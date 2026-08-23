@@ -1754,10 +1754,24 @@ document.addEventListener("click", e => {
   if (e.target.id === "tab-cheat") { tab = "cheat"; render(); window.scrollTo({top:0}); return; }
 });
 
-/* 첫 진입 : #stage7 같은 주소 지원 */
-(function init(){
+/* 주소의 #stage7 을 화면에 반영 */
+function viewFromHash(){
   const m = location.hash.match(/stage(\d+)/);
-  if (m) view = Number(m[1]);
+  return m ? Number(m[1]) : "home";
+}
+
+/* 뒤로/앞으로 가기, 주소창에 직접 입력한 #stage7 도 동작하게 */
+window.addEventListener("hashchange", () => {
+  const next = viewFromHash();
+  if (tab === "home" && view === next) return;   // 이미 그 화면이면 그냥 둠
+  tab = "home";
+  view = next;
+  render();
+});
+
+/* 첫 진입 */
+(function init(){
+  view = viewFromHash();
   render();
 })();
 </script>
