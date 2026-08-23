@@ -1,0 +1,1784 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="유니티로 배우는 게임 프로그래밍 · 13차시 미션보드 by pcteachpc">
+<meta property="og:type" content="website">
+<meta property="og:title" content="유니티 방과후 미션보드">
+<meta property="og:description" content="13번의 미션으로 내 게임 하나 만들기 — 차시별 미션과 코드">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127918;</text></svg>">
+
+<style>
+/* 브라우저 기본 여백 초기화 (Artifact 환경과 동일하게 맞춤) */
+html,body{margin:0;padding:0}
+</style>
+<title>유니티 방과후 미션보드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+
+<style>
+/* ── 토큰 : 밝은 테마(기본) ───────────────────────────── */
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#F6F8FA; --surface-3:#E8EDF1;
+  --ink:#15181C; --ink-2:#495159; --ink-3:#79838D;
+  --line:#DBE1E7; --line-2:#C6CFD8;
+  --x:#D9433F; --y:#4E9410; --z:#2360CE;
+  --y-soft:#EAF5DC; --x-soft:#FBE7E6; --z-soft:#E3ECFC;
+  --shadow:0 1px 2px rgba(20,30,40,.06), 0 8px 24px -12px rgba(20,30,40,.18);
+  --slab:#1D2226; --slab-2:#272D33; --slab-line:#343C43; --slab-ink:#DDE3E8;
+  --slab-kw:#7FB3FF; --slab-ty:#9BDE4F; --slab-st:#FF8A84; --slab-cm:#6E7A85;
+  --r:14px;
+}
+/* ── 토큰 : 어두운 테마 (유니티 에디터 그레이) ─────────── */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1F2225; --surface:#2A2E32; --surface-2:#32373C; --surface-3:#3A4046;
+    --ink:#ECEFF2; --ink-2:#AFB7BF; --ink-3:#828B95;
+    --line:#3C4248; --line-2:#4A5158;
+    --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7;
+    --y-soft:#2C3A22; --x-soft:#3B2725; --z-soft:#22303F;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1F2225; --surface:#2A2E32; --surface-2:#32373C; --surface-3:#3A4046;
+  --ink:#ECEFF2; --ink-2:#AFB7BF; --ink-3:#828B95;
+  --line:#3C4248; --line-2:#4A5158;
+  --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7;
+  --y-soft:#2C3A22; --x-soft:#3B2725; --z-soft:#22303F;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  font-size:16px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{text-wrap:balance; margin:0}
+a{color:var(--z)}
+button{font-family:inherit}
+:focus-visible{outline:2.5px solid var(--z); outline-offset:2px; border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+
+/* ── 헤더 ─────────────────────────────────────────────── */
+.top{position:sticky; top:0; z-index:40; background:var(--surface); border-bottom:1px solid var(--line)}
+.top-in{max-width:1240px; margin:0 auto; padding:12px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:11px; margin-right:auto}
+.play{width:30px; height:30px; border-radius:8px; background:var(--y); display:grid; place-items:center; flex:none}
+.play::after{content:""; width:0; height:0; margin-left:2px;
+  border-left:9px solid #10160B; border-top:6px solid transparent; border-bottom:6px solid transparent}
+.brand b{font-size:1.12rem; letter-spacing:-.01em; display:block}
+.brand span{display:block; font-size:.71rem; color:var(--ink-3); letter-spacing:.09em; line-height:1.3}
+
+.tabs{display:flex; gap:5px; background:var(--surface-2); padding:4px; border-radius:11px}
+.tab{border:0; background:transparent; color:var(--ink-2); cursor:pointer;
+  padding:7px 15px; border-radius:8px; font-size:.9rem; font-weight:600}
+.tab[aria-selected="true"]{background:var(--surface); color:var(--ink); box-shadow:var(--shadow)}
+
+.gauge{display:flex; align-items:center; gap:10px}
+.gauge svg{display:block; transform:rotate(-90deg)}
+.gauge-t{font-size:.74rem; color:var(--ink-3); line-height:1.35}
+.gauge-t b{display:block; font-size:.95rem; color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ── 레이아웃 ─────────────────────────────────────────── */
+.wrap{max-width:1240px; margin:0 auto; padding:26px 22px 90px;
+  display:grid; grid-template-columns:250px minmax(0,1fr); gap:30px; align-items:start}
+@media (max-width:900px){ .wrap{grid-template-columns:1fr; gap:18px; padding:16px 14px 70px} }
+
+/* ── 좌측 스테이지 트랙 ───────────────────────────────── */
+.rail{position:sticky; top:78px}
+.rail-h{font-size:.69rem; letter-spacing:.16em; color:var(--ink-3); font-weight:600; margin:0 0 10px 4px}
+.track{display:flex; flex-direction:column; gap:3px; position:relative}
+.track::before{content:""; position:absolute; left:20px; top:18px; bottom:18px; width:2px; background:var(--line); border-radius:2px}
+.node{position:relative; display:grid; grid-template-columns:40px 1fr; gap:11px; align-items:center;
+  border:0; background:transparent; text-align:left; cursor:pointer;
+  padding:6px 9px; border-radius:11px; color:var(--ink-2); width:100%; transition:background .14s}
+.node:hover{background:var(--surface-2)}
+.node .dot{position:relative; z-index:1; width:40px; height:40px; border-radius:11px;
+  background:var(--surface); border:2px solid var(--line-2); color:var(--ink-3);
+  display:grid; place-items:center; font-size:1rem; flex:none;
+  font-family:"Black Han Sans",sans-serif; font-variant-numeric:tabular-nums}
+.node .lb{min-width:0}
+.node .lb b{display:block; font-size:.87rem; font-weight:600; color:var(--ink);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.4}
+.node .lb i{font-style:normal; font-size:.7rem; color:var(--ink-3); font-family:"IBM Plex Mono",monospace}
+.node.on{background:var(--surface); box-shadow:var(--shadow)}
+.node.on .dot{background:var(--y); border-color:var(--y); color:#10160B}
+.node.done .dot{background:var(--y-soft); border-color:var(--y); color:var(--y)}
+.node.on.done .dot{background:var(--y); color:#10160B}
+
+@media (max-width:900px){
+  .rail{position:static}
+  .rail-h{display:none}
+  .track{flex-direction:row; overflow-x:auto; gap:7px; padding:4px 2px 10px}
+  .track::before{display:none}
+  .node{grid-template-columns:1fr; width:auto; flex:none; padding:5px; justify-items:center}
+  .node .lb{display:none}
+}
+
+/* ── 본문 카드 ────────────────────────────────────────── */
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  box-shadow:var(--shadow); overflow:hidden}
+.pane{animation:in .28s ease both}
+@keyframes in{from{opacity:0; transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.head{padding:26px 30px 24px; border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+@media (max-width:640px){ .head{padding:20px 18px} }
+.eyebrow{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:9px}
+.pill{font-size:.71rem; font-weight:600; letter-spacing:.03em; padding:3px 10px; border-radius:99px;
+  border:1px solid var(--line-2); color:var(--ink-2); background:var(--surface)}
+.pill.date{font-family:"IBM Plex Mono",monospace; letter-spacing:0}
+.pill.lv1{background:var(--y-soft); border-color:transparent; color:var(--y)}
+.pill.lv2{background:var(--z-soft); border-color:transparent; color:var(--z)}
+.pill.lv3{background:var(--x-soft); border-color:transparent; color:var(--x)}
+.pill.stg{font-family:"Black Han Sans",sans-serif; letter-spacing:.1em;
+  background:var(--ink); color:var(--bg); border-color:transparent}
+.head h1{font-family:"Black Han Sans",sans-serif; font-size:clamp(1.55rem,4.4vw,2.3rem);
+  line-height:1.3; letter-spacing:-.005em; font-weight:400}
+.head p{margin:11px 0 0; color:var(--ink-2); font-size:1.01rem; max-width:62ch}
+
+.body{padding:8px 30px 30px}
+@media (max-width:640px){ .body{padding:6px 18px 22px} }
+.sec{padding-top:26px}
+.sec-h{display:flex; align-items:baseline; gap:10px; margin-bottom:13px; flex-wrap:wrap}
+.sec-h h2{font-size:1rem; font-weight:700; letter-spacing:-.01em}
+.sec-h em{font-style:normal; font-size:.77rem; color:var(--ink-3)}
+
+/* 타임테이블 */
+.clock{display:flex; border:1px solid var(--line); border-radius:11px; overflow:hidden}
+.clock div{flex:1; padding:11px 14px; border-right:1px solid var(--line); background:var(--surface-2); min-width:0}
+.clock div:last-child{border-right:0}
+.clock b{display:block; font-family:"IBM Plex Mono",monospace; font-size:1rem; color:var(--ink)}
+.clock span{font-size:.77rem; color:var(--ink-3)}
+@media (max-width:560px){ .clock{flex-wrap:wrap} .clock div{flex:1 1 45%; border-bottom:1px solid var(--line)} }
+
+/* 미션 체크리스트 */
+.quests{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px}
+.quests li{display:flex}
+.q{display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left; cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--line); border-radius:11px;
+  padding:12px 15px; color:var(--ink); font-size:.96rem; line-height:1.62; transition:.14s}
+.q:hover{border-color:var(--line-2)}
+.q .bx{width:21px; height:21px; border-radius:6px; border:2px solid var(--line-2);
+  flex:none; margin-top:3px; display:grid; place-items:center; font-size:.78rem; color:transparent;
+  font-weight:700; transition:.14s}
+.q[aria-pressed="true"]{background:var(--y-soft); border-color:var(--y)}
+.q[aria-pressed="true"] .bx{background:var(--y); border-color:var(--y); color:#10160B; transform:scale(1.07)}
+.q[aria-pressed="true"] .qt{color:var(--ink-2)}
+.q .qn{font-family:"IBM Plex Mono",monospace; font-size:.77rem; color:var(--ink-3); flex:none; margin-top:3px}
+
+/* 코드 슬랩 : 밝은/어두운 테마 모두에서 에디터 화면처럼 */
+.slab{background:var(--slab); border-radius:12px; overflow:hidden; border:1px solid var(--slab-line)}
+.slab + .slab{margin-top:12px}
+.slab-top{display:flex; align-items:center; gap:9px; padding:8px 10px 8px 14px;
+  background:var(--slab-2); border-bottom:1px solid var(--slab-line)}
+.cs{width:17px; height:17px; border-radius:4px; background:#3E7A3B; color:#DFF5DC;
+  font-size:.6rem; font-weight:700; display:grid; place-items:center; flex:none;
+  font-family:"IBM Plex Mono",monospace}
+.slab-top b{font-family:"IBM Plex Mono",monospace; font-size:.82rem; color:var(--slab-ink); font-weight:400}
+.copy{margin-left:auto; border:1px solid var(--slab-line); background:transparent; color:#A9B4BE;
+  font-size:.76rem; padding:4px 11px; border-radius:7px; cursor:pointer; font-weight:500}
+.copy:hover{background:#343C43; color:#fff}
+.copy.ok{background:var(--slab-ty); border-color:var(--slab-ty); color:#10160B}
+.slab pre{margin:0; padding:15px 17px; overflow-x:auto; font-family:"IBM Plex Mono",monospace;
+  font-size:.84rem; line-height:1.78; color:var(--slab-ink); tab-size:4}
+.slab .kw{color:var(--slab-kw)} .slab .ty{color:var(--slab-ty)}
+.slab .st{color:var(--slab-st)} .slab .cm{color:var(--slab-cm)}
+
+/* 표 */
+.tw{overflow-x:auto; border:1px solid var(--line); border-radius:11px}
+table{border-collapse:collapse; width:100%; font-size:.89rem; min-width:380px}
+th,td{padding:9px 14px; text-align:left; border-bottom:1px solid var(--line); white-space:nowrap}
+th{background:var(--surface-2); font-weight:600; font-size:.77rem; letter-spacing:.05em; color:var(--ink-2)}
+tr:last-child td{border-bottom:0}
+td.n{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink-2)}
+code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
+  background:var(--surface-3); padding:1.5px 6px; border-radius:5px}
+.slab code{background:transparent; padding:0}
+
+/* 노트 박스 */
+.note{border-radius:11px; padding:14px 17px; font-size:.92rem; line-height:1.68;
+  border:1px solid var(--line); background:var(--surface-2)}
+.note + .note{margin-top:9px}
+.note.warn{background:var(--x-soft); border-color:transparent}
+.note.tip{background:var(--z-soft); border-color:transparent}
+.note > b{display:block; margin-bottom:5px}
+.note ul,.note ol{margin:6px 0 0; padding-left:19px} .note li{margin:5px 0}
+.note li b{display:inline}
+
+/* 링크 목록 */
+.links{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:9px}
+.lk{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;
+  border:1px solid var(--line); border-radius:11px; padding:12px 15px; background:var(--surface-2)}
+.lk:hover{border-color:var(--z); background:var(--surface)}
+.lk .lt{min-width:0}
+.lk b{display:block; font-size:.93rem; line-height:1.45}
+.lk i{font-style:normal; display:block; font-family:"IBM Plex Mono",monospace;
+  font-size:.76rem; color:var(--z); word-break:break-all}
+.lk em{font-style:normal; display:block; font-size:.78rem; color:var(--ink-3); line-height:1.55; margin-top:2px}
+.lk .ar{margin-left:auto; color:var(--ink-3); font-size:1.05rem; flex:none}
+.step p a, .lc p a{color:var(--z); text-decoration:underline; text-underline-offset:2px}
+
+/* 개념 카드 */
+.learn{display:grid; grid-template-columns:repeat(auto-fit,minmax(258px,1fr)); gap:10px}
+.lc{border:1px solid var(--line); border-radius:11px; padding:14px 16px; background:var(--surface-2)}
+.lc .k{display:block; font-family:"IBM Plex Mono",monospace; font-size:.68rem;
+  color:var(--y); letter-spacing:.1em; margin-bottom:4px}
+.lc > b{display:block; font-size:.93rem; margin-bottom:5px; line-height:1.5}
+.lc p{margin:0; font-size:.875rem; color:var(--ink-2); line-height:1.72}
+.lc p b{display:inline; color:var(--ink)}
+.lc code{background:var(--surface-3)}
+
+/* 설치 단계 */
+.card2{border:1px solid var(--line); border-radius:12px; padding:4px 18px; background:var(--surface-2)}
+.steps{display:flex; flex-direction:column}
+.step{display:grid; grid-template-columns:34px 1fr; gap:14px; padding:15px 0;
+  border-bottom:1px solid var(--line); align-items:start}
+.step:last-child{border-bottom:0}
+.step .sn{width:34px; height:34px; border-radius:10px; background:var(--z-soft); color:var(--z);
+  display:grid; place-items:center; font-family:"Black Han Sans",sans-serif; font-size:1rem}
+.step > span > b{display:block; font-size:.98rem; margin-bottom:4px; line-height:1.5}
+.step p{margin:0; font-size:.9rem; color:var(--ink-2); line-height:1.78}
+.step p b{display:inline; color:var(--ink)}
+.step code{background:var(--surface-3)}
+@media (max-width:520px){ .card2{padding:4px 14px} .step{grid-template-columns:28px 1fr; gap:11px}
+  .step .sn{width:28px;height:28px;font-size:.85rem} }
+
+/* 보너스 */
+.bonus{border:2px dashed var(--line-2); border-radius:12px; padding:15px 18px}
+.bonus > b{color:var(--y); display:block; margin-bottom:2px}
+.bonus ul{margin:7px 0 0; padding-left:19px} .bonus li{margin:4px 0; font-size:.93rem}
+
+/* 하단 이동 */
+.nav{display:flex; gap:10px; margin-top:30px}
+.nav button{flex:1; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+  border-radius:11px; padding:13px 16px; cursor:pointer; text-align:left; font-size:.89rem}
+.nav button:hover:not(:disabled){border-color:var(--y)}
+.nav button:disabled{opacity:.32; cursor:default}
+.nav button span{display:block; font-size:.71rem; color:var(--ink-3)}
+.nav .r{text-align:right}
+
+/* 홈 */
+.hero{padding:34px 30px}
+@media (max-width:640px){ .hero{padding:24px 18px} }
+.hero h1{font-family:"Black Han Sans",sans-serif; font-weight:400;
+  font-size:clamp(1.85rem,6vw,2.9rem); line-height:1.24}
+.hero .lead{margin:14px 0 0; font-size:1.04rem; color:var(--ink-2); max-width:58ch}
+.axis{display:flex; gap:7px; margin-bottom:18px}
+.axis i{width:28px; height:5px; border-radius:3px; display:block}
+.grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:11px}
+.mini{border:1px solid var(--line); border-radius:11px; padding:14px 16px; background:var(--surface-2)}
+.mini > b{display:block; font-size:.91rem; margin-bottom:3px}
+.mini p{margin:0; font-size:.85rem; color:var(--ink-2); line-height:1.6}
+.mini p b{display:inline; color:var(--ink)}
+.chapters{display:flex; flex-direction:column; gap:8px}
+.chap{display:grid; grid-template-columns:44px 1fr auto; gap:14px; align-items:center;
+  border:1px solid var(--line); border-radius:11px; padding:11px 15px; background:var(--surface-2);
+  cursor:pointer; text-align:left; color:inherit; width:100%; font-size:.94rem}
+.chap:hover{border-color:var(--y); background:var(--surface)}
+.chap .num{font-family:"Black Han Sans",sans-serif; font-size:1.25rem; color:var(--ink-3); text-align:center}
+.chap.done .num{color:var(--y)}
+.chap .tt b{display:block; font-weight:600; line-height:1.45}
+.chap .tt span{font-size:.79rem; color:var(--ink-3)}
+.chap .dt{font-family:"IBM Plex Mono",monospace; font-size:.75rem; color:var(--ink-3)}
+@media (max-width:560px){ .chap{grid-template-columns:36px 1fr} .chap .dt{display:none} }
+
+.reset{border:1px solid var(--line); background:transparent; color:var(--ink-3);
+  border-radius:9px; padding:7px 13px; font-size:.79rem; cursor:pointer}
+.reset:hover{border-color:var(--x); color:var(--x)}
+.foot{max-width:1240px; margin:0 auto; padding:4px 22px 46px; text-align:center}
+.foot p{margin:8px 0 0; color:var(--ink-3); font-size:.79rem}
+.sig{display:inline-flex; align-items:center; gap:9px; padding:8px 17px 8px 12px;
+  border:1px solid var(--line); border-radius:99px; background:var(--surface)}
+.sig .bun{font-size:1.1rem; line-height:1; transform:translateY(-1px)}
+.sig b{font-family:"IBM Plex Mono",monospace; font-size:.86rem; font-weight:600;
+  letter-spacing:.02em; color:var(--ink-2)}
+.sig:hover .bun{animation:hop .5s ease}
+@keyframes hop{30%{transform:translateY(-7px)}60%{transform:translateY(-1px)}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <div class="play" aria-hidden="true"></div>
+      <div>
+        <b>유니티 방과후 미션보드</b>
+        <span>A · 유니티로 배우는 게임 프로그래밍</span>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="화면 전환">
+      <button class="tab" role="tab" id="tab-home" aria-selected="true">미션</button>
+      <button class="tab" role="tab" id="tab-cheat" aria-selected="false">치트키</button>
+    </div>
+    <div class="gauge" title="내 진행률">
+      <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true">
+        <circle cx="19" cy="19" r="15.5" fill="none" stroke="var(--line)" stroke-width="4"></circle>
+        <circle id="ring" cx="19" cy="19" r="15.5" fill="none" stroke="var(--y)" stroke-width="4"
+                stroke-linecap="round" stroke-dasharray="97.4" stroke-dashoffset="97.4"></circle>
+      </svg>
+      <div class="gauge-t"><b id="pct">0%</b>클리어</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="rail" aria-label="차시 목록">
+    <p class="rail-h">STAGE SELECT</p>
+    <div class="track" id="track"></div>
+  </nav>
+  <main id="main"></main>
+</div>
+
+<footer class="foot">
+  <div class="sig"><span class="bun">🐰</span><b>pcteachpc</b></div>
+  <p>2026학년도 2학기 방과후학교 · 유니티로 배우는 게임 프로그래밍</p>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   데이터
+   ══════════════════════════════════════════════════════════ */
+const STAGES = [
+{
+ n:1, date:"08/24", lv:1, lvName:"OT",
+ title:"유니티 설치하고 게임 원리 알기",
+ sub:"다운로드를 먼저 걸어 놓고, 기다리는 동안 게임으로 놀면서 13주 지도를 그립니다.",
+ clock:[["8분","설치 걸어두기 (계정 + Hub)"],["15분","🎲 쁘띠바크 3라운드"],["22분","🦖 공룡게임 해부 · 13차시 안내"],["15분","설치 마무리 · 한 줄 기획서"]],
+ install:[
+  ["Unity ID 계정 먼저 만들기",
+   "<a href=\"https://unity.com/download\" target=\"_blank\" rel=\"noopener\"><b>unity.com/download</b> 바로가기</a> 를 누르면 <b>곧바로 계정 만들기 화면</b>이 뜹니다. 이메일로 가입하거나 <b>구글 계정으로 가입</b>해도 됩니다. 이메일로 가입했다면 <b>메일함에서 인증 메일을 꼭 클릭</b>하세요 — 여기서 제일 많이 막힙니다."],
+  ["Unity Hub 내려받기",
+   "로그인하면 다운로드 페이지로 들어갑니다. <b>Download for Windows</b> 클릭 → <code>UnityHubSetup.exe</code> 저장 (약 100MB, 금방 받아집니다).<br>페이지가 안 열리면 <a href=\"https://unity.com/releases/editor/archive\" target=\"_blank\" rel=\"noopener\">다운로드 아카이브</a> 에서 받아도 됩니다 (여긴 로그인 없이 열립니다)."],
+  ["Unity Hub 설치하기",
+   "받은 파일을 더블클릭 → 약관 화면에서 <b>I Agree</b> → <b>Install</b> → 끝나면 <b>Finish</b>. 설치 위치는 <b>그대로 두세요.</b>"],
+  ["Hub 에 로그인하기",
+   "Hub 가 열리면 1단계에서 만든 계정으로 <b>Sign in</b>. 구글로 가입했으면 <b>Continue with Google</b>."],
+  ["무료 라이선스 받기",
+   "Hub 오른쪽 위 <b>톱니바퀴(설정)</b> → 왼쪽 <b>Licenses</b> → <b>Add</b> → <b>Get a free personal license</b> → 동의. 개인 무료 라이선스라 수업용으로 아무 문제 없습니다."],
+  ["에디터 설치 : Unity 6.3 LTS 고르기",
+   "왼쪽 <b>Installs</b> → <b>Install Editor</b> → <b>LTS</b> 라고 표시된 <b>6000.3.xx</b> 를 선택 → Install.<br>⚠️ <b>6000.0.xx 는 2026년 10월에 지원이 끝나서</b> 이 수업 중간에 끊깁니다. <b>6000.1 · 6000.2 는 보안 경고</b>가 붙어 있으니 고르지 마세요. <b>반드시 6000.3.xx (Unity 6.3 LTS)</b>."],
+  ["모듈(추가 부품) 고르기",
+   "<b>체크할 것</b> → <b>Microsoft Visual Studio Community</b> (코드 쓰는 프로그램. 학교 PC 에 VS Code 가 이미 있으면 체크 안 해도 됩니다) · <b>Windows Build Support (IL2CPP)</b> (13차시 빌드용).<br><b>체크하지 말 것</b> → Android · iOS · WebGL · 언어팩. 용량만 몇 GB 씩 늘어납니다."],
+  ["기다리기 ☕",
+   "다운로드 용량이 <b>약 8~15GB</b>, 인터넷 속도에 따라 <b>20~40분</b> 걸립니다. 여러 명이 동시에 받으면 더 느려요. 이 시간 동안 아래 활동을 같이 합니다. <b>중간에 Hub 를 끄지 마세요.</b>"],
+  ["설치 확인하고 오늘은 끝!",
+   "<b>Installs</b> 목록에 <code>6000.3.xx</code> 가 보이면 성공입니다. <b>Projects → New project</b> 버튼이 눌리는지만 확인하고 오늘은 여기까지. 프로젝트는 다음 시간에 만듭니다."]
+ ],
+ learn:[
+  ["유니티가 뭔가요?","<b>게임 엔진</b>이라고 부르는 도구입니다. 중력 · 충돌 · 3D 화면 그리기 · 소리 같은 어려운 것들을 <b>이미 다 만들어 놓은 도구상자</b>예요. 우리는 '규칙'만 정하면 됩니다. 포켓몬 GO, 어몽어스, 하스스톤, 원신 모두 유니티로 만들었습니다."],
+  ["게임은 이 3단계를 계속 반복합니다","<b>입력 → 처리 → 출력</b>. 스페이스를 누르면(입력) → 위로 힘을 준다(처리) → 뛴 화면을 그린다(출력). 이 한 바퀴를 <b>프레임</b>이라고 하고, 보통 1초에 60바퀴 돕니다(60FPS)."],
+  ["3D 세상의 주소 : x · y · z","<b>x</b> 는 좌우, <b>y</b> 는 위아래, <b>z</b> 는 앞뒤입니다. 유니티 화면 오른쪽 위의 색깔 화살표가 이걸 알려 줘요 — <b style=\"color:var(--x)\">빨강 = x</b>, <b style=\"color:var(--y)\">초록 = y</b>, <b style=\"color:var(--z)\">파랑 = z</b>. (이 페이지 색깔의 정체가 바로 이겁니다)"],
+  ["게임 오브젝트 = 껍데기 + 부품","유니티의 모든 것은 <b>빈 껍데기(게임 오브젝트)</b> 에 <b>부품(컴포넌트)</b> 을 붙여서 만듭니다. 사람이라면 = 몸(Transform) + 눈(Camera) + 귀(AudioSource) + 두뇌(스크립트). 게임 캐릭터도 똑같은 방식이에요."],
+  ["프로그램은 2개를 씁니다","<b>Unity Hub</b> = 버전 설치와 프로젝트 관리를 하는 <b>리모컨</b>. <b>Unity Editor</b> = 실제로 게임을 만드는 <b>TV 화면</b>. Hub 를 먼저 깔고, Hub 로 Editor 를 깝니다."],
+  ["13주 뒤에 남는 것","8차시에 <b>볼링게임</b>, 13차시에 <b>아이템을 모아 골인하는 3D 스테이지 게임</b>. 마지막엔 실행 파일(.exe)로 뽑아서 친구에게 보낼 수 있습니다."]
+ ],
+ quests:[
+  "<b>1단계</b> : Unity ID 계정 만들고 <b>메일 인증까지</b> 끝내기",
+  "<b>2~4단계</b> : Unity Hub 내려받아 설치하고 로그인",
+  "<b>5단계</b> : 무료 라이선스(Personal) 받기",
+  "<b>6~7단계</b> : <b>Unity 6.3 LTS (6000.3.xx)</b> 설치 걸어 두기 — 버전과 모듈 주의!",
+  "🎲 <b>쁘띠바크 준비</b> — 종이에 표 그리기 (가로 = 항목 5칸, 세로 = 라운드 3줄). 아래 표를 보고 따라 그리세요",
+  "🎲 <b>쁘띠바크 1~3라운드</b> — 초성 뽑기 → 2분 안에 채우기 → 먼저 다 채우면 \"스톱!\" → 다 같이 채점",
+  "🎲 <b>보너스 라운드</b> — 마지막 칸은 <b>\"내가 만들고 싶은 게임\"</b>. 이건 채점 대신 <b>발표</b>합니다",
+  "🎮 <b>워밍업 O/X</b> — \"이 게임, 유니티로 만들었을까?\" 손들기로 맞히기",
+  "🦖 <b>공룡게임 대결</b> — 주소창에 <code>chrome://dino</code> 입력 (인터넷 없이도 됩니다). 3분 동안 <b>최고 점수</b> 겨루기",
+  "🔍 <b>게임 해부하기</b> — 공룡게임을 부품으로 쪼개 보기 (아래 표 함께 채우기)",
+  "쪼갠 부품이 <b>각각 몇 차시에 나오는지</b> 확인 — 이게 우리 13차시 지도입니다",
+  "좋아하는 게임 하나를 골라 <b>입력 → 처리 → 출력</b> 으로 쪼개 적어 보기",
+  "<b>9단계</b> : Installs 목록에 <code>6000.3.xx</code> 가 떴는지 확인",
+  "한 줄 기획서 쓰기 — \"나는 ○○하면 ○○되는 게임을 만들고 싶다\" (13차시에 다시 꺼냅니다)"
+ ],
+ code:[],
+ linksTitle:"🎲 쁘띠바크 설명 영상",
+ links:[
+  ["이렇게 하는 게임이에요","tvN 문제적남자 · 프랑스 국민게임 쁘띠 바크","https://www.youtube.com/watch?v=ctsnCNBf7Dw","한 번 보면 규칙이 바로 이해됩니다"]
+ ],
+ tables:[{
+   cap:"🎲 쁘띠바크 판 — 이렇게 그리면 됩니다",
+   head:["초성","게임 이름","게임 캐릭터","게임 속 아이템","동물","음식"],
+   rows:[["<b>ㄱ</b>","공룡게임","군인","검","고양이","김밥"],
+         ["<b>ㅁ</b>","마인크래프트","마리오","망토","말","만두"],
+         ["<b>?</b>","","","","",""]]
+ },{
+   cap:"🦖 공룡게임 해부하기 — 이게 우리 13차시 지도입니다",
+   head:["공룡게임의 부품","유니티에서는","배우는 차시"],
+   rows:[["스페이스를 누르면 점프","Input · GetButtonDown","<b>4 · 6차시</b>"],
+         ["뛰면 다시 떨어짐 (중력)","Rigidbody","<b>7차시</b>"],
+         ["선인장에 닿으면 끝","Collider · 충돌 이벤트","<b>8차시</b>"],
+         ["오른쪽 위 점수 숫자","UI Canvas · Text","<b>9 · 10차시</b>"],
+         ["낮이 밤으로 바뀌는 배경","Material · 조명","<b>2 · 7차시</b>"],
+         ["죽으면 처음부터 다시","Scene · SceneManager","<b>12차시</b>"],
+         ["파일 하나로 친구에게 전달","빌드(Build)","<b>13차시</b>"]]
+ }],
+ notes:[
+  ["tip","🎲 쁘띠바크 하는 법 (5줄 요약)","<ol style=\"margin:6px 0 0;padding-left:19px\"><li>종이에 표를 그린다 — <b>가로에 항목 5칸, 세로에 라운드 3줄</b></li><li>초성을 하나 뽑는다 (<b>ㄱ · ㅁ · ㅈ</b> 처럼). 제비뽑기도 좋고 아무나 외쳐도 됩니다</li><li><b>2분</b> 안에 그 초성으로 시작하는 단어로 칸을 채운다</li><li>먼저 다 채운 사람이 <b>\"스톱!\"</b> → 전원 펜 놓기</li><li>채점 : <b>나만 쓴 답 2점 · 겹친 답 1점 · 빈칸 0점</b></li></ol><b>종이와 펜만 있으면 됩니다.</b> 다운로드 속도도 전혀 안 잡아먹어요."],
+  ["tip","🦖 공룡게임 여는 법","크롬 주소창에 <code>chrome://dino</code> 를 치고 엔터 → <b>스페이스</b> 로 시작. 인터넷이 끊겨 있어도 되고, <b>다운로드 속도도 안 잡아먹습니다.</b> 규칙이 세상에서 제일 단순한 게임인데, <b>우리가 13주 동안 배울 것이 전부 들어 있어요.</b>"],
+  ["warn","설치가 막혔다면 이것부터","<ul><li><b>다운로드 페이지 대신 로그인 화면이 떠요</b> → 정상입니다. 계정을 만들어야 받을 수 있게 바뀌었어요 (1단계)</li><li><b>로그인이 안 돼요</b> → 메일함(스팸함 포함)에서 인증 메일을 눌렀는지 확인</li><li><b>다운로드가 0% 에서 안 움직여요</b> → Hub 를 껐다 켜고 다시 Install. 학교 방화벽이면 선생님께</li><li><b>용량이 부족하대요</b> → C드라이브에 최소 <b>20GB</b> 는 비어 있어야 합니다</li><li>오늘 못 끝냈어도 괜찮아요. <b>2차시 시작할 때 같이 마무리</b>합니다</li></ul>"],
+  ["tip","왜 이렇게 용량이 커요?","유니티는 3D 그래픽 · 물리엔진 · 오디오 · 빌드 도구가 통째로 들어 있는 큰 프로그램이라 그렇습니다. <b>한 번만 깔면 13주 내내 씁니다.</b>"]
+ ],
+ bonus:["쁘띠바크에서 <b>아무도 안 쓴 답</b>만으로 한 줄 채워 보기 (전부 2점!)",
+        "공룡게임 <b>최고 점수 1000점</b> 넘겨 보기","유니티로 만든 게임 3개 더 찾아보고 친구에게 말해 주기","<b>집 컴퓨터에도</b> 설치해 두면 주말에 이어서 만들 수 있어요","Unity Hub → <b>Learn</b> 탭에 있는 공식 튜토리얼 구경해 보기"]
+},
+{
+ n:2, date:"08/31", lv:1, lvName:"기초",
+ title:"첫 프로젝트 & 3D 놀이터 만들기",
+ sub:"3D 프로젝트를 만들고, 화면 4구역과 조작키 Q·W·E·R·T를 손에 익힙니다.",
+ clock:[["10분","설치 못 한 친구 마무리"],["20분","프로젝트 생성 + 화면 구경"],["25분","미션 : 나만의 놀이터"],["5분","저장하고 정리"]],
+ learn:[
+  ["프로젝트 = 게임 하나가 든 폴더","안에 <b>Assets</b>(내가 만든 모든 재료) · <b>Scenes</b>(무대) · <b>Settings</b> 폴더가 생깁니다. 이 폴더는 <b>이름을 바꾸거나 옮기지 마세요.</b> 유니티가 길을 잃습니다."],
+  ["템플릿은 Universal 3D","<b>Universal 3D</b> = 3D + URP(요즘 표준 그래픽 방식). Universal 2D 는 2D 게임용, High Definition 3D 는 고사양 PC 용입니다. 우리는 <b>Universal 3D</b> 하나만 씁니다."],
+  ["계층구조 (Hierarchy)","<b>지금 무대에 올라 있는 배우 명단</b>입니다. 여기 있는 것만 화면에 보여요. 우클릭으로 새 오브젝트를 만듭니다."],
+  ["장면 (Scene) 창","<b>내가 배치하는 작업 화면</b>입니다. 여기서 물체를 옮기고 돌립니다. 옆의 <b>Game</b> 탭은 <b>플레이어가 실제로 보게 될 화면</b> — 둘은 다릅니다!"],
+  ["프로젝트 (Project) 창","<b>내 컴퓨터에 저장된 재료 창고</b>입니다. 스크립트 · 재질 · 소리 파일이 여기 쌓입니다. 계층구조가 '무대', 프로젝트는 '창고'라고 생각하세요."],
+  ["인스펙터 (Inspector)","<b>선택한 오브젝트의 속성표</b>입니다. 위치 · 색 · 무게를 여기서 바꿉니다. 앞으로 수업 시간의 절반은 이 창을 봅니다."],
+  ["씬(Scene) = 무대 한 개","스테이지 1, 스테이지 2, 제목 화면이 각각 <b>씬 하나</b>입니다. 지금은 <code>SampleScene</code> 하나뿐이고, 12차시에 여러 개 만듭니다."],
+  ["기본 도형 5개면 충분해요","<b>Cube</b> 상자 · <b>Sphere</b> 구 · <b>Capsule</b> 캡슐 · <b>Cylinder</b> 원기둥 · <b>Plane</b> 땅. 우리가 만들 게임은 전부 이 5개로 만듭니다. 계층구조 우클릭 → 3D Object."],
+  ["Transform : 모든 오브젝트의 기본","<b>Position</b> 위치 · <b>Rotation</b> 회전(각도) · <b>Scale</b> 크기(배수). 유일하게 <b>모든 오브젝트가 반드시 갖는</b> 컴포넌트라, 지울 수도 없습니다."],
+  ["▶ Play 버튼의 무서운 규칙","Play 가 켜진 상태에서 바꾼 것은 <b>정지하는 순간 전부 사라집니다.</b> 반드시 <b>정지한 다음</b> 수정하세요. (많이들 여기서 울어요)"],
+  ["★ Active Input Handling 을 Both 로","Unity 6.3 의 Universal 3D 프로젝트는 <b>새 입력 시스템만</b> 켜져 있습니다. 우리가 쓸 <code>Input.GetAxisRaw</code> 는 <b>옛 방식</b>이라 그대로 두면 <b>4차시부터 키가 하나도 안 먹습니다.</b> <code>Edit → Project Settings → Player → Configuration → Active Input Handling</code> 을 <b>Both</b> 로 바꾸면 둘 다 됩니다. 노란 경고가 떠도 괜찮아요. <b>오늘 꼭 해 두세요.</b>"]
+ ],
+ quests:[
+  "지난 시간에 설치 못 했으면 <b>손 들고</b> 설치부터 마무리하기",
+  "Unity Hub → <b>Projects</b> → <b>New project</b>",
+  "왼쪽 <b>All templates → Core</b> → <b>Universal 3D</b> 선택",
+  "오른쪽 Project name 을 <code>MyGame</code> 으로, Location 은 그대로 → <b>Create project</b> (첫 실행은 1~3분 걸립니다)",
+  "★ <b>가장 중요한 설정!</b> <code>Edit → Project Settings → Player → Configuration → <b>Active Input Handling</b></code> 을 <b>Both</b> 로 바꾸기 → 재시작하겠냐고 물으면 <b>Yes</b>",
+  "화면 <b>4구역</b> 을 손가락으로 짚어 보기 : 계층구조 · 장면 · 프로젝트 · 인스펙터",
+  "<b>Scene</b> 탭과 <b>Game</b> 탭을 번갈아 눌러 뭐가 다른지 확인",
+  "계층구조 빈 곳 우클릭 → 3D Object → <b>Plane</b> 하나 깔기 (이게 땅!)",
+  "그 위에 Cube · Sphere · Capsule · Cylinder 등 <b>도형 5개 이상</b> 올려 나만의 놀이터 만들기",
+  "조작키 다 써 보기 : <code>Q</code> 뷰이동 <code>W</code> 이동 <code>E</code> 회전 <code>R</code> 크기 <code>T</code> 사각툴",
+  "카메라 돌려 보기 : 마우스 <b>우클릭 드래그</b> · <code>Alt</code>+좌클릭 · <b>휠</b>",
+  "마우스 말고 <b>인스펙터에 숫자를 직접 입력</b>해서 오브젝트 옮겨 보기",
+  "▶ <b>Play</b> 눌러 Game 화면 확인 → 다시 눌러 정지 → <code>Ctrl+S</code> 저장"
+ ],
+ code:[],
+ tables:[
+  {cap:"오늘 꼭 외울 조작키",
+   head:["키","기능"],
+   rows:[["Q","뷰(화면) 이동"],["W","오브젝트 이동"],["E","오브젝트 회전"],["R","오브젝트 크기"],["T","오브젝트 사각툴"],
+         ["마우스 우클릭 드래그","카메라 회전"],["Alt + 좌클릭","카메라 축 이동"],["방향키","카메라 자유 이동"],
+         ["마우스 휠","줌 / 이동"],["F","선택한 오브젝트로 화면 확 이동"],["Ctrl + D","선택한 것 복제"],["Ctrl + S","저장"]]},
+  {cap:"Transform 세 가지 값",
+   head:["값","뜻","예시"],
+   rows:[["Position","위치 (미터)","<code>(0, 0.5, 2)</code> = 오른쪽0 · 위0.5 · 앞2"],
+         ["Rotation","회전 (도)","<code>(0, 90, 0)</code> = y축 기준 90도 돌림"],
+         ["Scale","크기 (배수)","<code>(2, 1, 2)</code> = 가로세로 2배, 높이는 그대로"]]}
+ ],
+ notes:[
+  ["warn","Play 중에 바꾼 건 저장되지 않아요","▶ 가 켜진 상태에서 위치를 옮기면 정지하는 순간 원래대로 돌아갑니다. <b>반드시 정지한 뒤에</b> 수정하세요."],
+  ["tip","창 배치가 엉망이 됐어요","오른쪽 위 <b>Layout</b> → <b>Default</b> 를 누르면 원래 배치로 돌아옵니다. 마음껏 망가뜨려도 됩니다."],
+  ["warn","Plane 이 너무 작아요","Plane 의 Scale 을 <code>(2, 1, 2)</code> 처럼 키우면 땅이 넓어집니다. Plane 은 두께가 없어서 y 는 바꿔도 소용없어요."],
+  ["warn","★ Active Input Handling = Both, 오늘 꼭!","이걸 안 하면 <b>4차시부터 키보드가 아예 안 먹습니다.</b> 그리고 원인을 찾기가 아주 어려워요 (오류 메시지가 안 뜨거든요). 프로젝트를 만들자마자 <b>제일 먼저</b> 바꾸고, 재시작까지 하고 시작하세요."]
+ ],
+ bonus:["도형만으로 <b>얼굴 · 눈사람 · 로봇 · 우리 학교</b> 중 하나 만들어 스크린샷 제출","Scale 을 <code>0.3</code> 같은 소수로 넣어 아주 작은 오브젝트 만들기","Directional Light 를 선택하고 Rotation 을 바꿔서 <b>해가 지는 장면</b> 만들기"]
+},
+{
+ n:3, date:"09/07", lv:1, lvName:"기초",
+ title:"첫 코드 & 게임오브젝트의 일생",
+ sub:"Debug.Log로 첫 코드를 실행하고, Awake → Start → Update 순서를 눈으로 확인합니다.",
+ clock:[["10분","지난 시간 복습"],["20분","스크립트 만들어 붙이기"],["25분","미션 : 생명주기 관찰"],["5분","정리"]],
+ learn:[
+  ["스크립트도 '부품'입니다","코드 파일을 만들기만 하면 <b>아무 일도 일어나지 않습니다.</b> 오브젝트에 <b>붙여야(Add Component)</b> 비로소 작동해요. 스크립트는 오브젝트에 다는 <b>두뇌</b>라고 생각하세요."],
+  ["MonoBehaviour 가 뭐예요?","<code>: MonoBehaviour</code> 라고 써 두면 <b>유니티가 알아서 함수를 불러 줍니다.</b> Start 나 Update 를 우리가 직접 부른 적이 없는데도 실행되는 이유가 이것 때문이에요."],
+  ["프레임 = 화면 한 장","게임은 그림을 아주 빠르게 넘기는 만화입니다. 1초에 60장 그리면 60FPS. <b>Update 는 그 한 장마다 한 번씩</b> 실행됩니다."],
+  ["Debug.Log = 파이썬의 print","프로그램이 지금 뭘 하고 있는지 <b>콘솔(Console)</b> 창에 찍어 주는 함수입니다. 나중에 막힐 때 가장 강력한 무기예요. <b>의심되는 곳마다 Debug.Log 를 뿌리세요.</b>"],
+  ["Console 창 읽는 법","아래쪽 <b>Console</b> 탭입니다. <b>흰 글씨</b> = 내가 찍은 메시지, <b>노란 줄</b> = 경고(무시해도 됨), <b>빨간 줄</b> = 오류(반드시 고쳐야 함). 빨간 줄이 하나라도 있으면 Play 가 안 됩니다."],
+  ["지켜야 할 규칙 3개","① <b>파일 이름 = 클래스 이름</b> (다르면 컴포넌트로 안 붙음) ② 문장 끝에는 <b>반드시 세미콜론 <code>;</code></b> ③ 코드 고치면 <b><code>Ctrl+S</code> 저장</b> 후 유니티 창 한 번 클릭"]
+ ],
+ quests:[
+  "프로젝트 창 우클릭 → Create → Scripting → <b>MonoBehaviour Script</b> → 이름 <code>LifeCycleTest</code>",
+  "더블클릭해서 코드 편집기를 열고, 아래 코드를 <b>통째로 붙여넣기</b> → <code>Ctrl+S</code> 저장",
+  "계층구조에 Cylinder 하나 만들고, 스크립트 파일을 인스펙터의 <b>Add Component</b> 자리로 드래그",
+  "▶ Play → 아래 <b>Console</b> 창에 뜨는 <b>순서</b> 확인하기",
+  "Play 중에 인스펙터에서 스크립트 왼쪽 <b>체크를 껐다 켜기</b> → OnEnable / OnDisable 확인",
+  "정지한 뒤 오브젝트를 <b>Delete</b> → OnDestroy 가 언제 뜨는지 확인",
+  "Console 왼쪽 위 <b>Clear</b> 버튼으로 로그 지우는 법 익히기",
+  "메시지를 <b>내 이름</b>이 들어가게 바꿔서 다시 실행해 보기"
+ ],
+ code:[["LifeCycleTest.cs",
+`using UnityEngine;
+
+public class LifeCycleTest : MonoBehaviour
+{
+    int count = 0;
+
+    // 1. 태어날 때 딱 한 번
+    void Awake()
+    {
+        Debug.Log("1. Awake  : 오브젝트가 태어났어요!");
+    }
+
+    // 2. 켜질 때마다
+    void OnEnable()
+    {
+        Debug.Log("2. OnEnable : 스위치가 켜졌어요!");
+    }
+
+    // 3. 첫 Update 직전에 딱 한 번
+    void Start()
+    {
+        Debug.Log("3. Start  : 준비 끝, 시작합니다!");
+    }
+
+    // 4. 매 프레임마다 계속 (1초에 수십~수백 번!)
+    void Update()
+    {
+        count = count + 1;
+        if (count <= 5)
+            Debug.Log("4. Update : " + count + "번째 프레임");
+    }
+
+    // 5. 꺼질 때마다
+    void OnDisable()
+    {
+        Debug.Log("5. OnDisable : 스위치가 꺼졌어요!");
+    }
+
+    // 6. 사라질 때 딱 한 번
+    void OnDestroy()
+    {
+        Debug.Log("6. OnDestroy : 안녕히 계세요!");
+    }
+}`]],
+ tables:[{
+   cap:"게임오브젝트의 일생 (생명주기)",
+   head:["함수","언제 실행되나","주로 쓰는 곳"],
+   rows:[["Awake()","태어날 때 1번","변수 초기화 · 부품 찾아두기"],["OnEnable()","켜질 때마다","다시 시작 처리"],["Start()","첫 프레임 직전 1번","시작 세팅"],
+         ["FixedUpdate()","고정 주기 (1초 약 50번)","물리 · Rigidbody"],["Update()","매 프레임","입력 받기 · 게임 로직"],
+         ["LateUpdate()","모든 Update 끝난 뒤","카메라 따라가기"],["OnDestroy()","사라질 때 1번","마무리 정리"]]
+ }],
+ notes:[
+  ["warn","스크립트가 안 붙는다면","<ul><li><b>파일 이름 = 클래스 이름</b> 이어야 합니다. <code>LifeCycleTest.cs</code> 면 <code>class LifeCycleTest</code>.</li><li>코드를 고치고 <code>Ctrl+S</code> 를 안 하면 반영되지 않습니다.</li><li>Console 에 <b>빨간 줄</b>이 하나라도 있으면 Play 가 안 됩니다. 빨간 줄부터 해결!</li></ul>"],
+  ["tip","Awake 와 Start, 뭐가 달라요?","둘 다 딱 한 번 실행되지만 <b>Awake 가 먼저</b>입니다. 그래서 '준비물 챙기기'는 Awake 에, '다른 오브젝트한테 말 걸기'는 Start 에 쓰는 게 안전해요."]
+ ],
+ bonus:["<code>if (count &lt;= 5)</code> 의 5를 20으로 바꾸면 어떻게 될지 <b>먼저 예상</b>하고 실행해 보기","Cylinder 를 2개 만들어 같은 스크립트를 둘 다 붙이면 로그가 몇 줄 나올지 맞혀 보기","<code>Debug.Log</code> 대신 <code>Debug.LogWarning</code>, <code>Debug.LogError</code> 도 써 보기"]
+},
+{
+ n:4, date:"09/14", lv:1, lvName:"기초",
+ title:"인스펙터로 조종하는 움직임",
+ sub:"public 변수와 transform.Translate 로, 코드를 안 고치고도 속도를 바꿔 봅니다.",
+ clock:[["10분","복습 + C# 최소 문법"],["20분","코드 붙이고 움직이기"],["25분","미션 : 숫자 바꿔가며 관찰"],["5분","정리"]],
+ learn:[
+  ["변수 = 값을 담는 상자","파이썬은 <code>speed = 2</code> 로 끝이지만, C# 은 <b>상자에 종류를 미리 적어야</b> 합니다 → <code>float speed = 2f;</code>. 귀찮아 보여도 실수를 미리 잡아 줘요."],
+  ["public 을 붙이면 마법이 일어납니다","<code>public float speed;</code> 라고 쓰면 <b>인스펙터 창에 칸이 생깁니다.</b> 코드를 열지 않고 마우스로 값을 바꿀 수 있어요. 게임 개발에서 <b>가장 많이 쓰는 기능</b>입니다. <code>private</code>(또는 안 씀)는 인스펙터에 안 보입니다."],
+  ["Vector3 = 숫자 3개 묶음","<code>new Vector3(0, 0, 1)</code> 은 (x, y, z) 세 값을 하나로 묶은 것. <b>위치</b>를 나타낼 수도 있고 <b>방향</b>을 나타낼 수도 있습니다. 3D 게임에서 제일 자주 나오는 단어예요."],
+  ["Translate = 지금 위치에 더하기","<code>transform.Translate(vec)</code> 는 <b>현재 위치 + vec</b> 로 옮깁니다. 순간이동이 아니라 '조금씩 더하기'를 Update 에서 반복하니까 <b>움직이는 것처럼</b> 보이는 거예요."],
+  ["Time.deltaTime 을 꼭 곱하세요","이전 프레임에서 지금까지 걸린 <b>시간</b>입니다. 좋은 컴퓨터는 1초에 200프레임, 낡은 컴퓨터는 30프레임인데, 곱해 주지 않으면 <b>좋은 컴퓨터에서 7배 빨라집니다.</b> 곱하면 어디서든 '1초에 speed 만큼'으로 똑같아져요."],
+  ["Rotate = 회전시키기","<code>transform.Rotate(Vector3.up * 90 * Time.deltaTime)</code> 은 y축을 중심으로 1초에 90도 돌립니다. 아이템이 빙글빙글 도는 연출이 전부 이겁니다."]
+ ],
+ quests:[
+  "Cube 하나 만들고 <code>MoveSimple</code> 스크립트를 만들어 붙이기",
+  "▶ Play → 앞으로 스르륵 움직이는지 확인",
+  "정지하고 인스펙터에서 <b>Speed</b> 를 <code>0.5</code> → <code>5</code> → <code>20</code> 으로 바꿔 보기 (코드는 안 건드림!)",
+  "<b>Direction</b> 을 <code>(1, 0, 0)</code> / <code>(0, 1, 0)</code> 으로 바꿔 보기 — 각각 어느 방향인가요?",
+  "<code>Spin</code> 스크립트도 같이 붙여서 빙글빙글 돌면서 이동시키기",
+  "코드에서 <code>* Time.deltaTime</code> 을 지우고 실행 → 왜 미친 듯이 빨라지는지 이야기해 보기 (<b>다시 복구!</b>)",
+  "도형 3개에 각각 다른 Speed 를 넣어 <b>레이스</b> 만들기",
+  "<b>Direction 을 <code>(0, -1, 0)</code></b> 으로 주면 어떻게 될지 예상하고 실행"
+ ],
+ code:[
+  ["MoveSimple.cs",
+`using UnityEngine;
+
+public class MoveSimple : MonoBehaviour
+{
+    // public 을 붙이면 인스펙터 창에 나타나요!
+    public float speed = 2f;
+    public Vector3 direction = new Vector3(0, 0, 1);
+
+    void Update()
+    {
+        // Translate : 지금 위치에 벡터를 더해서 이동
+        transform.Translate(direction * speed * Time.deltaTime);
+    }
+}`],
+  ["Spin.cs",
+`using UnityEngine;
+
+public class Spin : MonoBehaviour
+{
+    public float rotateSpeed = 90f;   // 1초에 90도
+
+    void Update()
+    {
+        transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
+    }
+}`]],
+ tables:[
+  {cap:"C# 자료형 — 이 5개면 충분합니다",
+   head:["자료형","담는 것","예시"],
+   rows:[["<code>int</code>","정수","<code>int score = 0;</code>"],
+         ["<code>float</code>","소수 (뒤에 <b>f</b>!)","<code>float speed = 2.5f;</code>"],
+         ["<code>bool</code>","참/거짓","<code>bool isJump = false;</code>"],
+         ["<code>string</code>","글자","<code>string name = \"홍길동\";</code>"],
+         ["<code>Vector3</code>","숫자 3개 (x,y,z)","<code>Vector3 v = new Vector3(0,1,0);</code>"]]},
+  {cap:"방향은 외우지 말고 이걸 쓰세요",
+   head:["코드","뜻","같은 값"],
+   rows:[["<code>Vector3.up</code>","위","(0, 1, 0)"],["<code>Vector3.down</code>","아래","(0, -1, 0)"],
+         ["<code>Vector3.right</code>","오른쪽","(1, 0, 0)"],["<code>Vector3.left</code>","왼쪽","(-1, 0, 0)"],
+         ["<code>Vector3.forward</code>","앞","(0, 0, 1)"],["<code>Vector3.back</code>","뒤","(0, 0, -1)"],
+         ["<code>Vector3.zero</code>","원점","(0, 0, 0)"]]},
+  {cap:"파이썬 ↔ C# 대조표",
+   head:["하는 일","파이썬","C# (유니티)"],
+   rows:[["변수","<code>speed = 2</code>","<code>float speed = 2f;</code>"],
+         ["정수","<code>count = 0</code>","<code>int count = 0;</code>"],
+         ["참/거짓","<code>flag = False</code>","<code>bool flag = false;</code>"],
+         ["조건문","<code>if x > 3:</code>","<code>if (x > 3) { }</code>"],
+         ["아니면","<code>else:</code>","<code>else { }</code>"],
+         ["출력","<code>print(\"안녕\")</code>","<code>Debug.Log(\"안녕\");</code>"],
+         ["주석","<code># 메모</code>","<code>// 메모</code>"],
+         ["블록 표시","들여쓰기","<code>{ }</code> 중괄호"],
+         ["문장 끝","줄바꿈","<b>반드시 세미콜론 <code>;</code></b>"]]}
+ ],
+ notes:[
+  ["warn","코드를 고쳤는데 안 바뀌어요","<code>public</code> 변수는 <b>인스펙터 값이 코드보다 우선</b>입니다. 컴포넌트 오른쪽 <b>점 세 개</b> → <b>Reset</b> 을 누르면 코드에 쓴 값으로 돌아갑니다."],
+  ["warn","float 뒤에 f 를 빼먹으면","<code>float speed = 2.5;</code> 는 오류입니다. C# 에서 소수는 기본이 double 이라, float 임을 알려 주는 <b><code>f</code></b> 를 꼭 붙여야 해요. <code>2f</code>, <code>0.5f</code> 처럼요."],
+  ["tip","다 외우려고 하지 마세요","위 표들은 <b>필요할 때 찾아보는 사전</b>입니다. 상단 <b>치트키</b> 탭에도 똑같이 들어 있어요."]
+ ],
+ bonus:["Direction 을 대각선 <code>(1, 0, 1)</code> 로 주면 왜 더 빨라 보이는지 생각해 보기","<code>Vector3.up</code> 을 <code>Vector3.right</code> 로 바꿔 옆으로 구르게 만들기","Spin 의 rotateSpeed 에 <b>음수</b>를 넣으면?"]
+},
+{
+ n:5, date:"09/21", lv:2, lvName:"조작",
+ title:"마우스로 오브젝트 조작하기",
+ sub:"클릭하면 색이 바뀌고, 바닥을 클릭하면 그 자리로 이동합니다.",
+ clock:[["10분","복습"],["20분","클릭 이벤트 2종"],["25분","미션 : 두더지 잡기"],["5분","정리"]],
+ learn:[
+  ["마우스 클릭을 받는 방법은 2가지","① <b><code>Input.GetMouseButtonDown(0)</code></b> — 화면 <b>어디를 눌러도</b> 감지. Update 안에 씁니다. ② <b><code>OnMouseDown()</code></b> — <b>이 오브젝트를 눌렀을 때만</b> 실행. 훨씬 간단하지만 Collider 가 있어야 해요."],
+  ["버튼 번호","<code>0</code> = 왼쪽, <code>1</code> = 오른쪽, <code>2</code> = 가운데(휠). <code>Down</code> 은 <b>누른 순간 1번</b>, 아무것도 안 붙이면 <b>누르는 동안 계속</b>, <code>Up</code> 은 <b>뗀 순간 1번</b>입니다."],
+  ["화면은 평평한데 세상은 3D","마우스는 화면(2D) 좌표만 알려 줍니다. 그래서 <b>카메라에서 마우스 방향으로 보이지 않는 레이저를 쏘는데</b>, 이걸 <b>Ray(광선)</b> 라고 해요."],
+  ["Raycast : 레이저를 쏴서 맞히기","<code>Physics.Raycast(ray, out hit)</code> 를 하면 레이저가 <b>처음 맞은 물체</b>의 정보가 <code>hit</code> 에 담깁니다. <code>hit.point</code> 는 <b>맞은 지점의 3D 좌표</b>, <code>hit.collider</code> 는 <b>맞은 물체</b>. 총 쏘는 게임도 전부 이 원리예요."],
+  ["Camera.main 이 뭔가요?","씬에서 <b>Tag 가 MainCamera 인 카메라</b>를 자동으로 찾아 줍니다. 카메라의 Tag 가 바뀌어 있으면 작동하지 않으니 확인하세요."],
+  ["Random 두 가지","<code>Random.value</code> → <b>0 ~ 1</b> 사이 소수 (색깔 만들 때 딱!). <code>Random.Range(-4f, 4f)</code> → <b>-4 ~ 4</b> 사이 값 (위치 정할 때). 정수 범위는 마지막 숫자가 포함되지 않으니 주의."],
+  ["코드로 색 바꾸기","<code>GetComponent&lt;MeshRenderer&gt;().material.color = ...</code>. MeshRenderer 는 '이 물체를 화면에 그리는 부품'이고, 그 안의 material 이 색을 갖고 있습니다."]
+ ],
+ quests:[
+  "도형 여러 개를 만들고 전부에 <code>MouseColor</code> 붙이기 → Play 후 마구 클릭해 보기",
+  "Sphere 하나에 <code>MouseClickMove</code> 붙이기 → 바닥을 클릭하면 그 자리로 이동하는지 확인",
+  "인스펙터에서 Speed 를 바꿔 이동 속도 조절해 보기",
+  "Console 에 찍히는 <b>좌표값</b> 확인 — 클릭한 곳의 x, y, z 가 보이나요?",
+  "Capsule 하나에 <code>Mole</code> 붙이고 클릭 → 점수가 오르고 순간이동 하는지 확인",
+  "Mole 을 <code>Ctrl+D</code> 로 <b>5마리</b>로 늘리기",
+  "★ <b>미션 : 두더지 잡기</b> — 30초 안에 몇 점 나오는지 친구와 대결",
+  "두더지에 <code>MouseColor</code> 도 같이 붙여서 클릭할 때 색까지 바뀌게 만들기"
+ ],
+ code:[
+  ["MouseColor.cs",
+`using UnityEngine;
+
+public class MouseColor : MonoBehaviour
+{
+    Material mat;
+
+    void Start()
+    {
+        // 이 오브젝트의 재질(Material)을 가져온다
+        mat = GetComponent<MeshRenderer>().material;
+    }
+
+    // 이 오브젝트를 마우스로 눌렀을 때 (Collider 가 있어야 작동!)
+    void OnMouseDown()
+    {
+        mat.color = new Color(Random.value, Random.value, Random.value);
+        Debug.Log(gameObject.name + " 클릭!");
+    }
+}`],
+  ["MouseClickMove.cs",
+`using UnityEngine;
+
+public class MouseClickMove : MonoBehaviour
+{
+    public float speed = 5f;
+    Vector3 target;
+
+    void Start()
+    {
+        target = transform.position;
+    }
+
+    void Update()
+    {
+        // 마우스 왼쪽 버튼을 누른 순간
+        if (Input.GetMouseButtonDown(0))
+        {
+            // 화면의 마우스 위치에서 3D 세상으로 광선(Ray)을 쏜다
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                target = hit.point;
+                target.y = transform.position.y;   // 높이는 그대로 유지
+                Debug.Log("여기로 이동! " + target);
+            }
+        }
+
+        // 목표 지점까지 일정한 속도로 이동
+        transform.position =
+            Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+    }
+}`],
+  ["Mole.cs  (두더지 잡기)",
+`using UnityEngine;
+
+public class Mole : MonoBehaviour
+{
+    public static int score = 0;   // 모든 두더지가 함께 쓰는 점수
+
+    void OnMouseDown()
+    {
+        score = score + 1;
+        Debug.Log("점수 : " + score);
+
+        // 바닥 위 아무 데나로 순간이동
+        transform.position = new Vector3(
+            Random.Range(-4f, 4f), 0.5f, Random.Range(-4f, 4f));
+    }
+}`]],
+ tables:[{
+   cap:"입력 함수 사전",
+   head:["코드","언제 true 가 되나"],
+   rows:[["<code>Input.GetMouseButtonDown(0)</code>","왼쪽 버튼을 <b>누른 순간</b> 1번"],
+         ["<code>Input.GetMouseButton(0)</code>","누르고 <b>있는 동안</b> 계속"],
+         ["<code>Input.GetMouseButtonUp(0)</code>","<b>뗀 순간</b> 1번"],
+         ["<code>Input.GetKeyDown(KeyCode.A)</code>","A 키를 누른 순간"],
+         ["<code>Input.GetKey(KeyCode.A)</code>","A 키를 누르고 있는 동안"],
+         ["<code>Input.anyKeyDown</code>","아무 키나 누른 순간"],
+         ["<code>OnMouseDown()</code>","<b>이 오브젝트를</b> 클릭했을 때"],
+         ["<code>OnMouseEnter()</code>","마우스가 이 오브젝트 위에 올라왔을 때"]]
+ }],
+ notes:[
+  ["warn","클릭이 안 먹혀요","<ul><li>클릭하려는 오브젝트에 <b>Collider</b> 가 있어야 합니다 (기본 도형엔 자동으로 붙어 있어요)</li><li>카메라의 Tag 가 <b>MainCamera</b> 여야 <code>Camera.main</code> 이 작동합니다</li><li>Scene 창이 아니라 <b>Game 창</b>을 클릭해야 합니다</li></ul>"],
+  ["tip","out 이 뭐예요?","<code>Physics.Raycast(ray, out hit)</code> 의 <code>out</code> 은 <b>\"이 상자에 결과를 담아 줘\"</b> 라는 뜻입니다. 지금은 <b>그냥 이렇게 쓴다</b>고만 알아 두면 충분해요."]
+ ],
+ bonus:["두더지가 <b>1초마다 저절로</b> 움직이게 만들어 보기 (힌트 : Update + 시간 재기)","<code>Random.Range</code> 범위를 넓혀 더 어려운 두더지 만들기","<code>OnMouseEnter()</code> 로 마우스만 올려도 색이 변하게 해 보기"]
+},
+{
+ n:6, date:"10/12", lv:2, lvName:"조작",
+ title:"키보드로 조작하기",
+ sub:"WASD로 움직이고, 목표 지점까지 부드럽게 이동시키는 방법들을 비교합니다.",
+ clock:[["10분","복습"],["15분","Input Manager 살펴보기"],["30분","미션 : WASD 조종 + 이동 비교"],["5분","정리"]],
+ learn:[
+  ["Input Manager = 키에 붙인 이름표","<code>Edit → Project Settings → Input Manager</code>. 유니티는 키를 직접 쓰는 대신 <b>이름</b>으로 부릅니다. <code>\"Horizontal\"</code> 이라고만 쓰면 <b>A · D · ← · →</b> 를 전부 알아서 처리해 줘요. 나중에 키 배치를 바꿔도 코드는 그대로!"],
+  ["GetAxis 와 GetAxisRaw 의 차이","<b>GetAxis</b> 는 0 → 0.3 → 0.7 → 1 처럼 <b>부드럽게</b> 올라갑니다(미끄러지는 느낌). <b>GetAxisRaw</b> 는 <b>-1 · 0 · 1</b> 딱 세 값만 줍니다(칼 같은 조작). 처음엔 이해하기 쉬운 <b>Raw</b> 를 씁니다."],
+  ["왜 h 와 v 두 개를 받나요?","<code>h</code>(가로) 는 <b>x축</b>, <code>v</code>(세로) 는 <b>z축</b> 에 넣습니다. 3D 에서 y 는 위아래(점프)라서 걸어 다니는 건 x 와 z 예요. <code>new Vector3(h, 0, v)</code> 의 가운데 0 이 그 이유입니다."],
+  ["GetButtonDown(\"Jump\")","Space 에 붙어 있는 이름표가 <code>Jump</code> 입니다. <b>누른 순간 딱 한 번</b> true 라서 점프에 딱 맞아요. <code>GetButton</code> 을 쓰면 누르고 있는 내내 점프가 걸립니다."],
+  ["목표 지점까지 이동하는 3가지","<b>MoveTowards</b> = 처음부터 끝까지 <b>같은 속도</b>(엘리베이터). <b>Lerp</b> = 가까워질수록 <b>느려짐</b>(부드러운 카메라). <b>Slerp</b> = <b>호를 그리며</b> 이동(위성 궤도). 표로 아래 정리했어요."],
+  ["Time.deltaTime, 다시 한 번","이동 · 회전 코드에는 <b>거의 항상</b> 곱합니다. \"1초에 speed 만큼\" 이라는 뜻이 돼요. 곱하지 않으면 \"1프레임에 speed 만큼\" 이 되어 컴퓨터마다 속도가 달라집니다."]
+ ],
+ quests:[
+  "Edit → Project Settings → <b>Input Manager</b> 를 열어 <code>Horizontal</code> · <code>Vertical</code> · <code>Jump</code> 가 어떤 키에 붙어 있는지 확인",
+  "Sphere 에 <code>KeyMove</code> 붙이고 <b>WASD</b> · 방향키로 조종해 보기",
+  "<code>Space</code> 를 눌러 Console 에 점프 메시지가 뜨는지 확인",
+  "Speed 를 바꿔 가며 내 마음에 드는 조작감 찾기",
+  "Plane 의 Scale 을 <code>(2, 1, 2)</code> 로 키워 놀이터 넓히기",
+  "코드에서 <code>GetAxisRaw</code> 를 <code>GetAxis</code> 로 바꿔 보고 <b>느낌 차이</b> 말해 보기",
+  "<code>MoveCompare</code> 를 Cube 에 붙이고 <b>Mode</b> 를 1 → 2 → 3 으로 바꿔 관찰",
+  "셋 중 어떤 게 어떤 느낌인지 <b>한 줄로</b> 적어 보기"
+ ],
+ code:[
+  ["KeyMove.cs",
+`using UnityEngine;
+
+public class KeyMove : MonoBehaviour
+{
+    public float speed = 5f;
+
+    void Update()
+    {
+        // GetAxisRaw 는 -1, 0, 1 중 하나를 딱 떨어지게 준다
+        float h = Input.GetAxisRaw("Horizontal");   // A / D , ← / →
+        float v = Input.GetAxisRaw("Vertical");     // W / S , ↑ / ↓
+
+        // 3D 에서 걸어다니는 건 x 와 z! (y 는 위아래라서 0)
+        Vector3 dir = new Vector3(h, 0, v);
+        transform.Translate(dir * speed * Time.deltaTime);
+
+        if (Input.GetButtonDown("Jump"))            // Space
+            Debug.Log("점프 키를 눌렀어요!");
+    }
+}`],
+  ["MoveCompare.cs",
+`using UnityEngine;
+
+public class MoveCompare : MonoBehaviour
+{
+    public Vector3 target = new Vector3(5, 0.5f, 0);
+    public int mode = 1;        // 1=MoveTowards  2=Lerp  3=Slerp
+    public float speed = 2f;
+
+    void Update()
+    {
+        if (mode == 1)   // 등속 : 처음부터 끝까지 같은 속도
+            transform.position =
+                Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+
+        if (mode == 2)   // 선형보간 : 가까워질수록 느려짐
+            transform.position =
+                Vector3.Lerp(transform.position, target, speed * Time.deltaTime);
+
+        if (mode == 3)   // 구면보간 : 호를 그리며 이동
+            transform.position =
+                Vector3.Slerp(transform.position, target, speed * Time.deltaTime);
+    }
+}`]],
+ tables:[
+  {cap:"유니티가 기본으로 주는 입력 이름",
+   head:["이름","연결된 키","돌려주는 값"],
+   rows:[["<code>\"Horizontal\"</code>","← → / A D","-1, 0, 1"],["<code>\"Vertical\"</code>","↑ ↓ / W S","-1, 0, 1"],
+         ["<code>\"Jump\"</code>","Space","눌리면 true"],["<code>\"Fire1\"</code>","좌클릭 / Ctrl","눌리면 true"]]},
+  {cap:"목표 지점으로 이동하는 방법 비교",
+   head:["함수","움직임","어울리는 곳"],
+   rows:[["<code>MoveTowards</code>","같은 속도로 뚜벅뚜벅","엘리베이터 · 적 추격"],
+         ["<code>Lerp</code>","가까워질수록 느려짐","카메라 · UI 애니메이션"],
+         ["<code>Slerp</code>","호를 그리며 돌아감","위성 · 회전하는 물체"],
+         ["<code>SmoothDamp</code>","부드럽게 가속·감속","고급 카메라 추적"]]}
+ ],
+ notes:[
+  ["warn","키를 눌러도 아무 반응이 없어요","<code>Edit → Project Settings → Player → Other Settings → <b>Active Input Handling</b></code> 을 <b>Both</b> 로 바꾸고 에디터를 다시 켜세요. Unity 6 는 새 입력 시스템이 기본이라 이 설정이 필요할 수 있습니다."],
+  ["warn","Game 창을 한 번 클릭하세요","키보드 입력은 <b>Game 창이 선택된 상태</b>에서만 들어갑니다. Play 를 누른 뒤 Game 화면을 한 번 클릭하세요."],
+  ["tip","대각선이 더 빠른 이유","오른쪽 위로 가면 x 로 1, z 로 1 이라 실제 이동거리는 √2 ≈ 1.41 배가 됩니다. 진짜 게임은 <code>dir.normalized</code> 로 길이를 1 로 맞춰서 해결해요."]
+ ],
+ bonus:["Shift 를 누르면 두 배 빨라지는 <b>달리기</b> 넣기 — <code>if (Input.GetKey(KeyCode.LeftShift)) speed = 10f;</code>","<code>dir.normalized</code> 를 써서 대각선 속도 문제 고쳐 보기","Target 자리에 작은 Cube 를 놓아 목표 지점이 눈에 보이게 하기"]
+},
+{
+ n:7, date:"10/19", lv:2, lvName:"물리",
+ title:"진짜 같은 물체 만들기",
+ sub:"Rigidbody·Collider·Material·Physics Material 로 무게와 탄성이 있는 공을 만듭니다.",
+ clock:[["10분","복습"],["20분","씬 배치 + 물리 컴포넌트"],["25분","미션 : 재질 입히고 굴리기"],["5분","저장"]],
+ learn:[
+  ["지금까지의 이동은 사실 '순간이동'","<code>transform.Translate</code> 는 위치를 <b>강제로 바꾸는</b> 것이라 <b>벽을 뚫고 지나갑니다.</b> 오늘부터는 <b>힘을 줘서</b> 움직이는 진짜 물리를 씁니다."],
+  ["Rigidbody = 물리 법칙을 적용해 줘","이걸 붙이는 순간 오브젝트가 <b>중력을 받고 떨어지고, 부딪히면 튕깁니다.</b> 유니티의 물리엔진이 위치를 대신 계산해 줘요."],
+  ["Collider = 보이지 않는 충돌 껍질","실제 모양과 <b>달라도 됩니다.</b> 복잡한 캐릭터도 충돌 판정은 단순한 캡슐 하나로 처리해요(그래야 빠릅니다). <b>Is Trigger</b> 를 켜면 막지 않고 <b>통과</b>시킵니다."],
+  ["Material vs Physics Material","<b>Material</b> = <b>겉모습</b>(색 · 광택 · 투명도). <b>Physics Material</b> = <b>물리 질감</b>(탄성 · 마찰). 이름이 비슷해서 제일 많이 헷갈리는 부분이니 조심!"],
+  ["AddForce = 힘을 주다","<code>rigid.AddForce(방향 * 세기, ForceMode.Impulse)</code>. Translate 처럼 위치를 바꾸는 게 아니라 <b>밀어 주는</b> 겁니다. 그래서 관성이 생기고, 미끄러지고, 벽에 막혀요."],
+  ["물리는 FixedUpdate 에서","Update 는 컴퓨터 성능에 따라 실행 횟수가 달라지지만, <b>FixedUpdate 는 1초에 정확히 약 50번</b> 실행됩니다. Rigidbody 를 다룰 땐 반드시 FixedUpdate 를 쓰세요. Update 에 쓰면 컴퓨터마다 세기가 달라집니다."],
+  ["Is Kinematic 은 언제?","체크하면 <b>물리를 무시</b>합니다(중력도 안 받고 밀려나지도 않음). 움직이는 발판이나 함정처럼 <b>내가 직접 조종하고 싶은 물체</b>에 씁니다."],
+  ["투명한 물체 만들기","Material 의 <b>Surface Type</b> 을 <code>Transparent</code> 로 바꾸고, 색 창의 <b>A(알파)</b> 를 <code>0</code> 으로. 눈엔 안 보이지만 Collider 는 살아 있어서 <b>보이지 않는 함정</b>이 됩니다."]
+ ],
+ quests:[
+  "새 씬(또는 지금 씬 정리)에 <b>Sphere 6개 · Plane 1개 · Cube 1개</b> 만들고 아래 위치표대로 배치",
+  "이름 바꾸기 : <code>MyBall</code> · <code>Ball</code> ×5 · <code>Floor</code> (Cube 는 그대로)",
+  "모든 공에 <b>Add Component → Rigidbody</b> 추가 → ▶ Play 해서 떨어지는지 확인",
+  "프로젝트 창 우클릭 → Create → <b>Material</b> → MyBall / Ball / Floor 색을 다르게 입히기 <b>(내 공은 눈에 띄는 색으로!)</b>",
+  "Cube 를 <b>투명 함정</b>으로 : Material 의 Surface Type = <code>Transparent</code>, 색의 <b>A(알파) = 0</b>",
+  "Cube 의 Box Collider 에서 <b>Is Trigger 체크</b>",
+  "Create → <b>Physics Material</b> → Bounciness <code>0.5</code> · Friction <code>0.6</code> · Bounce Combine <code>Maximum</code>",
+  "만든 Physics Material 을 공들의 <b>Sphere Collider → Material</b> 칸에 끌어다 놓기 → 통통 튀는지 확인",
+  "<code>MyBall</code> 코드 붙이고 <b>WASD</b> 로 공 굴려 보기",
+  "Power 값을 바꿔 가며 조작감 찾기"
+ ],
+ code:[["MyBall.cs  (기본형)",
+`using UnityEngine;
+
+public class MyBall : MonoBehaviour
+{
+    public float power = 0.5f;      // 너무 빠르면 낮추고, 느리면 올리세요
+    Rigidbody rigid;
+
+    void Start()
+    {
+        // 이 오브젝트에 붙은 Rigidbody 를 찾아서 보관해 둔다
+        rigid = GetComponent<Rigidbody>();
+    }
+
+    // 물리를 다룰 땐 Update 가 아니라 FixedUpdate!
+    void FixedUpdate()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+
+        Vector3 dir = new Vector3(h, 0, v);
+
+        // AddForce : 힘을 준다. Impulse 는 순간적으로 툭!
+        rigid.AddForce(dir * power, ForceMode.Impulse);
+    }
+}`]],
+ tables:[
+  {cap:"오브젝트 위치표 (Position)",
+   head:["이름","x","y","z"],
+   rows:[["Floor","0","0","0"],["MyBall","0","0.5","0"],["Ball","-0.91","0.5","-1.5"],["Ball","-1.96","0.5","0.43"],
+         ["Ball","0","0.5","2"],["Ball","2","0.5","0.95"],["Ball","1.38","0.5","-1.5"],["Cube","-4","1.5","4"]],
+   num:true},
+  {cap:"Rigidbody 주요 설정",
+   head:["설정","뜻","이렇게 해 보세요"],
+   rows:[["Mass","무게","크게 하면 잘 안 밀립니다"],
+         ["Linear Damping","공기 저항","크게 하면 금방 멈춥니다"],
+         ["Angular Damping","회전 저항","구르는 속도에 영향"],
+         ["Use Gravity","중력을 받을지","끄면 우주처럼 둥둥"],
+         ["Is Kinematic","물리 무시","움직이는 발판 · 함정에"],
+         ["Collision Detection","충돌 정밀도","빠른 물체는 <code>Continuous</code>"]]},
+  {cap:"AddForce 의 ForceMode 4가지",
+   head:["ForceMode","느낌","어울리는 곳"],
+   rows:[["<code>Force</code>","서서히 밀림 (무게 반영)","자동차 · 바람"],
+         ["<code>Impulse</code>","<b>순간적으로 툭!</b> (무게 반영)","점프 · 대포 · 우리 수업"],
+         ["<code>Acceleration</code>","서서히 밀림 (무게 무시)","특수 효과"],
+         ["<code>VelocityChange</code>","순간적으로 툭 (무게 무시)","즉각적인 조작감"]]},
+  {cap:"⚙️ 조작감이 이상할 때 바꿀 숫자 (아주 중요!)",
+   head:["증상","바꿀 값","어떻게"],
+   rows:[["공이 미쳐 날뛴다","<code>Power</code>","<b>절반으로</b> 줄이기 (0.5 → 0.25)"],
+         ["공이 굼뜨다","<code>Power</code>","<b>두 배로</b> 올리기 (0.5 → 1)"],
+         ["공이 안 멈춘다","Rigidbody <code>Linear Damping</code>","0 → <b>1</b> 정도로 올리기"],
+         ["점프가 로켓처럼 뜬다","<code>Jump Power</code>","절반으로 줄이기"],
+         ["점프를 거의 못 한다","<code>Jump Power</code>","두 배로 올리기"],
+         ["너무 잘 튕긴다","Physics Material <code>Bounciness</code>","0.5 → <b>0.2</b>"]]},
+  {cap:"헷갈리는 Material 두 가지",
+   head:["","Material","Physics Material"],
+   rows:[["역할","<b>겉모습</b>","<b>물리 질감</b>"],
+         ["주요 값","Base Map(색) · Metallic · Smoothness · Surface Type","Bounciness(탄성) · Friction(마찰)"],
+         ["어디에 넣나","Mesh Renderer → Materials","Collider → Material"],
+         ["만드는 곳","Create → Material","Create → Physics Material"]]}
+ ],
+ notes:[
+  ["warn","공이 바닥을 뚫고 떨어져요","Rigidbody → <b>Collision Detection</b> 을 <code>Continuous</code> 로 바꾸거나, 힘(power)을 줄이세요. 너무 빠른 물체는 한 프레임 사이에 바닥을 지나쳐 버립니다."],
+  ["warn","공이 안 움직여요","<ul><li>FixedUpdate 가 아니라 Update 에 썼는지 확인</li><li>Rigidbody 를 붙였는지 확인</li><li>Is Kinematic 이 켜져 있으면 힘을 줘도 안 움직입니다</li></ul>"],
+  ["tip","Cube 는 왜 투명하게?","보이지 않는 <b>점프대 / 함정</b>을 만들기 위해서예요. 다음 시간에 여기에 들어가면 공이 튀어오르게 만듭니다."],
+  ["tip","숫자에 정답은 없습니다","Power · Mass · Bounciness 에 <b>\"이게 맞다\"는 값은 없어요.</b> 코드에 적힌 건 <b>출발점</b>일 뿐입니다. 위 표를 보면서 <b>인스펙터에서 직접 바꿔 가며</b> 내 손에 맞는 조작감을 찾는 것 — 그게 오늘의 진짜 미션입니다. Mass 를 바꾸면 Power 와 Jump Power 도 같이 바꿔야 해요."]
+ ],
+ bonus:["Bounciness 를 <code>1</code> 로 올려 <b>슈퍼볼</b> 만들기","Mass 를 공마다 다르게 줘서 무거운 공 / 가벼운 공 만들기","Material 의 <b>Metallic</b> 과 <b>Smoothness</b> 를 올려 쇠구슬 만들기","<code>ForceMode.Force</code> 로 바꿔 보고 Impulse 와 뭐가 다른지 느껴 보기"]
+},
+{
+ n:8, date:"10/26", lv:3, lvName:"완성작 1",
+ title:"충돌 이벤트 & 볼링게임 완성",
+ sub:"부딪히면 색이 변하고 함정에선 튀어오릅니다. 오늘 첫 게임을 완성합니다.",
+ clock:[["10분","복습"],["20분","충돌 이벤트 6종"],["25분","미션 : 볼링게임 완성"],["5분","서로 플레이"]],
+ learn:[
+  ["부딪히면 유니티가 알려 줍니다","우리가 매 프레임 \"닿았나?\" 검사할 필요가 없어요. <b>부딪히는 순간 유니티가 정해진 이름의 함수를 대신 불러 줍니다.</b> 우리는 그 함수를 만들어 두기만 하면 됩니다."],
+  ["Collision 과 Trigger","<b>Collision(충돌)</b> = <b>막힙니다.</b> 당구공처럼 서로 튕겨요. <b>Trigger(감지)</b> = <b>통과합니다.</b> 자동문 센서나 아이템처럼 지나가면서 신호만 보내요. 갈림길은 Collider 의 <b>Is Trigger</b> 체크 하나입니다."],
+  ["Enter / Stay / Exit","<b>Enter</b> = 닿기 <b>시작한 순간</b> 딱 1번. <b>Stay</b> = 닿아 있는 <b>동안 계속</b>. <b>Exit</b> = <b>떨어진 순간</b> 1번. 그래서 함수가 총 6개(2×3)입니다."],
+  ["이벤트가 불리는 조건","① <b>둘 다 Collider</b> 가 있어야 하고, ② <b>둘 중 하나 이상에 Rigidbody</b> 가 있어야 합니다. 이벤트가 아예 안 불리면 십중팔구 이 둘 중 하나예요."],
+  ["누가 부딪혔는지 알아내기","Collision 버전은 <code>collision.gameObject.name</code>, Trigger 버전은 <code>other.name</code>. <b>이름</b> 대신 <b>Tag</b> 로 확인하는 게 더 좋은 방법이고, 그건 10차시에 배웁니다."],
+  ["매개변수가 다른 이유","<code>OnCollisionEnter(<b>Collision</b> c)</code> 는 <b>부딪힌 정보 전체</b>(어디서 · 얼마나 세게)를 담고 있고, <code>OnTriggerEnter(<b>Collider</b> o)</code> 는 <b>상대 콜라이더만</b> 줍니다. 통과한 거라 '충돌 세기'가 없으니까요."],
+  ["AddTorque = 회전력","<code>rigid.AddTorque(Vector3.back * h)</code> 는 공을 <b>돌려 줍니다.</b> 앞으로 밀기만 하면 미끄러지는 느낌인데, 회전을 더하면 진짜로 <b>구르는</b> 느낌이 나요."]
+ ],
+ quests:[
+  "<code>OtherBall</code> 스크립트를 만들어 <b>Ball 5개 전부</b>에 붙이기",
+  "▶ Play → MyBall 로 부딪히면 <b>검정</b>, 떨어지면 <b>하양</b>으로 바뀌는지 확인",
+  "<code>MyBall</code> 코드를 아래 <b>완성형</b>으로 교체 (점프 + 회전 + 함정 반응)",
+  "Space 를 눌러 공이 점프하는지 확인",
+  "투명 Cube 위를 지나가면 <b>붕 떠오르는지</b> 확인",
+  "<code>OnCollisionEnter</code> 를 <code>OnCollisionStay</code> 로 바꿔 보고 뭐가 다른지 관찰 (다시 복구!)",
+  "★ <b>최종 미션</b> : 공 5개를 <b>볼링핀처럼</b> 세우고, 한 번에 다 맞히는 코스 만들기",
+  "친구 자리로 가서 서로의 볼링장을 3판씩 플레이해 보기"
+ ],
+ code:[
+  ["OtherBall.cs",
+`using UnityEngine;
+
+public class OtherBall : MonoBehaviour
+{
+    Material mat;
+
+    void Start()
+    {
+        mat = GetComponent<MeshRenderer>().material;
+    }
+
+    // 물리적으로 부딪히기 시작한 순간
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name == "MyBall")
+            mat.color = new Color(0, 0, 0);      // 검정
+    }
+
+    // 떨어진 순간
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.name == "MyBall")
+            mat.color = new Color(1, 1, 1);      // 하양
+    }
+}`],
+  ["MyBall.cs  (완성형 — 기존 코드 전체 교체)",
+`using UnityEngine;
+
+public class MyBall : MonoBehaviour
+{
+    public float power = 0.5f;      // 너무 빠르면 낮추고, 느리면 올리세요
+    public float jumpPower = 5f;    // 너무 높이 뜨면 낮추세요
+    Rigidbody rigid;
+
+    void Start()
+    {
+        rigid = GetComponent<Rigidbody>();
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("Jump"))
+            rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+    }
+
+    void FixedUpdate()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+
+        rigid.AddForce(new Vector3(h, 0, v) * power, ForceMode.Impulse);
+
+        // 회전력을 줘서 미끄러지지 않고 '구르는' 느낌 내기
+        rigid.AddTorque(Vector3.back * h);
+    }
+
+    // 투명 Cube(함정) 안에 있는 동안 계속 위로!
+    void OnTriggerStay(Collider other)
+    {
+        if (other.name == "Cube")
+            rigid.AddForce(Vector3.up * 2, ForceMode.Impulse);
+    }
+}`]],
+ tables:[{
+   cap:"충돌 이벤트 6종 — Is Trigger 하나로 갈립니다",
+   head:["함수","Is Trigger","언제 불리나"],
+   rows:[["<code>OnCollisionEnter(Collision c)</code>","꺼짐 ☐","부딪힌 순간 (막힘)"],
+         ["<code>OnCollisionStay(Collision c)</code>","꺼짐 ☐","붙어 있는 동안 계속"],
+         ["<code>OnCollisionExit(Collision c)</code>","꺼짐 ☐","떨어진 순간"],
+         ["<code>OnTriggerEnter(Collider o)</code>","<b>켜짐 ☑</b>","통과해 들어간 순간"],
+         ["<code>OnTriggerStay(Collider o)</code>","<b>켜짐 ☑</b>","안에 있는 동안 계속"],
+         ["<code>OnTriggerExit(Collider o)</code>","<b>켜짐 ☑</b>","빠져나온 순간"]]
+ }],
+ notes:[
+  ["warn","이벤트가 아예 안 불려요","<ul><li>부딪히는 <b>둘 중 하나</b>에 반드시 <b>Rigidbody</b> 가 있어야 합니다</li><li><b>둘 다</b> Collider 가 있어야 합니다</li><li>Trigger 함수를 쓰려면 <b>Is Trigger 체크</b>, Collision 함수를 쓰려면 <b>체크 해제</b></li><li>함수 이름 철자를 확인하세요. <code>OnColisionEnter</code>(l 하나) 는 그냥 무시됩니다</li></ul>"],
+  ["tip","이름 비교는 대소문자까지 정확히","<code>collision.gameObject.name == \"MyBall\"</code> 은 <b>MyBall</b> 과 <b>myball</b> 을 다르게 봅니다. 계층구조의 이름과 <b>글자 하나까지</b> 똑같이 쓰세요."]
+ ],
+ bonus:["부딪히면 색 대신 <b>공이 사라지게</b> 해 보기 — <code>gameObject.SetActive(false);</code>","공을 10개로 늘려 진짜 볼링핀 삼각형 배치 만들기","<code>OnCollisionStay</code> 로 <b>닿아 있는 동안 계속 색이 변하게</b> 만들어 보기","점수 세는 건 다음 주에! 오늘은 눈으로 세기"]
+},
+{
+ n:9, date:"11/02", lv:2, lvName:"UI",
+ title:"화면에 글자 띄우기",
+ sub:"Canvas 위에 Image와 Text를 올리고, 스페이스를 누르면 숫자가 올라가게 만듭니다.",
+ clock:[["10분","복습"],["25분","UI 배치"],["20분","미션 : 점수판 만들기"],["5분","정리"]],
+ learn:[
+  ["UI 는 3D 세상 위에 붙은 스티커","점수 · 체력바 · 버튼은 <b>게임 세상 안에 있는 물건이 아닙니다.</b> 화면 앞에 놓인 <b>투명 유리판(Canvas)</b> 위에 붙은 스티커예요. 그래서 카메라가 움직여도 제자리에 있습니다."],
+  ["Canvas 는 자동으로 생깁니다","UI 요소를 처음 만들면 <b>Canvas</b> 와 <b>EventSystem</b> 이 함께 생성됩니다. Canvas 는 유리판, EventSystem 은 <b>클릭 · 터치를 감지하는 장치</b>예요. 둘 다 지우면 안 됩니다."],
+  ["Rect Transform : UI 전용 위치","일반 오브젝트는 Transform 이지만 UI 는 <b>Rect Transform</b> 을 씁니다. Position 대신 <b>앵커 기준 좌표 + Width/Height</b> 로 위치와 크기를 정해요."],
+  ["앵커(Anchor)가 제일 중요합니다","<b>화면 크기가 바뀌어도 붙어 있을 기준점</b>입니다. 점수는 <b>왼쪽 위</b>, 체력바는 <b>아래 가운데</b>, 설정 버튼은 <b>오른쪽 위</b>에 앵커를 두면 어떤 화면에서도 안 흐트러져요. Rect Transform 왼쪽 위의 네모 박스를 클릭하면 고를 수 있습니다."],
+  ["Text 는 두 종류가 있어요","<b>Text (Legacy)</b> 는 옛날 방식이지만 <b>단순해서 배우기 쉽습니다.</b> <b>TextMeshPro</b> 는 예쁘지만 초기 설정이 필요해요. 우리는 <b>Legacy Text</b> 를 씁니다 (UI → Legacy → Text)."],
+  ["코드에서 UI 를 건드리려면","맨 위에 <b><code>using UnityEngine.UI;</code></b> 를 꼭 쓰고, <code>public Text scoreText;</code> 로 칸을 만든 뒤 <b>인스펙터에 드래그</b>해서 연결합니다. 이 '드래그 연결'이 유니티의 기본 방식이에요."],
+  [".text 에는 글자만 들어갑니다","<code>scoreText.text = 5;</code> 는 오류입니다. 숫자는 <b><code>.ToString()</code></b> 으로 글자로 바꿔 주세요 → <code>scoreText.text = score.ToString();</code>"],
+  ["Scene 창의 2D 버튼","UI 를 만지고 있으면 3D 시점에선 보기 어렵습니다. Scene 창 위쪽 <b>2D</b> 버튼을 누르면 캔버스를 <b>정면에서</b> 볼 수 있어요."]
+ ],
+ quests:[
+  "★ <b>Assets → Scenes 우클릭 → Create → Scene → Scene</b> 으로 <b>새 씬</b>을 만들고 이름을 <code>Stage0</code> 으로 → 더블클릭해서 열기 <b>(볼링게임 씬은 그대로 둡니다. 오늘부터 여기서 2차 완성작을 만들어요)</b>",
+  "Plane 하나 깔아 바닥 만들기 (다음 시간에 쓸 무대입니다)",
+  "계층구조 우클릭 → <b>UI → Image</b> (Canvas 와 EventSystem 이 자동으로 생깁니다)",
+  "Image 의 Rect Transform 왼쪽 위 박스를 눌러 <b>앵커를 왼쪽 위</b>로 설정",
+  "Pos <code>(78, -65, -2)</code> · Width/Height <code>50</code> · Color 는 마음대로",
+  "우클릭 → UI → <b>Legacy → Text</b> 를 <b>2개</b> 만들고 이름을 <code>PlayerItemText</code>, <code>StageItemText</code> 로 변경",
+  "<code>PlayerItemText</code> : 앵커 왼쪽 위 · Pos <code>(140, -64, 0)</code> · 50×60 · Text <code>0</code> · Bold · Font Size <code>50</code>",
+  "<code>StageItemText</code> : 앵커 왼쪽 위 · Pos <code>(190, -64, 0)</code> · 110×60 · Text <code>/ 0</code> · Bold · Font Size <code>50</code>",
+  "Scene 창 위쪽 <b>2D</b> 버튼을 눌러 캔버스를 정면으로 확인",
+  "빈 오브젝트 하나 만들고(Create Empty) <code>ScoreTest</code> 붙이기",
+  "인스펙터의 <b>Score Text</b> 칸에 <code>PlayerItemText</code> 를 <b>끌어다 놓기</b>",
+  "▶ Play → Space 를 누를 때마다 숫자가 올라가면 성공!",
+  "Game 창 크기를 늘였다 줄여 보며 <b>앵커가 왜 필요한지</b> 확인",
+  "<code>Ctrl+S</code> 로 저장! <b>다음 시간에 이 씬에서 이어서 만듭니다</b> (ScoreTest 붙인 빈 오브젝트는 지워도 됩니다)"
+ ],
+ code:[["ScoreTest.cs",
+`using UnityEngine;
+using UnityEngine.UI;      // UI 를 쓰려면 이 줄이 꼭 필요!
+
+public class ScoreTest : MonoBehaviour
+{
+    public Text scoreText;   // 인스펙터에 Text 오브젝트를 끌어다 넣으세요
+    int score = 0;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            score = score + 1;
+
+            // 숫자를 글자로 바꿔서 화면에 표시
+            scoreText.text = score.ToString();
+        }
+    }
+}`]],
+ tables:[
+  {cap:"UI 용어 정리",
+   head:["이름","뜻"],
+   rows:[["Canvas","모든 UI 가 올라가는 투명 유리판"],
+         ["EventSystem","클릭 · 터치를 감지하는 장치 (자동 생성)"],
+         ["Rect Transform","UI 전용 위치·크기 (Transform 대신)"],
+         ["Anchor (앵커)","화면이 커져도 붙어 있을 기준점"],
+         ["Pivot","회전·크기 변화의 중심점"],
+         ["Image","네모난 그림 · 색 박스"],
+         ["Text (Legacy)","글자"],
+         ["Button","누를 수 있는 버튼"],
+         ["Slider","체력바 · 볼륨 조절"]]},
+  {cap:"Canvas 의 Render Mode 3종",
+   head:["모드","화면에서","쓰는 곳"],
+   rows:[["Screen Space - Overlay","항상 화면 맨 앞 <b>(기본값)</b>","점수 · 체력바 · 메뉴"],
+         ["Screen Space - Camera","카메라 앞 일정 거리","화면 효과가 필요할 때"],
+         ["World Space","게임 세상 안에 놓임","캐릭터 머리 위 이름표"]]}
+ ],
+ notes:[
+  ["warn","Text 가 안 보여요","<ul><li>앵커나 Pos 때문에 <b>화면 밖으로 나가</b> 있진 않은지</li><li><b>Width / Height</b> 가 글자보다 작으면 잘립니다</li><li>Color 의 <b>A(알파)</b> 가 0 은 아닌지</li><li>Font Size 가 너무 작진 않은지</li></ul>"],
+  ["warn","using UnityEngine.UI; 를 빼먹으면","<code>The type or namespace name 'Text' could not be found</code> 오류가 납니다. 맨 윗줄을 확인하세요."],
+  ["tip","드래그 연결이 핵심입니다","<code>public Text scoreText;</code> 라고 써 두면 인스펙터에 <b>빈 칸(None)</b> 이 생깁니다. 여기에 오브젝트를 끌어다 넣는 것이 유니티의 기본 연결 방식이에요. <b>빈 칸을 남겨 두면 반드시 오류가 납니다.</b>"],
+  ["tip","메뉴에 Legacy → Text 가 없다면","TextMeshPro 로 대신하면 됩니다. <b>UI → Text - TextMeshPro</b> 로 만들고(처음 한 번 <b>Import TMP Essentials</b> 팝업이 뜨면 누르세요), 코드에서 <b>세 군데</b>만 바꾸면 나머지는 그대로예요.<ul><li><code>using UnityEngine.UI;</code> → <code>using TMPro;</code></li><li><code>public Text scoreText;</code> → <code>public TMP_Text scoreText;</code></li><li><code>public Text stageCountText;</code> 등 <b>모든 Text 를 TMP_Text 로</b></li></ul><code>.text = ...</code> 쓰는 방식은 완전히 똑같습니다."]
+ ],
+ bonus:["Space 말고 <b>마우스 클릭</b>으로 점수가 오르게 바꾸기","점수가 10 이 넘으면 글자 색이 빨갛게 — <code>scoreText.color = Color.red;</code>","UI → Legacy → <b>Button</b> 을 만들어 눌러 보기","앵커를 <b>오른쪽 아래</b>로 바꾸고 Game 창 크기를 조절해 보기"]
+},
+{
+ n:10, date:"11/09", lv:3, lvName:"UI",
+ title:"아이템을 먹으면 점수가 오른다",
+ sub:"Tag와 GameManager로 게임의 두뇌를 만들고, 효과음까지 넣습니다.",
+ clock:[["10분","복습"],["25분","Tag · GameManager 세팅"],["20분","미션 : 아이템 먹기 완성"],["5분","정리"]],
+ learn:[
+  ["지난 시간 만든 Stage0 씬에서 이어서","9차시에 UI 를 올려 둔 <code>Stage0</code> 씬을 그대로 씁니다. <b>볼링게임 씬은 건드리지 마세요.</b> 오늘부터 여기서 만드는 게임이 13차시에 실행 파일로 나갑니다."],
+  ["효과음 파일은 어디서?","가장 간단한 건 짧은 <code>.wav</code> · <code>.mp3</code> 파일을 <b>프로젝트 창에 그냥 끌어다 놓는 것</b>입니다. Asset Store 에서 받고 싶다면 <b>웹(assetstore.unity.com)에서 무료 에셋을 \"Add to My Assets\"</b> 한 뒤, 유니티에서 <code>Window → Package Manager → My Assets</code> 로 가서 <b>Download → Import</b> 하면 됩니다. 시간이 걸리니 오늘은 파일 드래그를 권해요."],
+  ["Tag = 오브젝트에 붙이는 이름표","아이템이 5개면 이름은 <code>Item</code>, <code>Item (1)</code>, <code>Item (2)</code>... 로 제각각입니다. 하지만 <b>Tag 를 전부 <code>Item</code> 으로</b> 달아 두면 <code>if (other.tag == \"Item\")</code> <b>한 줄로 5개를 전부</b> 처리할 수 있어요."],
+  ["Tag 만드는 법","오브젝트를 고르고 인스펙터 맨 위 <b>Tag → Add Tag...</b> → <b>+</b> 버튼 → 이름 입력. 만든 뒤에는 <b>다시 오브젝트로 돌아와서</b> 그 Tag 를 골라 줘야 합니다 (여기서 많이 놓쳐요!)."],
+  ["GameManager 패턴","점수 · 스테이지 번호처럼 <b>게임 전체가 알아야 하는 정보</b>는 한 오브젝트가 모아서 관리합니다. 모양이 필요 없으니 <b>Create Empty</b>(빈 오브젝트)로 만들어요. 거의 모든 게임에 있는 방식입니다."],
+  ["스크립트끼리 대화하기","<code>public GameManagerLogic manager;</code> 로 칸을 만들고 인스펙터에 <b>GameManager 를 드래그</b>하면, 이제 <code>manager.GetItem(3)</code> 처럼 <b>다른 스크립트의 함수를 부를 수 있습니다.</b> 오늘의 진짜 핵심이에요."],
+  ["SetActive(false) 와 Destroy","<code>SetActive(false)</code> 는 <b>껐다</b>(숨김 · 다시 켤 수 있음), <code>Destroy()</code> 는 <b>아예 삭제</b>. 먹은 아이템은 보통 SetActive(false) 로 숨깁니다."],
+  ["효과음 넣는 법","오브젝트에 <b>Audio Source</b> 컴포넌트를 붙이고 소리 파일을 <b>AudioClip</b> 칸에 넣습니다. <b>Play On Awake 는 체크를 꺼야</b> 시작하자마자 울리지 않아요. 코드에서 <code>audioSource.Play()</code> 로 울립니다."],
+  ["떨어지면 다시 시작하는 원리","바닥 한참 아래(<code>y = -10.6</code>)에 <b>거대한 투명 Trigger 판</b>을 깔아 둡니다. 낭떠러지로 떨어진 플레이어가 이 판에 닿으면 <code>OnTriggerEnter</code> 가 불려서 스테이지를 다시 시작해요. <b>보이지도 않고 막지도 않는 감지판</b>입니다."],
+  ["★ 씬을 Build 목록에 넣어야 합니다","<code>SceneManager.LoadScene(0)</code> 은 <b>Build 목록의 0번 씬</b>을 부릅니다. <code>Stage0</code> 을 등록하지 않으면 <b>엉뚱한 빈 씬(SampleScene)이 열려서</b> \"떨어지면 다시 시작\"이 이상하게 동작해요. <code>File → Build Profiles → Scene List</code> 에서 <b>Stage0 이 0번</b>인지 꼭 확인하세요."]
+ ],
+ quests:[
+  "지난 시간에 만든 <code>Stage0</code> 씬 열기 (UI 가 이미 올라가 있어야 합니다)",
+  "인스펙터 Tag → <b>Add Tag...</b> → <b>+</b> 버튼으로 <code>Item</code> · <code>Floor</code> 두 개 만들어 두기",
+  "바닥 Plane 을 고르고 Tag 를 <b>Floor</b> 로 지정",
+  "Sphere 하나를 <b>Player</b> 로 : Tag = <b>Player</b>, Position <code>(0, 0.7, 0)</code>, <b>Rigidbody</b>(Mass 15) + <b>Audio Source</b> 추가",
+  "Capsule 5개 만들어 이름 <code>Item</code>, Tag = <b>Item</b>, Scale <code>(0.7, 0.4, 0.7)</code>, <b>Capsule Collider → Is Trigger 체크</b>",
+  "Item 5개 전부에 <code>ItemCan</code> 붙이기 → Play 해서 빙글빙글 도는지 확인",
+  "지난 시간에 만든 <b>PlayerItemText</b> · <b>StageItemText</b> 가 그대로 있는지 확인 (없으면 9차시 미션을 다시 보고 만들기)",
+  "★ <b>File → Build Profiles</b> → <b>Scene List</b> → <b>Add Open Scenes</b> 로 <code>Stage0</code> 등록 → 원래 있던 <code>SampleScene</code> 은 <b>체크 해제하거나 삭제</b> → <b><code>Stage0</code> 이 0번</b>이 되어야 합니다",
+  "계층구조 우클릭 → <b>Create Empty</b> → 이름 <code>GameManager</code>, Position <code>(0, -10.6, 0)</code>",
+  "GameManager 에 <b>Box Collider</b> 추가 → Size <code>(100, 1, 100)</code> → <b>Is Trigger 반드시 체크!</b>",
+  "GameManager 에 <code>GameManagerLogic</code> 붙이고 : Total Item Count = <b>5</b> · Stage = <b>0</b> · Text 2개 <b>드래그 연결</b>",
+  "Player 에 <code>PlayerBall</code> 붙이고 <b>Manager</b> 칸에 GameManager <b>드래그</b>",
+  "효과음 넣기 — <b>가장 쉬운 방법</b> : 짧은 <code>.wav</code> / <code>.mp3</code> 파일을 <b>프로젝트 창으로 그냥 드래그</b> → 그 파일을 Player 의 Audio Source 의 <b>AudioClip</b> 칸에 끌어다 놓기",
+  "Audio Source 의 <b>Play On Awake 체크 해제</b> (안 그러면 시작하자마자 울립니다) · Volume 은 <code>0.5</code> 정도로",
+  "▶ Play → 아이템을 먹으면 숫자가 오르고 소리가 나면 성공!",
+  "일부러 바닥 밖으로 떨어져 보기 → 스테이지가 다시 시작되면 성공"
+ ],
+ code:[
+  ["ItemCan.cs",
+`using UnityEngine;
+
+public class ItemCan : MonoBehaviour
+{
+    public float rotateSpeed = 40f;
+
+    void Update()
+    {
+        // 아이템이 제자리에서 빙글빙글 (눈에 잘 띄게!)
+        transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime, Space.World);
+    }
+}`],
+  ["GameManagerLogic.cs",
+`using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class GameManagerLogic : MonoBehaviour
+{
+    public int totalItemCount;      // 이 스테이지의 아이템 총 개수
+    public int stage;               // 이 스테이지 번호 (0부터)
+    public Text stageCountText;     // "/ 5" 를 보여줄 글자
+    public Text playerCountText;    // "0"  을 보여줄 글자
+
+    void Awake()
+    {
+        stageCountText.text = "/ " + totalItemCount;
+        playerCountText.text = "0";
+    }
+
+    // 아이템을 먹었을 때 화면 숫자 갱신
+    public void GetItem(int count)
+    {
+        playerCountText.text = count.ToString();
+    }
+
+    // 다음 스테이지로 이동
+    public void NextStage()
+    {
+        int next = stage + 1;
+        if (next >= SceneManager.sceneCountInBuildSettings)
+            next = 0;
+        SceneManager.LoadScene(next);
+    }
+
+    // 이 스테이지 다시하기
+    public void RetryStage()
+    {
+        SceneManager.LoadScene(stage);
+    }
+
+    // 바닥 아래로 떨어지면 다시하기
+    // (이 오브젝트의 Box Collider 는 Is Trigger 체크!)
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+            RetryStage();
+    }
+}`],
+  ["PlayerBall.cs",
+`using UnityEngine;
+
+public class PlayerBall : MonoBehaviour
+{
+    public float power = 1f;         // Mass 15 기준. 느리면 올리세요
+    public float jumpPower = 100f;   // Mass 15 기준. 안 뛰면 올리세요
+    public int itemCount = 0;
+    public GameManagerLogic manager;   // GameManager 를 끌어다 넣으세요
+
+    bool isJump;
+    Rigidbody rigid;
+    AudioSource audioSource;
+
+    void Awake()
+    {
+        isJump = false;
+        rigid = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    void Update()
+    {
+        // 땅에 있을 때만 점프 (공중 2단 점프 방지)
+        if (Input.GetButtonDown("Jump") && isJump == false)
+        {
+            isJump = true;
+            rigid.AddForce(new Vector3(0, jumpPower, 0), ForceMode.Impulse);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        rigid.AddForce(new Vector3(h, 0, v) * power, ForceMode.Impulse);
+    }
+
+    // 바닥에 닿으면 다시 점프 가능
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Floor")
+            isJump = false;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Item")
+        {
+            itemCount = itemCount + 1;
+            if (audioSource != null) audioSource.Play();
+            manager.GetItem(itemCount);
+            other.gameObject.SetActive(false);   // 먹은 아이템 숨기기
+        }
+        else if (other.tag == "Finish")
+        {
+            if (itemCount == manager.totalItemCount)
+                manager.NextStage();
+            else
+                Debug.Log("아이템을 다 모아야 통과할 수 있어요! "
+                          + itemCount + " / " + manager.totalItemCount);
+        }
+    }
+}`]],
+ tables:[{
+   cap:"오늘 쓰는 Tag 4개",
+   head:["Tag","붙이는 곳","코드에서 하는 일"],
+   rows:[["<code>Player</code>","플레이어 Sphere","낙하 감지 · 카메라 추적"],
+         ["<code>Floor</code>","바닥 Plane · 발판 Cube","땅에 닿으면 점프 가능"],
+         ["<code>Item</code>","캡슐 아이템 5개","먹으면 점수 +1"],
+         ["<code>Finish</code>","골인 지점 (11차시)","다음 스테이지로"]]
+ }],
+ notes:[
+  ["warn","자주 나는 오류 5종","<ul><li><b>NullReferenceException</b> → 인스펙터의 빈 칸(Manager · Text)에 드래그를 안 했습니다. <b>인스펙터부터 보세요.</b></li><li><b>아이템을 먹어도 반응이 없다</b> → 아이템의 <b>Is Trigger 체크</b> 와 <b>Tag = Item</b> 확인</li><li><b>떨어져도 재시작이 안 된다</b> → GameManager 의 Box Collider <b>Is Trigger 체크</b> 확인</li><li><b>떨어졌더니 텅 빈 화면이 뜬다</b> → Build 목록에 <b>Stage0 이 0번</b>으로 있는지 확인 (SampleScene 이 0번이면 그게 열립니다)</li><li><b>Tag 를 만들었는데 적용이 안 됐다</b> → Add Tag 로 만든 뒤 <b>오브젝트로 돌아와 다시 골라야</b> 합니다</li></ul>"],
+  ["tip","Total Item Count 를 꼭 맞추세요","아이템 개수를 바꿨으면 GameManager 의 <b>Total Item Count</b> 도 같이 바꿔야 골인이 됩니다. 안 그러면 영원히 통과 못 해요."]
+ ],
+ bonus:["아이템마다 Rotate Speed 를 다르게 줘서 속도 차이 만들기","아이템을 먹을 때 <b>위아래로 둥실둥실</b> 뜨게 만들기 (힌트 : <code>Mathf.Sin(Time.time)</code>)","효과음을 다른 것으로 바꿔 내 취향 게임 만들기","<code>itemCount</code> 를 인스펙터에서 지켜보며 정말 올라가는지 확인"]
+},
+{
+ n:11, date:"11/16", lv:3, lvName:"완성작 2",
+ title:"3D 게임 만들기 ① 카메라와 골인 지점",
+ sub:"플레이어를 따라다니는 카메라를 만들고, 아이템을 다 모아야 통과하는 골인 지점을 놓습니다.",
+ clock:[["10분","복습"],["20분","카메라 추적 · 골인 지점"],["25분","미션 : 스테이지 완성"],["5분","저장"]],
+ learn:[
+  ["카메라도 그냥 게임 오브젝트입니다","특별한 존재가 아니에요. <b>Transform 을 옮기면 화면이 바뀝니다.</b> 그러니 매 프레임 플레이어 위치를 따라 옮겨 주면 '따라다니는 카메라'가 됩니다."],
+  ["offset(간격)이 핵심 아이디어","시작할 때 <b>카메라 위치 − 플레이어 위치</b> 를 계산해서 기억해 둡니다. 그리고 매 프레임 <b>플레이어 위치 + 그 간격</b> 으로 카메라를 옮기면, 처음 잡아 둔 <b>각도와 거리가 그대로 유지</b>돼요."],
+  ["왜 LateUpdate 인가요?","Update 에서 카메라를 옮기면 <b>플레이어보다 먼저 움직여서 화면이 떨립니다.</b> LateUpdate 는 그 프레임의 모든 움직임이 <b>끝난 뒤 마지막에</b> 실행돼요. 카메라는 항상 LateUpdate."],
+  ["FindGameObjectWithTag","씬 전체에서 <b>Tag 가 Player 인 오브젝트</b>를 찾아 줍니다. <b>이름이 Player 인 것으로는 안 됩니다</b> — 반드시 Tag 여야 해요. 못 찾으면 바로 오류가 납니다."],
+  ["Finish Tag 는 유니티가 준 것","<code>Finish</code> 는 Untagged · Player · MainCamera 처럼 <b>유니티가 기본으로 만들어 둔 Tag</b> 입니다. 따로 만들 필요 없이 목록에서 고르기만 하면 돼요."],
+  ["골인 조건을 코드로 표현하면","<code>if (itemCount == manager.totalItemCount)</code> → <b>내가 먹은 개수 == 총 개수</b> 일 때만 통과. 아니면 Console 에 안내 메시지. 이게 게임의 '규칙'을 코드로 쓴 것입니다."]
+ ],
+ quests:[
+  "Cylinder 하나 만들어 이름 <code>Point</code>, <b>Tag = Finish</b>, Scale <code>(2, 2, 2)</code>, 코스 끝쪽에 배치",
+  "Point 의 <b>Capsule Collider → Is Trigger 체크</b>",
+  "Point 에 밝은 Material 을 입혀 눈에 확 띄게 만들기",
+  "Main Camera 를 플레이어가 잘 보이는 <b>위치와 각도</b>로 옮기기 (Game 창을 보면서!)",
+  "Main Camera 에 <code>CameraMove</code> 붙이기",
+  "▶ Play → 카메라가 플레이어를 <b>따라오는지</b> 확인",
+  "아이템을 <b>다 안 먹고</b> Point 에 닿아 보기 → Console 에 안내 메시지가 뜨나요?",
+  "아이템을 <b>다 먹고</b> Point 에 닿아 보기 → 스테이지가 처음부터 다시 시작됩니다 (다음 씬이 아직 없으니까요. 다음 시간에!)",
+  "일부러 바닥 밖으로 떨어져 보기 → 다시 시작되면 성공",
+  "코스를 조금 더 재미있게 다듬기 (Cube 발판 · 아이템 위치)"
+ ],
+ code:[["CameraMove.cs",
+`using UnityEngine;
+
+public class CameraMove : MonoBehaviour
+{
+    Transform playerTransform;
+    Vector3 offset;
+
+    void Awake()
+    {
+        // Tag 가 Player 인 오브젝트를 씬에서 찾는다
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
+        // 처음의 '카메라 - 플레이어' 간격을 기억해 둔다
+        offset = transform.position - playerTransform.position;
+    }
+
+    // LateUpdate : 플레이어가 다 움직인 뒤에 카메라를 옮긴다
+    void LateUpdate()
+    {
+        transform.position = playerTransform.position + offset;
+    }
+}`]],
+ notes:[
+  ["warn","카메라 스크립트에서 오류가 나요","<code>FindGameObjectWithTag(\"Player\")</code> 는 <b>Tag 가 Player 인 오브젝트</b>를 찾습니다. 플레이어 Sphere 의 <b>Tag</b> 를 확인하세요. <b>이름이 Player 인 것만으로는 안 됩니다!</b>"],
+  ["warn","골인해도 아무 일이 없어요","<ul><li>Point 의 Tag 가 <b>Finish</b> 인지</li><li>Point 의 Collider 가 <b>Is Trigger</b> 인지</li><li>PlayerBall 의 <b>Manager</b> 칸이 연결돼 있는지</li></ul>"],
+  ["tip","카메라 각도 잡는 요령","Scene 창에서 원하는 시점을 만든 뒤 Main Camera 를 선택하고 <code>Ctrl + Shift + F</code> 를 누르면 <b>지금 보고 있는 시점으로 카메라가 이동</b>합니다. 아주 편해요."]
+ ],
+ bonus:["offset 을 <code>public Vector3 offset;</code> 으로 바꿔 인스펙터에서 조절해 보기","카메라가 <b>부드럽게</b> 따라오게 — <code>transform.position = Vector3.Lerp(transform.position, playerTransform.position + offset, 5f * Time.deltaTime);</code>","골인 지점을 회전시키기 (<code>ItemCan</code> 스크립트를 그냥 붙이면 됩니다!)"]
+},
+{
+ n:12, date:"11/23", lv:3, lvName:"완성작 2",
+ title:"3D 게임 만들기 ② 스테이지를 넘나들자",
+ sub:"Scene을 여러 개 만들어 이어 붙이면, 진짜 게임의 구조가 완성됩니다.",
+ clock:[["10분","복습"],["20분","씬 3개 만들고 등록"],["25분","미션 : 나만의 스테이지 디자인"],["5분","저장"]],
+ learn:[
+  ["Scene = 무대 한 개","스테이지 1, 스테이지 2, 제목 화면, 게임오버 화면이 각각 하나의 씬입니다. 씬을 바꾸면 <b>무대 세트를 통째로 갈아끼우는</b> 것과 같아요."],
+  ["Build 목록 = 씬에 번호 붙이기","<code>File → Build Profiles(Build Settings)</code> 의 <b>Scene List</b> 에 등록된 씬만 코드로 부를 수 있습니다. 등록하면 위에서부터 <b>0, 1, 2...</b> 번호가 붙어요. <b>여기 없는 씬은 절대 못 부릅니다.</b>"],
+  ["SceneManager.LoadScene(번호)","현재 씬을 <b>통째로 갈아끼웁니다.</b> 지금 씬에 있던 것들은 <b>전부 사라집니다</b> — 점수도 초기화돼요. 그래서 우리는 스테이지마다 아이템 개수를 새로 세는 겁니다."],
+  ["씬을 넘어가도 남기고 싶다면 (참고)","<code>DontDestroyOnLoad</code> 나 <code>static</code> 변수를 쓰면 됩니다. 조금 어려우니 <b>오늘은 쓰지 않습니다.</b> 나중에 혼자 게임 만들 때 검색해 보세요."],
+  ["복사 - 붙여넣기로 스테이지 늘리기","처음부터 다시 만들 필요 없어요. Stage0 의 계층구조를 <b>전체 선택 → 복사</b> 하고, 새 씬에서 <b>기본으로 있는 것들을 지운 뒤 붙여넣기</b>. 그 다음 발판만 다시 배치하면 새 스테이지 완성입니다."],
+  ["각 씬의 Stage 값을 꼭 바꾸세요","<code>stage</code> 는 <b>이 씬의 번호</b>입니다. 떨어지면 <code>stage</code> 로 다시 시작하고, 골인하면 <code>stage + 1</code> 로 넘어가요. Stage1 씬인데 값이 0 이면 <b>떨어질 때 엉뚱한 씬</b>으로 갑니다."]
+ ],
+ quests:[
+  "Assets → Scenes 폴더 우클릭 → Create → Scene → <b>Scene</b> 을 <b>2번</b> 해서 씬을 두 개 더 만들기",
+  "새로 만든 두 개의 이름을 <code>Stage1</code> · <code>Stage2</code> 로 변경 (지금까지 만든 게 <code>Stage0</code>)",
+  "<b>File → Build Profiles</b> → Scene List 에 <b>Stage1 · Stage2</b> 를 드래그해 추가 (Stage0 은 지난 시간에 넣어 뒀습니다)",
+  "순서가 <b>Stage0(0) → Stage1(1) → Stage2(2)</b> 인지 확인 — 다르면 드래그해서 순서 바꾸기",
+  "Stage0 을 열고 계층구조 <b>전체 선택 → 복사</b>",
+  "Stage1 을 열고 <b>기본으로 있는 것들을 모두 지운 뒤</b> 붙여넣기 (Stage2 도 동일)",
+  "각 씬의 GameManager 에서 <b>Stage</b> 값을 <b>0 / 1 / 2</b> 로 맞추기",
+  "Stage1 · Stage2 는 Cube 로 <b>발판 코스</b>를 만들어 점프 스테이지로 꾸미기 <b>(자유 디자인!)</b>",
+  "발판 Cube 들의 Tag 를 <b>Floor</b> 로 (안 그러면 점프가 한 번밖에 안 됩니다)",
+  "아이템 개수를 바꿨다면 <b>Total Item Count</b> 도 꼭 같이 수정",
+  "▶ Play → Stage0 → Stage1 → Stage2 → 다시 Stage0 까지 끝까지 확인"
+ ],
+ code:[],
+ tables:[{
+   cap:"씬 번호와 Stage 값 맞추기",
+   head:["씬 이름","Build 번호","GameManager 의 Stage","골인하면"],
+   rows:[["Stage0","0","0","Stage1 로"],["Stage1","1","1","Stage2 로"],["Stage2","2","2","Stage0 으로 (처음부터)"]],
+   num:true
+ }],
+ notes:[
+  ["warn","\"Scene couldn't be loaded\" 오류","씬을 <b>Build 목록에 등록하지 않았을 때</b> 나는 오류입니다. File → Build Profiles 에서 씬을 드래그해 넣으세요."],
+  ["warn","붙여넣기 전에 먼저 지우세요","새 씬에는 <b>Main Camera</b> 와 <b>Directional Light</b> 가 기본으로 들어 있습니다. 지우지 않고 붙여넣으면 카메라가 두 개가 되어 화면이 이상해져요."],
+  ["tip","발판에 Tag = Floor 를 꼭","<code>PlayerBall</code> 은 <b>Floor 태그에 닿아야</b> 점프를 다시 허용합니다. 새로 만든 발판에 Tag 를 안 붙이면 <b>한 번 점프하고 끝</b>이에요."],
+  ["warn","★ 복사는 반드시 '한꺼번에'","계층구조의 오브젝트를 <b>전부 선택해서 한 번에</b> 복사해야 인스펙터의 <b>드래그 연결(Manager · Text)이 그대로 따라옵니다.</b> 하나씩 나눠 복사하면 <b>연결이 전부 끊겨서</b> 새 씬에서 NullReferenceException 이 쏟아져요. 붙여넣은 뒤에는 GameManager 와 Player 의 인스펙터를 열어 <b>빈 칸(None)이 없는지 꼭 확인</b>하세요."]
+ ],
+ bonus:["스테이지마다 <b>하늘 색이나 바닥 색</b>을 다르게 해서 분위기 바꾸기","Stage2 를 아주 어렵게 만들어 선생님에게 도전장 내밀기","떨어지면 다시 시작되는 걸 이용해 <b>낭떠러지 코스</b> 만들기","움직이는 발판 만들기 — 4차시의 <code>MoveSimple</code> 을 Cube 에 붙여 보세요!"]
+},
+{
+ n:13, date:"11/30", lv:3, lvName:"발표",
+ title:"게임쇼 & 내 게임 빌드하기",
+ sub:"내가 만든 게임을 실행 파일로 뽑아, 친구들과 서로 플레이합니다.",
+ clock:[["15분","마무리 다듬기"],["15분","빌드 걸어놓기"],["25분","게임쇼 · 투표"],["5분","수료"]],
+ learn:[
+  ["빌드(Build) 가 뭔가요?","유니티 없이도 돌아가는 <b>실행 파일로 굽는 것</b>입니다. 지금까지는 유니티 안에서만 플레이할 수 있었지만, 빌드하면 <b>유니티가 없는 컴퓨터에서도</b> 돌아가요."],
+  ["빌드하면 나오는 것 3가지","<b><code>내게임.exe</code></b> + <b><code>내게임_Data</code> 폴더</b> + <b><code>UnityPlayer.dll</code></b>. <b>셋 다 있어야 실행됩니다!</b> exe 파일 하나만 친구에게 보내면 절대 안 돌아가요. <b>폴더를 통째로 압축</b>해서 보내세요."],
+  ["플랫폼 고르기","Windows · Mac · Android · iOS · WebGL 중에 고릅니다. 우리는 <b>Windows</b>. 다른 플랫폼은 설치할 때 모듈을 추가해야 해요."],
+  ["Product Name = 창 제목","<code>Edit → Project Settings → Player → Product Name</code> 에 적은 이름이 <b>게임 창의 제목</b>이자 <b>exe 파일 이름</b>이 됩니다. 멋진 제목을 지어 보세요."],
+  ["빌드 전 체크리스트","① Console 에 <b>빨간 오류 0개</b> (하나라도 있으면 빌드 실패) ② 모든 씬이 <b>Build 목록에 등록</b> ③ 시작 씬이 <b>0번</b>인지 확인"],
+  ["빌드는 시간이 걸립니다","처음 빌드는 <b>3~10분</b>. 그동안 유니티를 건드리지 마세요. 그래서 오늘은 <b>빌드를 먼저 걸어 놓고</b> 게임쇼를 합니다."]
+ ],
+ quests:[
+  "마지막 다듬기 : 색 · 배치 · 아이템 개수 · 난이도 · 플레이어 속도",
+  "게임 제목 정하기 → <code>Edit → Project Settings → Player → <b>Product Name</b></code>",
+  "Console 에 <b>빨간 오류가 0개</b> 인지 확인 (있으면 먼저 해결!)",
+  "<b>File → Build Profiles</b> → <b>Windows</b> 선택 → <b>Build</b> → 바탕화면에 새 폴더 만들어 지정",
+  "빌드 도는 동안 <b>게임쇼 준비</b> (친구들과 자리 정하기)",
+  "만들어진 <code>.exe</code> 를 실행해서 진짜 게임처럼 플레이해 보기",
+  "폴더를 <b>통째로 압축(zip)</b> 해서 제출 (exe 하나만 보내면 안 됩니다!)",
+  "🎮 <b>게임쇼</b> : 친구 게임 3개 이상 플레이하고 한 줄 후기 남기기",
+  "베스트 게임 투표 (가장 재미있는 / 가장 어려운 / 가장 예쁜)",
+  "1차시에 쓴 <b>한 줄 기획서</b> 다시 꺼내 보기 — 얼마나 왔나요?"
+ ],
+ code:[],
+ notes:[
+  ["warn","빌드가 실패하면","Console 의 <b>빨간 오류를 전부 없애야</b> 빌드가 됩니다. 오류가 하나라도 있으면 무조건 실패해요. 노란 경고는 무시해도 됩니다."],
+  ["warn","친구 컴퓨터에서 안 켜져요","<b>exe 파일 하나만</b> 보냈을 가능성이 큽니다. <code>_Data</code> 폴더와 <code>UnityPlayer.dll</code> 까지 <b>폴더 통째로</b> 압축해서 보내세요."],
+  ["tip","게임을 끄는 방법도 넣어 주면 좋아요","전체 화면으로 켜지면 끄기 어렵습니다. <code>Alt + F4</code> 로 종료되고, 빌드 설정에서 창 모드로 바꿀 수도 있어요."]
+ ],
+ bonus:["<b>제목 화면</b> 만들기 : 새 씬에 Text + Button 을 놓고, 버튼의 On Click 에 <code>SceneManager.LoadScene</code> 연결","배경 음악 넣기 (Audio Source 에 Play On Awake · Loop 체크)","내 게임을 <b>2D 로 다시</b> 만들어 보기 — 여기까지 왔으면 혼자서도 할 수 있어요","itch.io 같은 곳에 내 게임 올려 보기"]
+}
+];
+
+const CHEAT = {
+ title:"치트키",
+ sub:"막힐 때 여기부터. 링크 · 조작키 · 코드 사전 · 오류 응급처치를 한 장에 모았습니다.",
+ links:[
+  ["Unity 내려받기","unity.com/download","https://unity.com/download","계정을 먼저 만들어야 다운로드 페이지가 열립니다"],
+  ["다운로드 아카이브","unity.com/releases/editor/archive","https://unity.com/releases/editor/archive","로그인 없이 열립니다. 버전을 직접 고를 때"],
+  ["우리가 쓰는 버전","Unity 6.3 LTS (6000.3.xx)","https://unity.com/releases/unity-6/support","2027년 12월까지 지원. 6000.0 · 6000.1 · 6000.2 는 쓰지 마세요"],
+  ["공식 매뉴얼 (한국어)","docs.unity3d.com","https://docs.unity3d.com/6000.3/Documentation/Manual/index.html","함수 이름을 검색하면 설명이 나옵니다"]
+ ],
+ tables:[
+  {cap:"유니티 조작키",
+   head:["키","기능"],
+   rows:[["Q","뷰(화면) 이동"],["W","오브젝트 이동"],["E","오브젝트 회전"],["R","오브젝트 크기"],["T","오브젝트 사각툴"],
+         ["마우스 우클릭","카메라 회전"],["Alt + 마우스 좌클릭","카메라 축 이동"],["키보드 방향키","카메라 자유 이동"],
+         ["마우스 휠","카메라 줌 / 이동"],["Ctrl + S","저장 (자주 하세요!)"],["Ctrl + D","선택한 오브젝트 복제"],
+         ["Ctrl + Z","되돌리기"],["F","선택한 오브젝트로 화면 이동"]]},
+  {cap:"자주 쓰는 코드 사전",
+   head:["코드","하는 일"],
+   rows:[["Debug.Log(\"글자\")","콘솔에 출력 (파이썬의 print)"],
+         ["transform.Translate(vec)","벡터만큼 이동"],
+         ["transform.Rotate(vec)","회전"],
+         ["transform.position","현재 위치 (읽기 · 쓰기)"],
+         ["Input.GetAxisRaw(\"Horizontal\")","좌우 입력 → -1 / 0 / 1"],
+         ["Input.GetButtonDown(\"Jump\")","Space 를 누른 순간"],
+         ["Input.GetKeyDown(KeyCode.A)","A 를 누른 순간"],
+         ["Input.GetMouseButtonDown(0)","마우스 좌클릭 순간"],
+         ["GetComponent&lt;Rigidbody&gt;()","같은 오브젝트의 부품 가져오기"],
+         ["rigid.AddForce(vec, ForceMode.Impulse)","힘을 툭 주기"],
+         ["Time.deltaTime","프레임 간 시간 (속도 보정)"],
+         ["Vector3.MoveTowards(a, b, t)","일정 속도로 이동"],
+         ["Vector3.Lerp(a, b, t)","부드럽게 감속 이동"],
+         ["other.gameObject.SetActive(false)","오브젝트 숨기기"],
+         ["SceneManager.LoadScene(0)","0번 씬 불러오기"],
+         ["gameObject.tag","이 오브젝트의 이름표"]]},
+  {cap:"이벤트 함수 언제 쓰나",
+   head:["함수","타이밍"],
+   rows:[["Awake()","태어날 때 1번 — 변수 초기화"],["Start()","첫 프레임 직전 1번"],["Update()","매 프레임 — 입력 처리"],
+         ["FixedUpdate()","고정 주기 — Rigidbody 물리"],["LateUpdate()","맨 마지막 — 카메라 추적"],
+         ["OnCollisionEnter(c)","부딪힌 순간 (Is Trigger ☐)"],["OnTriggerEnter(c)","통과한 순간 (Is Trigger ☑)"],
+         ["OnMouseDown()","이 오브젝트를 클릭"],["OnDestroy()","사라질 때"]]},
+  {cap:"파이썬 ↔ C#",
+   head:["","파이썬","C#"],
+   rows:[["변수","<code>x = 5</code>","<code>int x = 5;</code>"],
+         ["소수","<code>y = 1.5</code>","<code>float y = 1.5f;</code>"],
+         ["참/거짓","<code>True / False</code>","<code>true / false</code>"],
+         ["조건","<code>if x > 3:</code>","<code>if (x > 3) { }</code>"],
+         ["아니면","<code>else:</code>","<code>else { }</code>"],
+         ["출력","<code>print(x)</code>","<code>Debug.Log(x);</code>"],
+         ["주석","<code># 메모</code>","<code>// 메모</code>"],
+         ["블록","들여쓰기","<code>{ }</code> 중괄호"],
+         ["문장 끝","줄바꿈","<b>세미콜론 <code>;</code></b>"]]}
+ ],
+ notes:[
+  ["warn","오류 응급처치 7선",
+   "<ul>"+
+   "<li><b>The type or namespace name ... could not be found</b><br>→ 맨 위 <code>using UnityEngine.UI;</code> 같은 줄이 빠졌어요.</li>"+
+   "<li><b>NullReferenceException</b><br>→ 인스펙터의 <b>빈 칸(None)</b> 에 오브젝트를 드래그하지 않았어요. 인스펙터를 먼저 보세요.</li>"+
+   "<li><b>; expected</b><br>→ 세미콜론을 빠뜨렸어요. Console 에 적힌 <b>줄 번호</b>로 가세요.</li>"+
+   "<li><b>스크립트가 Add Component 로 안 붙어요</b><br>→ 파일 이름과 <code>class</code> 이름이 다릅니다. 똑같이 맞추세요.</li>"+
+   "<li><b>코드를 고쳤는데 반영이 안 돼요</b><br>→ VS Code 에서 <code>Ctrl+S</code> 저장 후, 유니티 창을 한 번 클릭해 주세요.</li>"+
+   "<li><b>키 입력이 안 먹혀요</b><br>→ <code>Edit → Project Settings → Player → Configuration → <b>Active Input Handling = Both</b></code> 로 바꾸고 에디터 재시작. Unity 6.3 새 프로젝트는 기본값이 <b>Input System (New)</b> 라서 옛 방식인 <code>Input.GetAxisRaw</code> 가 안 먹습니다. <b>오류 메시지가 안 뜨니 제일 먼저 의심하세요.</b></li>"+
+   "<li><b>충돌 · 트리거가 안 불려요</b><br>→ 둘 중 하나에 <b>Rigidbody</b>, 둘 다에 <b>Collider</b>, 트리거면 <b>Is Trigger 체크</b>.</li>"+
+   "</ul>"],
+  ["tip","매 시간 시작 루틴 (3단계)","<ol style='margin:6px 0 0;padding-left:19px'><li><b>Unity Hub</b> 실행 → <b>Projects</b> → <code>MyGame</code> 클릭 (첫 로딩 1~2분)</li><li>Assets → Scenes 에서 <b>오늘 작업할 씬을 더블클릭</b>해서 열기</li><li>이 페이지에서 <b>오늘 차시</b>를 열어 두기</li></ol>끝날 때는 언제나 <b><code>Ctrl+S</code></b> — 저장 안 하면 다음 주에 처음부터입니다."],
+  ["tip","창이 사라졌어요 / 화면이 엉망이에요","<ul><li><b>Console · Project · Inspector 창이 없어졌다</b> → 상단 <code>Window</code> 메뉴 → <code>General</code> → 원하는 창 선택</li><li><b>배치가 통째로 망가졌다</b> → 오른쪽 위 <code>Layout</code> → <code>Default</code></li><li><b>Scene 창에서 오브젝트를 잃어버렸다</b> → 계층구조에서 이름을 클릭하고 <code>F</code> 키</li></ul>"],
+  ["tip","막혔을 때 순서",
+   "<ol style='margin:6px 0 0;padding-left:19px'><li>Console 의 <b>빨간 줄</b>을 읽는다 (영어여도 파일명과 줄 번호는 보여요)</li><li>인스펙터에 <b>비어 있는 칸(None)</b> 이 없는지 본다</li><li>체크박스(Is Trigger, Use Gravity)를 확인한다</li><li>그래도 모르겠으면 <b>손 들기</b> 🙋</li></ol>"]
+ ]
+};
+
+/* ══════════════════════════════════════════════════════════
+   상태
+   ══════════════════════════════════════════════════════════ */
+const KEY = "unity-mission-progress-v1";
+const TOTAL = STAGES.reduce((a, s) => a + s.quests.length, 0);
+const CIRC = 2 * Math.PI * 15.5;
+
+let prog = loadProg();
+let tab  = "home";                 // "home" | "cheat"
+let view = "home";                 // "home" | 1..13
+
+function loadProg(){
+  try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; }
+}
+function saveProg(){
+  try { localStorage.setItem(KEY, JSON.stringify(prog)); } catch(e){}
+}
+function isDone(n, i){ return !!(prog[n] && prog[n][i]); }
+function stageDone(n){
+  const s = STAGES.find(x => x.n === n);
+  return s.quests.every((_, i) => isDone(n, i));
+}
+function doneCount(){
+  let c = 0;
+  STAGES.forEach(s => s.quests.forEach((_, i) => { if (isDone(s.n, i)) c++; }));
+  return c;
+}
+
+/* ══════════════════════════════════════════════════════════
+   유틸
+   ══════════════════════════════════════════════════════════ */
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+function hl(src){
+  const re = /(\/\/[^\n]*)|("(?:[^"\\]|\\.)*")|\b(using|public|private|void|class|new|if|else|return|null|true|false|static|int|float|bool|string|var)\b|\b(MonoBehaviour|Vector3|Rigidbody|Transform|Material|MeshRenderer|AudioSource|Collision|Collider|Debug|Input|Time|Camera|Physics|Ray|RaycastHit|Random|GameObject|Space|ForceMode|Color|KeyCode|Text|SceneManager|UnityEngine|Quaternion|GetComponent)\b/g;
+  let out = "", last = 0, m;
+  while ((m = re.exec(src)) !== null){
+    out += esc(src.slice(last, m.index));
+    if (m[1])      out += '<span class="cm">' + esc(m[1]) + "</span>";
+    else if (m[2]) out += '<span class="st">' + esc(m[2]) + "</span>";
+    else if (m[3]) out += '<span class="kw">' + m[3] + "</span>";
+    else           out += '<span class="ty">' + m[4] + "</span>";
+    last = re.lastIndex;
+  }
+  return out + esc(src.slice(last));
+}
+
+const CODES = [];   // 복사 버튼용 원본 코드 보관
+
+function slabHTML(name, code){
+  const id = CODES.push(code) - 1;
+  return '<div class="slab"><div class="slab-top"><span class="cs">C#</span><b>' + esc(name) +
+         '</b><button class="copy" data-code="' + id + '">복사</button></div><pre><code>' +
+         hl(code) + "</code></pre></div>";
+}
+function tableHTML(t){
+  const cells = t.rows.map(r => "<tr>" + r.map((c, i) =>
+    '<td class="' + (t.num && i > 0 ? "n" : "") + '">' + c + "</td>").join("") + "</tr>").join("");
+  return (t.cap ? '<div class="sec-h"><h2>' + t.cap + "</h2></div>" : "") +
+         '<div class="tw"><table><thead><tr>' + t.head.map(h => "<th>" + h + "</th>").join("") +
+         "</tr></thead><tbody>" + cells + "</tbody></table></div>";
+}
+function noteHTML(n){
+  return '<div class="note ' + n[0] + '"><b>' + (n[0] === "warn" ? "⚠️ " : "💡 ") + n[1] + "</b>" + n[2] + "</div>";
+}
+function sec(title, hint, inner){
+  return '<section class="sec"><div class="sec-h"><h2>' + title + "</h2>" +
+         (hint ? "<em>" + hint + "</em>" : "") + "</div>" + inner + "</section>";
+}
+
+/* ══════════════════════════════════════════════════════════
+   화면 그리기
+   ══════════════════════════════════════════════════════════ */
+const trackEl = document.getElementById("track");
+const mainEl  = document.getElementById("main");
+
+function renderRail(){
+  let h = '<button class="node' + (tab === "home" && view === "home" ? " on" : "") +
+          '" data-go="home"><span class="dot">◎</span><span class="lb"><b>코스 안내</b><i>전체 13차시</i></span></button>';
+  h += STAGES.map(s => {
+    const on = tab === "home" && view === s.n;
+    const dn = stageDone(s.n);
+    return '<button class="node' + (on ? " on" : "") + (dn ? " done" : "") + '" data-go="' + s.n + '">' +
+           '<span class="dot">' + (dn ? "✓" : String(s.n).padStart(2, "0")) + "</span>" +
+           '<span class="lb"><b>' + s.title + "</b><i>" + s.date + "</i></span></button>";
+  }).join("");
+  trackEl.innerHTML = h;
+}
+
+function renderGauge(){
+  const d = doneCount();
+  const p = TOTAL ? Math.round(d / TOTAL * 100) : 0;
+  document.getElementById("ring").setAttribute("stroke-dashoffset", CIRC * (1 - p / 100));
+  document.getElementById("pct").textContent = p + "%";
+}
+
+function homeHTML(){
+  const chaps = STAGES.map(s =>
+    '<button class="chap' + (stageDone(s.n) ? " done" : "") + '" data-go="' + s.n + '">' +
+    '<span class="num">' + String(s.n).padStart(2, "0") + "</span>" +
+    '<span class="tt"><b>' + s.title + "</b><span>" + s.sub + "</span></span>" +
+    '<span class="dt">' + s.date + "</span></button>").join("");
+
+  return '<div class="card pane"><div class="hero">' +
+    '<div class="axis"><i style="background:var(--x)"></i><i style="background:var(--y)"></i><i style="background:var(--z)"></i></div>' +
+    "<h1>13번의 미션으로<br>내 게임 하나 만들기</h1>" +
+    '<p class="lead">코딩을 한 번도 안 해 봤어도 괜찮습니다. <b>코드는 대부분 여기서 받아 가세요.</b> ' +
+    "여러분이 할 일은 붙여넣고, 숫자를 바꿔 보고, 뭐가 달라지는지 눈으로 확인하는 것. " +
+    "13주 뒤에는 친구에게 보낼 수 있는 진짜 게임 파일이 남습니다.</p>" +
+    '<div class="grid3" style="margin-top:22px">' +
+      '<div class="mini"><b>🎳 1차 완성작 · 8차시</b><p>공을 굴려 핀을 맞히는 볼링게임. 중력·충돌·재질을 배웁니다.</p></div>' +
+      '<div class="mini"><b>🏁 2차 완성작 · 13차시</b><p>아이템을 모아 골인하는 3D 스테이지 게임. 실행 파일로 뽑아 갑니다.</p></div>' +
+      '<div class="mini"><b>🧰 준비물</b><p>노트북 하나면 됩니다. Unity Hub · Unity 6 LTS 설치는 <b>1차시에 같이</b> 합니다.</p></div>' +
+    "</div></div>" +
+    '<div class="body">' +
+      sec("전체 코스", "카드를 누르면 그 차시로 이동합니다", '<div class="chapters">' + chaps + "</div>") +
+      sec("수업 약속", "",
+        '<div class="note tip"><b>💡 이 수업의 규칙 4가지</b><ul>' +
+        "<li><b>천천히 갑니다.</b> 못 따라와도 괜찮아요. 옆 친구랑 같이 하세요.</li>" +
+        "<li><b>코드는 외우지 않습니다.</b> 필요할 때 이 페이지에서 복사하세요.</li>" +
+        "<li><b>숫자를 마음대로 바꿔 보세요.</b> 망가뜨리는 게 가장 빠른 학습입니다. (Ctrl+Z 가 있어요)</li>" +
+        "<li><b>5분 넘게 막히면 손을 드세요.</b> 🙋</li></ul></div>") +
+      sec("내 진행 상황", "",
+        '<p style="color:var(--ink-2);font-size:.93rem;margin:0 0 12px">체크한 미션은 이 브라우저에 저장됩니다. ' +
+        "현재 <b>" + doneCount() + " / " + TOTAL + "</b> 개 완료.</p>" +
+        '<button class="reset" id="reset">진행 상황 초기화</button>') +
+    "</div></div>";
+}
+
+function stageHTML(s){
+  const idx = STAGES.indexOf(s);
+  const prev = STAGES[idx - 1], next = STAGES[idx + 1];
+
+  let h = '<div class="card pane"><div class="head">' +
+    '<div class="eyebrow">' +
+      '<span class="pill stg">STAGE ' + String(s.n).padStart(2, "0") + "</span>" +
+      '<span class="pill date">' + s.date + " (월) 16:50–17:50</span>" +
+      '<span class="pill lv' + s.lv + '">' + s.lvName + "</span>" +
+      (stageDone(s.n) ? '<span class="pill lv1">✓ 클리어</span>' : "") +
+    "</div><h1>" + s.title + "</h1><p>" + s.sub + "</p></div><div class=\"body\">";
+
+  if (s.install && s.install.length)
+    h += sec("⬇️ 유니티 설치, 8단계", "순서대로 따라오세요",
+          '<div class="card2"><div class="steps">' + s.install.map((st, i) =>
+            '<div class="step"><span class="sn">' + (i + 1) + "</span>" +
+            "<span><b>" + st[0] + "</b><p>" + st[1] + "</p></span></div>").join("") + "</div></div>");
+
+  if (s.learn && s.learn.length)
+    h += sec("📖 오늘 알아야 할 것", "읽고 넘어가면 미션이 쉬워집니다",
+          '<div class="learn">' + s.learn.map((l, i) =>
+            '<div class="lc"><span class="k">' + String(i + 1).padStart(2, "0") + "</span><b>" +
+            l[0] + "</b><p>" + l[1] + "</p></div>").join("") + "</div>");
+
+  h += sec("🎯 오늘의 미션", "하나씩 누르며 체크하세요",
+        '<ul class="quests">' + s.quests.map((q, i) =>
+          '<li><button class="q" data-n="' + s.n + '" data-i="' + i + '" aria-pressed="' + isDone(s.n, i) + '">' +
+          '<span class="bx">✓</span><span class="qn">' + String(i + 1).padStart(2, "0") + "</span>" +
+          '<span class="qt">' + q + "</span></button></li>").join("") + "</ul>");
+
+  if (s.code && s.code.length)
+    h += sec("💻 오늘의 코드", "복사해서 붙여넣고 Ctrl+S", s.code.map(c => slabHTML(c[0], c[1])).join(""));
+
+  if (s.tables) s.tables.forEach(t => { h += '<section class="sec">' + tableHTML(t) + "</section>"; });
+
+  if (s.links && s.links.length)
+    h += sec(s.linksTitle || "🔗 링크", "새 탭으로 열립니다",
+          '<div class="links">' + s.links.map(l =>
+            '<a class="lk" href="' + l[2] + '" target="_blank" rel="noopener">' +
+            '<span class="lt"><b>' + l[0] + "</b><i>" + l[1] + "</i><em>" + l[3] + "</em></span>" +
+            '<span class="ar">↗</span></a>').join("") + "</div>");
+
+  if (s.notes && s.notes.length)
+    h += sec("🆘 막히면 여기", "", s.notes.map(noteHTML).join(""));
+
+  if (s.bonus && s.bonus.length)
+    h += sec("🏆 보너스 미션", "다 끝냈다면 도전!",
+          '<div class="bonus"><b>여유가 있다면</b><ul>' + s.bonus.map(b => "<li>" + b + "</li>").join("") + "</ul></div>");
+
+  h += '<div class="nav">' +
+    (prev ? '<button data-go="' + prev.n + '"><span>← 이전 차시</span>' + prev.title + "</button>"
+          : '<button data-go="home"><span>←</span>코스 안내</button>') +
+    (next ? '<button class="r" data-go="' + next.n + '"><span>다음 차시 →</span>' + next.title + "</button>"
+          : '<button class="r" disabled><span>끝!</span>수고했어요 :D</button>') +
+    "</div></div></div>";
+  return h;
+}
+
+function cheatHTML(){
+  let h = '<div class="card pane"><div class="head">' +
+    '<div class="eyebrow"><span class="pill stg">CHEAT SHEET</span></div>' +
+    "<h1>" + CHEAT.title + "</h1><p>" + CHEAT.sub + "</p></div><div class=\"body\">";
+  h += sec("🔗 자주 가는 링크", "새 탭으로 열립니다",
+        '<div class="links">' + CHEAT.links.map(l =>
+          '<a class="lk" href="' + l[2] + '" target="_blank" rel="noopener">' +
+          '<span class="lt"><b>' + l[0] + "</b><i>" + l[1] + "</i><em>" + l[3] + "</em></span>" +
+          '<span class="ar">↗</span></a>').join("") + "</div>");
+  CHEAT.notes.forEach(n => { h += '<section class="sec">' + noteHTML(n) + "</section>"; });
+  CHEAT.tables.forEach(t => { h += '<section class="sec">' + tableHTML(t) + "</section>"; });
+  h += "</div></div>";
+  return h;
+}
+
+function render(){
+  CODES.length = 0;
+  document.querySelector(".rail").style.display = tab === "cheat" ? "none" : "";
+  document.querySelector(".wrap").style.gridTemplateColumns =
+    tab === "cheat" ? "minmax(0,1fr)" : "";
+  mainEl.style.maxWidth = tab === "cheat" ? "880px" : "";
+  mainEl.style.margin   = tab === "cheat" ? "0 auto" : "";
+  if (tab === "cheat")      mainEl.innerHTML = cheatHTML();
+  else if (view === "home") mainEl.innerHTML = homeHTML();
+  else                      mainEl.innerHTML = stageHTML(STAGES.find(s => s.n === view));
+  renderRail();
+  renderGauge();
+  document.getElementById("tab-home").setAttribute("aria-selected", tab === "home");
+  document.getElementById("tab-cheat").setAttribute("aria-selected", tab === "cheat");
+}
+
+/* ══════════════════════════════════════════════════════════
+   이벤트
+   ══════════════════════════════════════════════════════════ */
+function go(target){
+  tab  = "home";
+  view = target === "home" ? "home" : Number(target);
+  location.hash = target === "home" ? "" : "stage" + target;
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.addEventListener("click", e => {
+  const goBtn = e.target.closest("[data-go]");
+  if (goBtn) { go(goBtn.dataset.go); return; }
+
+  const q = e.target.closest(".q");
+  if (q){
+    const n = Number(q.dataset.n), i = Number(q.dataset.i);
+    prog[n] = prog[n] || {};
+    prog[n][i] = !prog[n][i];
+    saveProg();
+    q.setAttribute("aria-pressed", String(!!prog[n][i]));
+    renderRail(); renderGauge();
+    const badge = document.querySelector(".head .eyebrow");
+    if (badge){
+      const old = badge.querySelector(".pill.lv1:last-child");
+      const has = old && old.textContent.indexOf("클리어") >= 0;
+      if (stageDone(n) && !has){
+        const el = document.createElement("span");
+        el.className = "pill lv1"; el.textContent = "✓ 클리어"; badge.appendChild(el);
+      } else if (!stageDone(n) && has) old.remove();
+    }
+    return;
+  }
+
+  const cp = e.target.closest(".copy");
+  if (cp){
+    const txt = CODES[Number(cp.dataset.code)];
+    navigator.clipboard.writeText(txt).then(() => {
+      cp.textContent = "복사됨 ✓"; cp.classList.add("ok");
+      setTimeout(() => { cp.textContent = "복사"; cp.classList.remove("ok"); }, 1600);
+    }).catch(() => { cp.textContent = "Ctrl+C 로 복사"; });
+    return;
+  }
+
+  if (e.target.id === "reset"){
+    if (confirm("체크해 둔 미션을 모두 지울까요?")){ prog = {}; saveProg(); render(); }
+    return;
+  }
+  if (e.target.id === "tab-home")  { tab = "home";  render(); return; }
+  if (e.target.id === "tab-cheat") { tab = "cheat"; render(); window.scrollTo({top:0}); return; }
+});
+
+/* 첫 진입 : #stage7 같은 주소 지원 */
+(function init(){
+  const m = location.hash.match(/stage(\d+)/);
+  if (m) view = Number(m[1]);
+  render();
+})();
+</script>
+
+
+</body>
+</html>
