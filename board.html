@@ -411,7 +411,7 @@ const STAGES = [
 {
  n:2, date:"08/31", lv:1, lvName:"기초",
  title:"첫 프로젝트 & 3D 놀이터 만들기",
- sub:"3D 프로젝트를 만들고, 화면 4구역과 조작키 Q·W·E·R·T를 손에 익힙니다.",
+ sub:"3D 프로젝트를 만들고, 화면 4구역과 조작키를 익힌 뒤, 나만의 놀이터에 색을 입힙니다.",
  clock:[["10분","설치 못 한 친구 마무리"],["20분","프로젝트 생성 + 화면 구경"],["25분","미션 : 나만의 놀이터"],["5분","저장하고 정리"]],
  learn:[
   ["프로젝트 = 게임 하나가 든 폴더","안에 <b>Assets</b>(내가 만든 모든 재료) · <b>Scenes</b>(무대) · <b>Settings</b> 폴더가 생깁니다. 이 폴더는 <b>이름을 바꾸거나 옮기지 마세요.</b> 유니티가 길을 잃습니다."],
@@ -424,6 +424,8 @@ const STAGES = [
   ["기본 도형 5개면 충분해요","<b>Cube</b> 상자 · <b>Sphere</b> 구 · <b>Capsule</b> 캡슐 · <b>Cylinder</b> 원기둥 · <b>Plane</b> 땅. 우리가 만들 게임은 전부 이 5개로 만듭니다. 계층구조 우클릭 → 3D Object."],
   ["Transform : 모든 오브젝트의 기본","<b>Position</b> 위치 · <b>Rotation</b> 회전(각도) · <b>Scale</b> 크기(배수). 유일하게 <b>모든 오브젝트가 반드시 갖는</b> 컴포넌트라, 지울 수도 없습니다."],
   ["▶ Play 버튼의 무서운 규칙","Play 가 켜진 상태에서 바꾼 것은 <b>정지하는 순간 전부 사라집니다.</b> 반드시 <b>정지한 다음</b> 수정하세요. (많이들 여기서 울어요)"],
+  ["🎨 색은 Material(재질)로 입힙니다","오브젝트에 직접 색을 칠하는 게 아니라, <b>물감통(Material)을 만들어서 씌우는</b> 방식이에요. 그래서 <b>같은 물감통을 여러 오브젝트에 씌우면 한 번에 다 바뀝니다.</b> 100개짜리 벽돌을 한 번에 색칠할 수 있는 거죠."],
+  ["Base Map 이 '기본 색' 칸","Material 을 클릭하면 인스펙터에 <b>Base Map</b> 이 보입니다. 그 옆 <b>색깔 네모</b>가 우리가 바꿀 색이에요. 아래에 있는 Metallic(금속 느낌) · Smoothness(반짝임)는 <b>7차시</b>에 만져 봅니다. 오늘은 <b>색만</b>!"],
   ["★ Active Input Handling 을 Both 로","Unity 6.3 의 Universal 3D 프로젝트는 <b>새 입력 시스템만</b> 켜져 있습니다. 우리가 쓸 <code>Input.GetAxisRaw</code> 는 <b>옛 방식</b>이라 그대로 두면 <b>4차시부터 키가 하나도 안 먹습니다.</b> <code>Edit → Project Settings → Player → Configuration → Active Input Handling</code> 을 <b>Both</b> 로 바꾸면 둘 다 됩니다. 노란 경고가 떠도 괜찮아요. <b>오늘 꼭 해 두세요.</b>"]
  ],
  quests:[
@@ -439,6 +441,12 @@ const STAGES = [
   "조작키 다 써 보기 : <code>Q</code> 뷰이동 <code>W</code> 이동 <code>E</code> 회전 <code>R</code> 크기 <code>T</code> 사각툴",
   "카메라 돌려 보기 : 마우스 <b>우클릭 드래그</b> · <code>Alt</code>+좌클릭 · <b>휠</b>",
   "마우스 말고 <b>인스펙터에 숫자를 직접 입력</b>해서 오브젝트 옮겨 보기",
+  "🎨 프로젝트 창 <b>Assets</b> 안에서 우클릭 → <b>Create → Material</b> (안 보이면 <b>Create → Rendering → Material</b>) → 이름을 <code>MyRed</code> 처럼 색 이름으로",
+  "🎨 만든 Material 을 클릭하고, 인스펙터의 <b>Base Map</b> 옆 <b>색깔 네모</b>를 눌러 원하는 색 고르기",
+  "🎨 그 Material 을 <b>Scene 창의 도형 위로 그대로 드래그</b> → 색이 입혀지나요?",
+  "🎨 Material 을 <b>3~4개 더</b> 만들어 도형마다 다른 색 입히기 (바닥 Plane 도 잊지 말고!)",
+  "🎨 <b>같은 Material</b> 을 도형 두 개에 입힌 다음, Material 색을 바꿔 보기 → <b>둘 다 한꺼번에</b> 바뀌나요?",
+  "🎨 Assets 우클릭 → Create → <b>Folder</b> → 이름 <code>Materials</code> → 만든 Material 들을 전부 여기로 옮겨 정리",
   "▶ <b>Play</b> 눌러 Game 화면 확인 → 다시 눌러 정지 → <code>Ctrl+S</code> 저장"
  ],
  code:[],
@@ -458,9 +466,14 @@ const STAGES = [
   ["warn","Play 중에 바꾼 건 저장되지 않아요","▶ 가 켜진 상태에서 위치를 옮기면 정지하는 순간 원래대로 돌아갑니다. <b>반드시 정지한 뒤에</b> 수정하세요."],
   ["tip","창 배치가 엉망이 됐어요","오른쪽 위 <b>Layout</b> → <b>Default</b> 를 누르면 원래 배치로 돌아옵니다. 마음껏 망가뜨려도 됩니다."],
   ["warn","Plane 이 너무 작아요","Plane 의 Scale 을 <code>(2, 1, 2)</code> 처럼 키우면 땅이 넓어집니다. Plane 은 두께가 없어서 y 는 바꿔도 소용없어요."],
+  ["warn","🎨 색이 안 입혀져요","<ul><li><b>색깔 칸을 못 찾겠다</b> → Material 을 <b>클릭</b>해야 인스펙터에 뜹니다. <b>Base Map</b> 옆 네모예요 (Albedo 아님)</li><li><b>드래그해도 안 먹는다</b> → 오브젝트를 고르고 인스펙터 <b>Mesh Renderer → Materials → Element 0</b> 칸에 끌어다 놓으세요</li><li><b>다른 도형까지 같이 바뀐다</b> → 같은 Material 을 쓴 겁니다. <b>Material 을 따로 하나 더</b> 만드세요 (정상 동작이에요!)</li><li><b>색이 칙칙하다</b> → 색 고르는 창 아래 <b>A(알파)</b> 가 낮진 않은지, 조명이 어둡진 않은지 확인</li></ul>"],
   ["warn","★ Active Input Handling = Both, 오늘 꼭!","이걸 안 하면 <b>4차시부터 키보드가 아예 안 먹습니다.</b> 그리고 원인을 찾기가 아주 어려워요 (오류 메시지가 안 뜨거든요). 프로젝트를 만들자마자 <b>제일 먼저</b> 바꾸고, 재시작까지 하고 시작하세요."]
  ],
- bonus:["도형만으로 <b>얼굴 · 눈사람 · 로봇 · 우리 학교</b> 중 하나 만들어 스크린샷 제출","Scale 을 <code>0.3</code> 같은 소수로 넣어 아주 작은 오브젝트 만들기","Directional Light 를 선택하고 Rotation 을 바꿔서 <b>해가 지는 장면</b> 만들기"]
+ bonus:["도형과 색만으로 <b>얼굴 · 눈사람 · 로봇 · 우리 학교</b> 중 하나 만들어 스크린샷 제출",
+        "🌈 <b>무지개 놀이터</b> — 빨주노초파남보 Material 7개를 만들어 도형 7개에 순서대로 입히기",
+        "Scale 을 <code>0.3</code> 같은 소수로 넣어 아주 작은 오브젝트 만들기",
+        "Directional Light 를 선택하고 <b>Rotation</b> 을 바꿔 해가 지는 장면 만들기 — 색이 어떻게 달라지나요?",
+        "Directional Light 의 <b>색</b>도 바꿔 보기 (주황빛 노을 · 푸른 새벽)"]
 },
 {
  n:3, date:"09/07", lv:1, lvName:"기초",
@@ -849,7 +862,8 @@ public class MoveCompare : MonoBehaviour
   "새 씬(또는 지금 씬 정리)에 <b>Sphere 6개 · Plane 1개 · Cube 1개</b> 만들고 아래 위치표대로 배치",
   "이름 바꾸기 : <code>MyBall</code> · <code>Ball</code> ×5 · <code>Floor</code> (Cube 는 그대로)",
   "모든 공에 <b>Add Component → Rigidbody</b> 추가 → ▶ Play 해서 떨어지는지 확인",
-  "프로젝트 창 우클릭 → Create → <b>Material</b> → MyBall / Ball / Floor 색을 다르게 입히기 <b>(내 공은 눈에 띄는 색으로!)</b>",
+  "<b>2차시에 배운 대로</b> Material 을 만들어 MyBall / Ball / Floor 색을 다르게 입히기 <b>(내 공은 눈에 띄는 색으로!)</b>",
+  "오늘은 색뿐 아니라 <b>Metallic</b> 과 <b>Smoothness</b> 도 올려 보기 → 쇠구슬 · 당구공 느낌 만들기",
   "Cube 를 <b>투명 함정</b>으로 : Material 의 Surface Type = <code>Transparent</code>, 색의 <b>A(알파) = 0</b>",
   "Cube 의 Box Collider 에서 <b>Is Trigger 체크</b>",
   "Create → <b>Physics Material</b> → Bounciness <code>0.5</code> · Friction <code>0.6</code> · Bounce Combine <code>Maximum</code>",
