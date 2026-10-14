@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>우리 반 작품 전시관</title>
+<meta name="description" content="방과후학교 팀 프로젝트 작품 전시관 — 직접 만든 웹앱을 눌러서 바로 플레이해 보세요">
+<meta property="og:type" content="website">
+<meta property="og:title" content="우리 반 작품 전시관">
+<meta property="og:description" content="우리가 직접 만든 앱, 눌러서 바로 해보세요">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127942;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+
+<style>
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#F6F8FA; --surface-3:#E8EDF1;
+  --ink:#15181C; --ink-2:#495159; --ink-3:#79838D;
+  --line:#DBE1E7; --line-2:#C6CFD8;
+  --x:#D9433F; --y:#4E9410; --z:#2360CE;
+  --y-soft:#EAF5DC; --z-soft:#E3ECFC;
+  --shadow:0 1px 2px rgba(20,30,40,.06), 0 10px 28px -14px rgba(20,30,40,.22);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1F2225; --surface:#2A2E32; --surface-2:#32373C; --surface-3:#3A4046;
+    --ink:#ECEFF2; --ink-2:#AFB7BF; --ink-3:#828B95;
+    --line:#3C4248; --line-2:#4A5158;
+    --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7;
+    --y-soft:#2C3A22; --z-soft:#22303F;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 30px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1F2225; --surface:#2A2E32; --surface-2:#32373C; --surface-3:#3A4046;
+  --ink:#ECEFF2; --ink-2:#AFB7BF; --ink-3:#828B95;
+  --line:#3C4248; --line-2:#4A5158;
+  --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7;
+  --y-soft:#2C3A22; --z-soft:#22303F;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 30px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  font-size:16px; line-height:1.72; -webkit-font-smoothing:antialiased}
+h1,h2,h3{text-wrap:balance; margin:0}
+a{color:inherit; text-decoration:none}
+:focus-visible{outline:2.5px solid var(--z); outline-offset:3px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:1120px; margin:0 auto; padding:0 22px 70px}
+@media (max-width:640px){ .wrap{padding:0 14px 50px} }
+
+/* 머리말 */
+.hero{padding:54px 0 36px; text-align:center}
+.ribbon{display:inline-flex; align-items:center; gap:8px; padding:6px 16px; border-radius:99px;
+  background:var(--y-soft); color:var(--y); font-size:.78rem; font-weight:600; letter-spacing:.06em}
+.hero h1{font-family:"Black Han Sans",sans-serif; font-weight:400; margin:16px 0 0;
+  font-size:clamp(2rem,6.5vw,3.2rem); line-height:1.22}
+.hero p{margin:14px auto 0; color:var(--ink-2); font-size:1.04rem; max-width:46ch}
+.meta{display:flex; gap:9px; justify-content:center; flex-wrap:wrap; margin-top:22px}
+.meta span{font-size:.79rem; color:var(--ink-3); background:var(--surface); border:1px solid var(--line);
+  padding:5px 13px; border-radius:99px}
+
+/* 작품 격자 */
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:18px; margin-top:10px}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:18px;
+  overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column;
+  transition:transform .16s, border-color .16s}
+.card.live:hover{transform:translateY(-4px); border-color:var(--y)}
+
+.shot{position:relative; height:200px; background:#fff; overflow:hidden; border-bottom:1px solid var(--line)}
+.shot iframe{width:1100px; height:760px; border:0; transform:scale(.2636); transform-origin:0 0;
+  pointer-events:none}
+.shot .veil{position:absolute; inset:0}
+.badge{position:absolute; top:12px; left:12px; z-index:2; background:var(--ink); color:var(--bg);
+  font-family:"Black Han Sans",sans-serif; font-size:.78rem; letter-spacing:.08em;
+  padding:4px 11px; border-radius:99px}
+
+.soon{height:200px; display:grid; place-items:center; background:var(--surface-2);
+  border-bottom:1px dashed var(--line-2); color:var(--ink-3)}
+.soon div{text-align:center}
+.soon .em{font-size:2.4rem; display:block; opacity:.45}
+.soon small{font-size:.82rem}
+
+.info{padding:17px 19px 19px; display:flex; flex-direction:column; gap:7px; flex:1}
+.info .app{display:flex; align-items:center; gap:9px}
+.info .app .ic{font-size:1.45rem; line-height:1}
+.info .app b{font-size:1.08rem; letter-spacing:-.01em}
+.info .desc{margin:0; font-size:.89rem; color:var(--ink-2); line-height:1.65; flex:1}
+.info .who{font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-3)}
+.play{margin-top:6px; display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  background:var(--y); color:#10160B; font-weight:600; font-size:.92rem;
+  padding:11px 16px; border-radius:11px}
+.card.live:hover .play{filter:brightness(1.06)}
+.play.off{background:var(--surface-3); color:var(--ink-3); font-weight:500}
+
+/* 안내 */
+.note{margin-top:34px; background:var(--z-soft); border-radius:14px; padding:18px 22px;
+  font-size:.9rem; line-height:1.74; color:var(--ink-2)}
+.note b{color:var(--ink); display:block; margin-bottom:5px}
+.note code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
+  background:var(--surface); padding:2px 7px; border-radius:5px}
+.note ol{margin:8px 0 0; padding-left:20px} .note li{margin:5px 0}
+
+.back{display:inline-flex; align-items:center; gap:7px; margin-top:28px; font-size:.88rem;
+  color:var(--ink-2); border:1px solid var(--line); background:var(--surface);
+  padding:10px 16px; border-radius:11px}
+.back:hover{border-color:var(--z); color:var(--z)}
+
+.foot{text-align:center; padding:26px 0 0}
+.sig{display:inline-flex; align-items:center; gap:9px; padding:8px 17px 8px 12px;
+  border:1px solid var(--line); border-radius:99px; background:var(--surface)}
+.sig .bun{font-size:1.1rem; line-height:1}
+.sig b{font-family:"IBM Plex Mono",monospace; font-size:.86rem; color:var(--ink-2)}
+.foot p{margin:9px 0 0; color:var(--ink-3); font-size:.78rem}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="ribbon">🏆 TEAM PROJECT</span>
+    <h1>우리 반 작품 전시관</h1>
+    <p>방과후 수업에서 <b>직접 만든 앱</b>입니다. 카드를 누르면 바로 플레이할 수 있어요.</p>
+    <div class="meta">
+      <span>2026학년도 2학기 방과후학교</span>
+      <span>HTML · CSS · JavaScript</span>
+      <span id="count">—</span>
+    </div>
+  </header>
+
+  <main class="grid" id="grid"></main>
+
+  <div class="note">
+    <b>🧑‍🏫 선생님께 — 작품 올리는 법</b>
+    <ol>
+      <li>팀에게 받은 파일을 <code>team1.html</code> … <code>team6.html</code> 로 이름을 바꿔 <code>teams/</code> 폴더에 올립니다.</li>
+      <li>이 파일(<code>teams/index.html</code>)을 열어 맨 아래 <code>TEAMS</code> 목록에서 그 팀의 <code>ready</code> 를 <code>true</code> 로 바꾸고, 앱 이름·소개·팀원을 채웁니다.</li>
+      <li>저장하고 올리면 1~2분 뒤 자동으로 전시됩니다.</li>
+    </ol>
+  </div>
+
+  <a class="back" href="../">← 미션보드로 돌아가기</a>
+
+  <footer class="foot">
+    <div class="sig"><span class="bun">🐰</span><b>pcteachpc</b></div>
+    <p>웹으로 만드는 게임 &amp; 우리 팀 앱</p>
+  </footer>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   팀 작품 목록 — 여기만 고치면 됩니다
+   ready : 파일을 올렸으면 true, 아직이면 false
+   ══════════════════════════════════════════════════════════ */
+const TEAMS = [
+  { no:1, ready:true,  icon:"🍚", app:"오늘 뭐 먹지",
+    desc:"점심 메뉴 고르느라 쓰는 10분을 버튼 한 번으로 줄였습니다.",
+    who:"예시 작품", file:"team1.html" },
+
+  { no:2, ready:false, icon:"🎯", app:"", desc:"", who:"", file:"team2.html" },
+  { no:3, ready:false, icon:"⏰", app:"", desc:"", who:"", file:"team3.html" },
+  { no:4, ready:false, icon:"🧠", app:"", desc:"", who:"", file:"team4.html" },
+  { no:5, ready:false, icon:"🗳️", app:"", desc:"", who:"", file:"team5.html" },
+  { no:6, ready:false, icon:"🍅", app:"", desc:"", who:"", file:"team6.html" }
+];
+
+const grid = document.getElementById("grid");
+
+grid.innerHTML = TEAMS.map(t => {
+  if (!t.ready) {
+    return '<div class="card">' +
+      '<div class="soon"><div><span class="em">' + t.icon + "</span>" +
+      "<small>준비 중</small></div></div>" +
+      '<div class="info"><div class="app"><span class="ic">📦</span><b>' + t.no + "팀</b></div>" +
+      '<p class="desc">아직 작품이 올라오지 않았습니다.</p>' +
+      '<span class="play off">준비 중</span></div></div>';
+  }
+  return '<a class="card live" href="' + t.file + '">' +
+    '<div class="shot"><span class="badge">' + t.no + "팀</span>" +
+    '<iframe src="' + t.file + '" loading="lazy" scrolling="no" sandbox="allow-scripts" title="' +
+      t.app + ' 미리보기"></iframe><span class="veil"></span></div>' +
+    '<div class="info">' +
+      '<div class="app"><span class="ic">' + t.icon + '</span><b>' + t.app + "</b></div>" +
+      '<p class="desc">' + t.desc + "</p>" +
+      '<span class="who">' + t.who + "</span>" +
+      '<span class="play">▶ 플레이하기</span>' +
+    "</div></a>";
+}).join("");
+
+const done = TEAMS.filter(t => t.ready).length;
+document.getElementById("count").textContent = "작품 " + done + " / " + TEAMS.length + "팀";
+</script>
+
+</body>
+</html>
