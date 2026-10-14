@@ -13,7 +13,7 @@
   --y-soft:#EAF5DC; --x-soft:#FBE7E6; --z-soft:#E3ECFC;
   --shadow:0 1px 2px rgba(20,30,40,.06), 0 8px 24px -12px rgba(20,30,40,.18);
   --slab:#1D2226; --slab-2:#272D33; --slab-line:#343C43; --slab-ink:#DDE3E8;
-  --slab-kw:#7FB3FF; --slab-ty:#9BDE4F; --slab-st:#FF8A84; --slab-cm:#6E7A85;
+  --slab-kw:#7FB3FF; --slab-ty:#9BDE4F; --slab-st:#FF8A84; --slab-cm:#6E7A85; --slab-fn:#E9C46A;
   --r:14px;
 }
 /* ── 토큰 : 어두운 테마 (유니티 에디터 그레이) ─────────── */
@@ -172,7 +172,7 @@ button{font-family:inherit}
 .slab pre{margin:0; padding:15px 17px; overflow-x:auto; font-family:"IBM Plex Mono",monospace;
   font-size:.84rem; line-height:1.78; color:var(--slab-ink); tab-size:4}
 .slab .kw{color:var(--slab-kw)} .slab .ty{color:var(--slab-ty)}
-.slab .st{color:var(--slab-st)} .slab .cm{color:var(--slab-cm)}
+.slab .st{color:var(--slab-st)} .slab .cm{color:var(--slab-cm)} .slab .fn{color:var(--slab-fn)}
 
 /* 표 */
 .tw{overflow-x:auto; border:1px solid var(--line); border-radius:11px}
@@ -1124,15 +1124,29 @@ function doneCount(){
    ══════════════════════════════════════════════════════════ */
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
+/* HTML · CSS · JS 한 파일을 함께 칠하는 간단 하이라이터 */
 function hl(src){
-  const re = /(\/\/[^\n]*)|("(?:[^"\\]|\\.)*")|\b(using|public|private|void|class|new|if|else|return|null|true|false|static|int|float|bool|string|var)\b|\b(MonoBehaviour|Vector3|Rigidbody|Transform|Material|MeshRenderer|AudioSource|Collision|Collider|Debug|Input|Time|Camera|Physics|Ray|RaycastHit|Random|GameObject|Space|ForceMode|Color|KeyCode|Text|SceneManager|UnityEngine|Quaternion|GetComponent)\b/g;
+  const re = new RegExp([
+    "(<!--[\\s\\S]*?-->)",              // 1 HTML 주석
+    "(/\\*[\\s\\S]*?\\*/)",             // 2 CSS 주석
+    "(//[^\\n]*)",                      // 3 JS 주석
+    '("(?:[^"\\\\]|\\\\.)*")',          // 4 문자열
+    "(</?[a-zA-Z][\\w-]*)",             // 5 HTML 태그
+    "\\b(let|const|var|function|if|else|return|for|while|true|false|null|new|typeof)\\b", // 6 키워드
+    "\\b(document|window|Math|console|alert|setInterval|setTimeout|clearInterval|" +
+      "parseInt|getElementById|querySelector|querySelectorAll|addEventListener|" +
+      "createElement|appendChild|innerText|innerHTML|style|push|splice|remove|" +
+      "length|floor|random|abs|onclick|disabled|className|Audio)\\b"                      // 7 내장 기능
+  ].join("|"), "g");
+
   let out = "", last = 0, m;
   while ((m = re.exec(src)) !== null){
     out += esc(src.slice(last, m.index));
-    if (m[1])      out += '<span class="cm">' + esc(m[1]) + "</span>";
-    else if (m[2]) out += '<span class="st">' + esc(m[2]) + "</span>";
-    else if (m[3]) out += '<span class="kw">' + m[3] + "</span>";
-    else           out += '<span class="ty">' + m[4] + "</span>";
+    if (m[1] || m[2] || m[3]) out += '<span class="cm">' + esc(m[1] || m[2] || m[3]) + "</span>";
+    else if (m[4]) out += '<span class="st">' + esc(m[4]) + "</span>";
+    else if (m[5]) out += '<span class="ty">' + esc(m[5]) + "</span>";
+    else if (m[6]) out += '<span class="kw">' + m[6] + "</span>";
+    else           out += '<span class="fn">' + m[7] + "</span>";
     last = re.lastIndex;
   }
   return out + esc(src.slice(last));
