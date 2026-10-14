@@ -1,4 +1,4 @@
-<title>유니티 방과후 미션보드</title>
+<title>방과후 미션보드</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
@@ -198,7 +198,8 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
 /* 링크 목록 */
 .links{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:9px}
 .lk{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;
-  border:1px solid var(--line); border-radius:11px; padding:12px 15px; background:var(--surface-2)}
+  border:1px solid var(--line); border-radius:11px; padding:12px 15px; background:var(--surface-2);
+  width:100%; text-align:left; font:inherit; cursor:pointer}
 .lk:hover{border-color:var(--z); background:var(--surface)}
 .lk .lt{min-width:0}
 .lk b{display:block; font-size:.93rem; line-height:1.45}
@@ -291,8 +292,8 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
     <div class="brand">
       <div class="play" aria-hidden="true"></div>
       <div>
-        <b>유니티 방과후 미션보드</b>
-        <span>A · 유니티로 배우는 게임 프로그래밍</span>
+        <b>방과후 미션보드</b>
+        <span>웹으로 만드는 게임 &amp; 우리 팀 앱</span>
       </div>
     </div>
     <div class="tabs" role="tablist" aria-label="화면 전환">
@@ -320,7 +321,7 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
 
 <footer class="foot">
   <div class="sig"><span class="bun">🐰</span><b>pcteachpc</b></div>
-  <p>2026학년도 2학기 방과후학교 · 유니티로 배우는 게임 프로그래밍</p>
+  <p>2026학년도 2학기 방과후학교 · 웹으로 만드는 게임 &amp; 우리 팀 앱</p>
 </footer>
 
 <script>
@@ -329,1173 +330,747 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
    ══════════════════════════════════════════════════════════ */
 const STAGES = [
 {
- n:1, date:"08/24", lv:1, lvName:"OT",
- title:"유니티 설치하고 게임 원리 알기",
- sub:"다운로드를 먼저 걸어 놓고, 기다리는 동안 게임으로 놀면서 13주 지도를 그립니다.",
- clock:[["8분","설치 걸어두기 (계정 + Hub)"],["15분","🎲 쁘띠바크 3라운드"],["22분","🦖 공룡게임 해부 · 13차시 안내"],["15분","설치 마무리 · 한 줄 기획서"]],
- install:[
-  ["Unity ID 계정 먼저 만들기",
-   "<a href=\"https://unity.com/download\" target=\"_blank\" rel=\"noopener\"><b>unity.com/download</b> 바로가기</a> 를 누르면 <b>곧바로 계정 만들기 화면</b>이 뜹니다. 이메일로 가입하거나 <b>구글 계정으로 가입</b>해도 됩니다. 이메일로 가입했다면 <b>메일함에서 인증 메일을 꼭 클릭</b>하세요 — 여기서 제일 많이 막힙니다."],
-  ["Unity Hub 내려받기",
-   "로그인하면 다운로드 페이지로 들어갑니다. <b>Download for Windows</b> 클릭 → <code>UnityHubSetup.exe</code> 저장 (약 100MB, 금방 받아집니다).<br>페이지가 안 열리면 <a href=\"https://unity.com/releases/editor/archive\" target=\"_blank\" rel=\"noopener\">다운로드 아카이브</a> 에서 받아도 됩니다 (여긴 로그인 없이 열립니다)."],
-  ["Unity Hub 설치하기",
-   "받은 파일을 더블클릭 → 약관 화면에서 <b>I Agree</b> → <b>Install</b> → 끝나면 <b>Finish</b>. 설치 위치는 <b>그대로 두세요.</b>"],
-  ["Hub 에 로그인하기",
-   "Hub 가 열리면 1단계에서 만든 계정으로 <b>Sign in</b>. 구글로 가입했으면 <b>Continue with Google</b>."],
-  ["무료 라이선스 받기",
-   "Hub 오른쪽 위 <b>톱니바퀴(설정)</b> → 왼쪽 <b>Licenses</b> → <b>Add</b> → <b>Get a free personal license</b> → 동의. 개인 무료 라이선스라 수업용으로 아무 문제 없습니다."],
-  ["에디터 설치 : Unity 6.3 LTS 고르기",
-   "왼쪽 <b>Installs</b> → <b>Install Editor</b> → <b>LTS</b> 라고 표시된 <b>6000.3.xx</b> 를 선택 → Install.<br>⚠️ <b>6000.0.xx 는 2026년 10월에 지원이 끝나서</b> 이 수업 중간에 끊깁니다. <b>6000.1 · 6000.2 는 보안 경고</b>가 붙어 있으니 고르지 마세요. <b>반드시 6000.3.xx (Unity 6.3 LTS)</b>."],
-  ["모듈(추가 부품) 고르기",
-   "<b>체크할 것</b> → <b>Microsoft Visual Studio Community</b> (코드 쓰는 프로그램. 학교 PC 에 VS Code 가 이미 있으면 체크 안 해도 됩니다) · <b>Windows Build Support (IL2CPP)</b> (13차시 빌드용).<br><b>체크하지 말 것</b> → Android · iOS · WebGL · 언어팩. 용량만 몇 GB 씩 늘어납니다."],
-  ["기다리기 ☕",
-   "다운로드 용량이 <b>약 8~15GB</b>, 인터넷 속도에 따라 <b>20~40분</b> 걸립니다. 여러 명이 동시에 받으면 더 느려요. 이 시간 동안 아래 활동을 같이 합니다. <b>중간에 Hub 를 끄지 마세요.</b>"],
-  ["설치 확인하고 오늘은 끝!",
-   "<b>Installs</b> 목록에 <code>6000.3.xx</code> 가 보이면 성공입니다. <b>Projects → New project</b> 버튼이 눌리는지만 확인하고 오늘은 여기까지. 프로젝트는 다음 시간에 만듭니다."]
- ],
+ n:1, date:"7차시 · 10/19", lv:1, lvName:"첫 JS",
+ title:"버튼이 살아난다",
+ sub:"지금까지 만든 화면에 처음으로 '움직임'을 넣습니다. 오늘 클릭 게임 하나를 완성해요.",
  learn:[
-  ["유니티가 뭔가요?","<b>게임 엔진</b>이라고 부르는 도구입니다. 중력 · 충돌 · 3D 화면 그리기 · 소리 같은 어려운 것들을 <b>이미 다 만들어 놓은 도구상자</b>예요. 우리는 '규칙'만 정하면 됩니다. 포켓몬 GO, 어몽어스, 하스스톤, 원신 모두 유니티로 만들었습니다."],
-  ["게임은 이 3단계를 계속 반복합니다","<b>입력 → 처리 → 출력</b>. 스페이스를 누르면(입력) → 위로 힘을 준다(처리) → 뛴 화면을 그린다(출력). 이 한 바퀴를 <b>프레임</b>이라고 하고, 보통 1초에 60바퀴 돕니다(60FPS)."],
-  ["3D 세상의 주소 : x · y · z","<b>x</b> 는 좌우, <b>y</b> 는 위아래, <b>z</b> 는 앞뒤입니다. 유니티 화면 오른쪽 위의 색깔 화살표가 이걸 알려 줘요 — <b style=\"color:var(--x)\">빨강 = x</b>, <b style=\"color:var(--y)\">초록 = y</b>, <b style=\"color:var(--z)\">파랑 = z</b>. (이 페이지 색깔의 정체가 바로 이겁니다)"],
-  ["게임 오브젝트 = 껍데기 + 부품","유니티의 모든 것은 <b>빈 껍데기(게임 오브젝트)</b> 에 <b>부품(컴포넌트)</b> 을 붙여서 만듭니다. 사람이라면 = 몸(Transform) + 눈(Camera) + 귀(AudioSource) + 두뇌(스크립트). 게임 캐릭터도 똑같은 방식이에요."],
-  ["프로그램은 2개를 씁니다","<b>Unity Hub</b> = 버전 설치와 프로젝트 관리를 하는 <b>리모컨</b>. <b>Unity Editor</b> = 실제로 게임을 만드는 <b>TV 화면</b>. Hub 를 먼저 깔고, Hub 로 Editor 를 깝니다."],
-  ["13주 뒤에 남는 것","8차시에 <b>볼링게임</b>, 13차시에 <b>아이템을 모아 골인하는 3D 스테이지 게임</b>. 마지막엔 실행 파일(.exe)로 뽑아서 친구에게 보낼 수 있습니다."]
+  ["HTML · CSS · JS 셋의 역할","<b>HTML은 뼈대</b>(무엇이 있는가), <b>CSS는 옷</b>(어떻게 생겼는가), <b>JS는 움직임</b>(누르면 무슨 일이 생기는가). 여러분은 이미 뼈대와 옷을 만들 줄 압니다. <b>오늘 마지막 하나를 배웁니다.</b>"],
+  ["&lt;script&gt; 는 맨 아래에","코드는 <code>&lt;/body&gt;</code> 바로 위에 씁니다. <b>화면이 다 만들어진 다음에</b> 코드가 실행되어야 하거든요. 위에 쓰면 \"그런 버튼 없는데요?\" 하고 에러가 납니다."],
+  ["화면의 것을 '잡아오기'","HTML에 <code>id=\"btn\"</code> 처럼 이름표를 붙이고, JS에서 <code>document.getElementById(\"btn\")</code> 으로 잡아옵니다. <b>이름표를 붙여야 코드가 그걸 찾을 수 있어요.</b>"],
+  ["글자 바꾸기 innerText","<code>scoreText.innerText = 5;</code> → 그 자리 글자가 5로 바뀝니다. 유니티에서 쓰던 <code>.text</code> 와 똑같은 역할이에요."],
+  ["변수 = 값을 담는 상자","<code>let score = 0;</code> 는 score라는 상자를 만들고 0을 넣는다는 뜻. <code>score = score + 1</code> 은 \"지금 값에 1을 더해서 다시 넣어라\"입니다."],
+  ["onclick = 누르면 실행","<code>btn.onclick = function () { ... }</code> 안에 적은 것이 <b>버튼을 누를 때마다</b> 실행됩니다. 유니티의 <code>Update</code> 가 \"매 순간\"이었다면, 이건 <b>\"누를 때만\"</b>이에요."],
+  ["if = 만약 ~라면","<code>if (score &gt;= 20) { ... }</code> → 점수가 20 이상일 때만 안쪽이 실행됩니다. 게임의 '규칙'은 전부 이걸로 만듭니다."]
  ],
  quests:[
-  "<b>1단계</b> : Unity ID 계정 만들고 <b>메일 인증까지</b> 끝내기",
-  "<b>2~4단계</b> : Unity Hub 내려받아 설치하고 로그인",
-  "<b>5단계</b> : 무료 라이선스(Personal) 받기",
-  "<b>6~7단계</b> : <b>Unity 6.3 LTS (6000.3.xx)</b> 설치 걸어 두기 — 버전과 모듈 주의!",
-  "🎲 <b>쁘띠바크 준비</b> — 종이에 표 그리기 (가로 = 항목 5칸, 세로 = 라운드 3줄). 아래 표를 보고 따라 그리세요",
-  "🎲 <b>쁘띠바크 1~3라운드</b> — 초성 뽑기 → 2분 안에 채우기 → 먼저 다 채우면 \"스톱!\" → 다 같이 채점",
-  "🎲 <b>보너스 라운드</b> — 마지막 칸은 <b>\"내가 만들고 싶은 게임\"</b>. 이건 채점 대신 <b>발표</b>합니다",
-  "🎮 <b>워밍업 O/X</b> — \"이 게임, 유니티로 만들었을까?\" 손들기로 맞히기",
-  "🦖 <b>공룡게임 대결</b> — 주소창에 <code>chrome://dino</code> 입력 (인터넷 없이도 됩니다). 3분 동안 <b>최고 점수</b> 겨루기",
-  "🔍 <b>게임 해부하기</b> — 공룡게임을 부품으로 쪼개 보기 (아래 표 함께 채우기)",
-  "쪼갠 부품이 <b>각각 몇 차시에 나오는지</b> 확인 — 이게 우리 13차시 지도입니다",
-  "좋아하는 게임 하나를 골라 <b>입력 → 처리 → 출력</b> 으로 쪼개 적어 보기",
-  "<b>9단계</b> : Installs 목록에 <code>6000.3.xx</code> 가 떴는지 확인",
-  "한 줄 기획서 쓰기 — \"나는 ○○하면 ○○되는 게임을 만들고 싶다\" (13차시에 다시 꺼냅니다)"
+  "메모장(또는 VS Code)을 열고 아래 코드를 <b>통째로 붙여넣기</b>",
+  "★ <b>저장할 때 함정 주의!</b> 메모장이면 <b>파일 형식을 '모든 파일'</b> 로 바꾸고 이름을 <code>click.html</code> 로 저장 (안 그러면 <code>click.html.txt</code> 가 됩니다)",
+  "저장한 파일을 <b>더블클릭</b> → 브라우저에서 열리면 성공!",
+  "버튼을 눌러 숫자가 올라가는지 확인",
+  "20번 눌러서 <b>🎉 클리어!</b> 가 뜨는지 확인",
+  "코드에서 <code>score &gt;= 20</code> 의 <b>20을 5로</b> 바꾸고 저장 → 새로고침(F5) → 훨씬 빨리 클리어되나요?",
+  "<b>클리어 메시지</b>를 내 마음대로 바꿔 보기",
+  "CSS에서 버튼 <b>색깔</b>을 바꿔 보기 (이건 이미 할 줄 알죠!)",
+  "<b>다시하기</b> 버튼을 눌러 0으로 돌아가는지 확인"
  ],
- code:[],
- linksTitle:"🎲 쁘띠바크 설명 영상",
- links:[
-  ["이렇게 하는 게임이에요","tvN 문제적남자 · 프랑스 국민게임 쁘띠 바크","https://www.youtube.com/watch?v=ctsnCNBf7Dw","한 번 보면 규칙이 바로 이해됩니다"]
- ],
+ code:[["click.html", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>클릭 연타 게임</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 40px; }
+  h1 { font-size: 34px; }
+  #score { font-size: 90px; font-weight: bold; color: #2563eb; margin: 10px; }
+  #msg { font-size: 28px; color: #16a34a; height: 40px; }
+  button { font-size: 26px; padding: 18px 46px; border: 0; border-radius: 16px;
+           background: #2563eb; color: white; cursor: pointer; }
+  button:active { transform: scale(0.94); }
+  #reset { background: #94a3b8; font-size: 16px; padding: 10px 24px; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+  <h1>🖱️ 클릭 연타 게임</h1>
+  <p>목표 : <b>20번</b> 누르기!</p>
+
+  <div id="score">0</div>
+  <div id="msg"></div>
+
+  <button id="btn">눌러!</button>
+  <br>
+  <button id="reset">다시하기</button>
+
+<script>
+  // 1. 점수를 담을 상자(변수)
+  let score = 0;
+
+  // 2. 화면에 있는 것들을 잡아 온다
+  const btn       = document.getElementById("btn");
+  const scoreText = document.getElementById("score");
+  const msg       = document.getElementById("msg");
+  const resetBtn  = document.getElementById("reset");
+
+  // 3. 버튼을 누르면 이 안이 실행된다
+  btn.onclick = function () {
+    score = score + 1;           // 점수 1 올리기
+    scoreText.innerText = score; // 화면에 보여주기
+
+    if (score >= 20) {           // 20점이 넘으면
+      msg.innerText = "🎉 클리어!";
+    }
+  };
+
+  // 4. 다시하기
+  resetBtn.onclick = function () {
+    score = 0;
+    scoreText.innerText = 0;
+    msg.innerText = "";
+  };
+<\/script>
+
+</body>
+</html>`]],
  tables:[{
-   cap:"🎲 쁘띠바크 판 — 이렇게 그리면 됩니다",
-   head:["초성","게임 이름","게임 캐릭터","게임 속 아이템","동물","음식"],
-   rows:[["<b>ㄱ</b>","공룡게임","군인","검","고양이","김밥"],
-         ["<b>ㅁ</b>","마인크래프트","마리오","망토","말","만두"],
-         ["<b>?</b>","","","","",""]]
- },{
-   cap:"🦖 공룡게임 해부하기 — 이게 우리 13차시 지도입니다",
-   head:["공룡게임의 부품","유니티에서는","배우는 차시"],
-   rows:[["스페이스를 누르면 점프","Input · GetButtonDown","<b>4 · 6차시</b>"],
-         ["뛰면 다시 떨어짐 (중력)","Rigidbody","<b>7차시</b>"],
-         ["선인장에 닿으면 끝","Collider · 충돌 이벤트","<b>8차시</b>"],
-         ["오른쪽 위 점수 숫자","UI Canvas · Text","<b>9 · 10차시</b>"],
-         ["낮이 밤으로 바뀌는 배경","Material · 조명","<b>2 · 7차시</b>"],
-         ["죽으면 처음부터 다시","Scene · SceneManager","<b>12차시</b>"],
-         ["파일 하나로 친구에게 전달","빌드(Build)","<b>13차시</b>"]]
+   cap:"오늘 외울 건 이 4개뿐",
+   head:["코드","뜻"],
+   rows:[["<code>let score = 0;</code>","score 라는 상자를 만들고 0을 넣기"],
+         ["<code>document.getElementById(\"btn\")</code>","화면에서 id가 btn 인 것을 잡아오기"],
+         ["<code>어떤것.innerText = 값;</code>","그 자리 글자를 바꾸기"],
+         ["<code>버튼.onclick = function(){ }</code>","누르면 { } 안을 실행"]]
  }],
  notes:[
-  ["tip","🎲 쁘띠바크 하는 법 (5줄 요약)","<ol style=\"margin:6px 0 0;padding-left:19px\"><li>종이에 표를 그린다 — <b>가로에 항목 5칸, 세로에 라운드 3줄</b></li><li>초성을 하나 뽑는다 (<b>ㄱ · ㅁ · ㅈ</b> 처럼). 제비뽑기도 좋고 아무나 외쳐도 됩니다</li><li><b>2분</b> 안에 그 초성으로 시작하는 단어로 칸을 채운다</li><li>먼저 다 채운 사람이 <b>\"스톱!\"</b> → 전원 펜 놓기</li><li>채점 : <b>나만 쓴 답 2점 · 겹친 답 1점 · 빈칸 0점</b></li></ol><b>종이와 펜만 있으면 됩니다.</b> 다운로드 속도도 전혀 안 잡아먹어요."],
-  ["tip","🦖 공룡게임 여는 법","크롬 주소창에 <code>chrome://dino</code> 를 치고 엔터 → <b>스페이스</b> 로 시작. 인터넷이 끊겨 있어도 되고, <b>다운로드 속도도 안 잡아먹습니다.</b> 규칙이 세상에서 제일 단순한 게임인데, <b>우리가 13주 동안 배울 것이 전부 들어 있어요.</b>"],
-  ["warn","설치가 막혔다면 이것부터","<ul><li><b>다운로드 페이지 대신 로그인 화면이 떠요</b> → 정상입니다. 계정을 만들어야 받을 수 있게 바뀌었어요 (1단계)</li><li><b>로그인이 안 돼요</b> → 메일함(스팸함 포함)에서 인증 메일을 눌렀는지 확인</li><li><b>다운로드가 0% 에서 안 움직여요</b> → Hub 를 껐다 켜고 다시 Install. 학교 방화벽이면 선생님께</li><li><b>용량이 부족하대요</b> → C드라이브에 최소 <b>20GB</b> 는 비어 있어야 합니다</li><li>오늘 못 끝냈어도 괜찮아요. <b>2차시 시작할 때 같이 마무리</b>합니다</li></ul>"],
-  ["tip","왜 이렇게 용량이 커요?","유니티는 3D 그래픽 · 물리엔진 · 오디오 · 빌드 도구가 통째로 들어 있는 큰 프로그램이라 그렇습니다. <b>한 번만 깔면 13주 내내 씁니다.</b>"]
+  ["warn","★ 저장이 제일 큰 함정입니다","메모장에서 그냥 저장하면 <code>click.html.txt</code> 가 되어 <b>브라우저로 안 열립니다.</b><ul><li>저장 창에서 <b>파일 형식 → 모든 파일(*.*)</b> 로 바꾸기</li><li>이름을 <code>click.html</code> 로 (<b>.html 까지</b> 직접 입력)</li><li>인코딩이 <b>UTF-8</b> 인지 확인 (한글 안 깨지게)</li></ul>"],
+  ["warn","코드를 고쳤는데 안 바뀌어요","<b>저장(<code>Ctrl+S</code>)하고 브라우저에서 새로고침(<code>F5</code>)</b> 해야 반영됩니다. 유니티의 '저장하고 Play 다시 누르기'와 같은 것이에요."],
+  ["warn","아무 반응이 없어요","<ul><li><code>&lt;script&gt;</code> 가 <b>&lt;/body&gt; 바로 위</b>에 있는지</li><li>HTML의 <code>id</code> 와 JS의 <code>getElementById</code> 안 이름이 <b>글자 하나까지 똑같은지</b> (대소문자 구분!)</li><li>브라우저에서 <code>F12</code> → <b>Console</b> 탭에 빨간 글씨가 있는지</li></ul>"]
  ],
- bonus:["쁘띠바크에서 <b>아무도 안 쓴 답</b>만으로 한 줄 채워 보기 (전부 2점!)",
-        "공룡게임 <b>최고 점수 1000점</b> 넘겨 보기","유니티로 만든 게임 3개 더 찾아보고 친구에게 말해 주기","<b>집 컴퓨터에도</b> 설치해 두면 주말에 이어서 만들 수 있어요","Unity Hub → <b>Learn</b> 탭에 있는 공식 튜토리얼 구경해 보기"]
+ bonus:["목표를 <b>100번</b>으로 올려서 친구와 최고 기록 대결","누를 때마다 버튼 글자가 바뀌게 만들기","CSS를 고쳐서 <b>나만의 디자인</b>으로 꾸미기","점수가 10이 넘으면 글자 색이 빨개지게 — <code>scoreText.style.color = \"red\";</code>"]
 },
 {
- n:2, date:"08/31", lv:1, lvName:"기초",
- title:"첫 프로젝트 & 3D 놀이터 만들기",
- sub:"3D 프로젝트를 만들고, 화면 4구역과 조작키를 익힌 뒤, 나만의 놀이터에 색과 사진을 입힙니다.",
- linksTitle:"🖼️ 무료 이미지 받는 곳",
- links:[
-  ["픽사베이","pixabay.com","https://pixabay.com/ko/","한국어 지원 · 가입 없이 바로 다운로드. 사진·일러스트 다 있음"],
-  ["Poly Haven","polyhaven.com/textures","https://polyhaven.com/textures","게임용 표면 사진 전문(벽돌·나무·잔디). 전부 무료, 출처 표기도 필요 없음"],
-  ["픽사베이 이용 조건","pixabay.com/ko/service/license-summary","https://pixabay.com/ko/service/license-summary/","무료 이미지에도 지켜야 할 규칙이 있어요. 한 번만 읽어 보기"]
- ],
- clock:[["10분","설치 못 한 친구 마무리"],["20분","프로젝트 생성 + 화면 구경"],["25분","미션 : 나만의 놀이터"],["5분","저장하고 정리"]],
+ n:2, date:"8차시 · 10/26", lv:2, lvName:"시간·랜덤",
+ title:"시간이 흐르고, 랜덤하게 나타난다",
+ sub:"두더지 잡기를 만들면서 '혼자서 계속 돌아가는 코드'를 배웁니다.",
  learn:[
-  ["프로젝트 = 게임 하나가 든 폴더","안에 <b>Assets</b>(내가 만든 모든 재료) · <b>Scenes</b>(무대) · <b>Settings</b> 폴더가 생깁니다. 이 폴더는 <b>이름을 바꾸거나 옮기지 마세요.</b> 유니티가 길을 잃습니다."],
-  ["템플릿은 Universal 3D","<b>Universal 3D</b> = 3D + URP(요즘 표준 그래픽 방식). Universal 2D 는 2D 게임용, High Definition 3D 는 고사양 PC 용입니다. 우리는 <b>Universal 3D</b> 하나만 씁니다."],
-  ["계층구조 (Hierarchy)","<b>지금 무대에 올라 있는 배우 명단</b>입니다. 여기 있는 것만 화면에 보여요. 우클릭으로 새 오브젝트를 만듭니다."],
-  ["장면 (Scene) 창","<b>내가 배치하는 작업 화면</b>입니다. 여기서 물체를 옮기고 돌립니다. 옆의 <b>Game</b> 탭은 <b>플레이어가 실제로 보게 될 화면</b> — 둘은 다릅니다!"],
-  ["프로젝트 (Project) 창","<b>내 컴퓨터에 저장된 재료 창고</b>입니다. 스크립트 · 재질 · 소리 파일이 여기 쌓입니다. 계층구조가 '무대', 프로젝트는 '창고'라고 생각하세요."],
-  ["인스펙터 (Inspector)","<b>선택한 오브젝트의 속성표</b>입니다. 위치 · 색 · 무게를 여기서 바꿉니다. 앞으로 수업 시간의 절반은 이 창을 봅니다."],
-  ["씬(Scene) = 무대 한 개","스테이지 1, 스테이지 2, 제목 화면이 각각 <b>씬 하나</b>입니다. 지금은 <code>SampleScene</code> 하나뿐이고, 12차시에 여러 개 만듭니다."],
-  ["기본 도형 5개면 충분해요","<b>Cube</b> 상자 · <b>Sphere</b> 구 · <b>Capsule</b> 캡슐 · <b>Cylinder</b> 원기둥 · <b>Plane</b> 땅. 우리가 만들 게임은 전부 이 5개로 만듭니다. 계층구조 우클릭 → 3D Object."],
-  ["Transform : 모든 오브젝트의 기본","<b>Position</b> 위치 · <b>Rotation</b> 회전(각도) · <b>Scale</b> 크기(배수). 유일하게 <b>모든 오브젝트가 반드시 갖는</b> 컴포넌트라, 지울 수도 없습니다."],
-  ["▶ Play 버튼의 무서운 규칙","Play 가 켜진 상태에서 바꾼 것은 <b>정지하는 순간 전부 사라집니다.</b> 반드시 <b>정지한 다음</b> 수정하세요. (많이들 여기서 울어요)"],
-  ["🎨 색은 Material(재질)로 입힙니다","오브젝트에 직접 색을 칠하는 게 아니라, <b>물감통(Material)을 만들어서 씌우는</b> 방식이에요. 그래서 <b>같은 물감통을 여러 오브젝트에 씌우면 한 번에 다 바뀝니다.</b> 100개짜리 벽돌을 한 번에 색칠할 수 있는 거죠."],
-  ["Base Map 이 '기본 색' 칸","Material 을 클릭하면 인스펙터에 <b>Base Map</b> 이 보입니다. 그 옆 <b>색깔 네모</b>가 우리가 바꿀 색이에요. 아래에 있는 Metallic(금속 느낌) · Smoothness(반짝임)는 <b>7차시</b>에 만져 봅니다."],
-  ["🖼️ 사진을 붙이면 '텍스처'","Material 에는 <b>색 대신 이미지</b>를 넣을 수도 있어요. 그 이미지를 <b>텍스처(Texture)</b> 라고 부릅니다. 벽돌 사진을 씌우면 벽돌 벽이 되고, 잔디 사진을 씌우면 잔디밭이 되죠. <b>게임의 거의 모든 표면이 사실 사진 한 장</b>입니다."],
-  ["Base Map 칸이 두 개인 이유","<b>왼쪽 작은 네모</b> = 이미지(텍스처)를 넣는 곳. <b>오른쪽 색깔 네모</b> = 그 이미지에 <b>덧씌워 곱해지는 색</b>. 그래서 오른쪽이 회색이면 사진이 칙칙해집니다. <b>사진 원래 색을 보고 싶으면 오른쪽을 흰색으로!</b>"],
-  ["Tiling = 몇 번 반복할까","작은 이미지를 넓은 바닥에 씌우면 늘어나서 흐릿해집니다. Material 아래쪽 <b>Tiling</b> 을 <code>(5, 5)</code> 로 하면 가로·세로 5번씩 <b>반복</b>돼서 타일처럼 촘촘해져요. 바닥·벽에는 거의 항상 씁니다."],
-  ["⚖️ 인터넷 이미지, 아무거나 쓰면 안 돼요","검색해서 나온 사진에는 <b>만든 사람의 저작권</b>이 있습니다. 수업이라도 함부로 쓰면 안 돼요. 아래 <b>무료 이미지 사이트</b>에서 받거나, <b>내가 직접 찍은 사진</b>을 쓰세요. 나중에 게임을 공개할 때 특히 중요합니다."],
-  ["★ Active Input Handling 을 Both 로","Unity 6.3 의 Universal 3D 프로젝트는 <b>새 입력 시스템만</b> 켜져 있습니다. 우리가 쓸 <code>Input.GetAxisRaw</code> 는 <b>옛 방식</b>이라 그대로 두면 <b>4차시부터 키가 하나도 안 먹습니다.</b> <code>Edit → Project Settings → Player → Configuration → Active Input Handling</code> 을 <b>Both</b> 로 바꾸면 둘 다 됩니다. 노란 경고가 떠도 괜찮아요. <b>오늘 꼭 해 두세요.</b>"]
+  ["Math.random() = 주사위","<code>Math.random()</code> 은 <b>0과 1 사이 소수</b>를 줍니다(0.374... 같은). 여기에 9를 곱하고 <code>Math.floor</code> 로 소수점을 버리면 <b>0~8 중 하나</b>가 나와요. 그래서 구멍 9개 중 하나를 고를 수 있습니다."],
+  ["setInterval = 몇 초마다 반복","<code>setInterval(showMole, 800)</code> → <b>0.8초마다</b> showMole 을 계속 실행합니다. 유니티의 <code>Update</code> 와 같은 역할인데, <b>간격을 내가 정할 수 있다</b>는 점이 달라요."],
+  ["clearInterval = 멈추기","한번 시작한 반복은 <b>끄기 전까지 영원히</b> 돕니다. 게임이 끝나면 <code>clearInterval(타이머이름)</code> 으로 꼭 꺼야 해요. 안 끄면 시간이 계속 줄어듭니다."],
+  ["타이머 두 개를 동시에","이 게임에는 반복이 <b>두 개</b> 있어요. <b>0.8초마다 두더지 이동</b>, <b>1초마다 시간 감소</b>. 각각 따로 돌아갑니다."],
+  ["for = 같은 일을 여러 번","구멍이 9개인데 클릭 기능을 9번 쓰면 너무 깁니다. <code>for (let i = 0; i &lt; 9; i = i + 1)</code> 로 <b>한 번만 쓰고 9개에 전부</b> 달 수 있어요."],
+  ["=== 는 '같다'","<code>i === now</code> 는 \"i와 now가 같은가?\"를 묻는 겁니다. <b>=</b> 하나는 \"넣어라\", <b>===</b> 셋은 \"같냐?\" — 완전히 다릅니다."]
  ],
  quests:[
-  "지난 시간에 설치 못 했으면 <b>손 들고</b> 설치부터 마무리하기",
-  "Unity Hub → <b>Projects</b> → <b>New project</b>",
-  "왼쪽 <b>All templates → Core</b> → <b>Universal 3D</b> 선택",
-  "오른쪽 Project name 을 <code>MyGame</code> 으로, Location 은 그대로 → <b>Create project</b> (첫 실행은 1~3분 걸립니다)",
-  "★ <b>가장 중요한 설정!</b> <code>Edit → Project Settings → Player → Configuration → <b>Active Input Handling</b></code> 을 <b>Both</b> 로 바꾸기 → 재시작하겠냐고 물으면 <b>Yes</b>",
-  "화면 <b>4구역</b> 을 손가락으로 짚어 보기 : 계층구조 · 장면 · 프로젝트 · 인스펙터",
-  "<b>Scene</b> 탭과 <b>Game</b> 탭을 번갈아 눌러 뭐가 다른지 확인",
-  "계층구조 빈 곳 우클릭 → 3D Object → <b>Plane</b> 하나 깔기 (이게 땅!)",
-  "그 위에 Cube · Sphere · Capsule · Cylinder 등 <b>도형 5개 이상</b> 올려 나만의 놀이터 만들기",
-  "조작키 다 써 보기 : <code>Q</code> 뷰이동 <code>W</code> 이동 <code>E</code> 회전 <code>R</code> 크기 <code>T</code> 사각툴",
-  "카메라 돌려 보기 : 마우스 <b>우클릭 드래그</b> · <code>Alt</code>+좌클릭 · <b>휠</b>",
-  "마우스 말고 <b>인스펙터에 숫자를 직접 입력</b>해서 오브젝트 옮겨 보기",
-  "🎨 프로젝트 창 <b>Assets</b> 안에서 우클릭 → <b>Create → Material</b> (안 보이면 <b>Create → Rendering → Material</b>) → 이름을 <code>MyRed</code> 처럼 색 이름으로",
-  "🎨 만든 Material 을 클릭하고, 인스펙터의 <b>Base Map</b> 옆 <b>색깔 네모</b>를 눌러 원하는 색 고르기",
-  "🎨 그 Material 을 <b>Scene 창의 도형 위로 그대로 드래그</b> → 색이 입혀지나요?",
-  "🎨 Material 을 <b>3~4개 더</b> 만들어 도형마다 다른 색 입히기 (바닥 Plane 도 잊지 말고!)",
-  "🎨 <b>같은 Material</b> 을 도형 두 개에 입힌 다음, Material 색을 바꿔 보기 → <b>둘 다 한꺼번에</b> 바뀌나요?",
-  "🎨 Assets 우클릭 → Create → <b>Folder</b> → 이름 <code>Materials</code> → 만든 Material 들을 전부 여기로 옮겨 정리",
-  "🖼️ 이미지 구하기 — 아래 무료 사이트에서 받거나, <b>내 사진</b>을 써도 됩니다 (<code>.png</code> · <code>.jpg</code>)",
-  "🖼️ Assets 우클릭 → Create → Folder → 이름 <code>Textures</code> → 받은 이미지 파일을 이 폴더로 <b>드래그</b>해서 넣기",
-  "🖼️ Material 하나를 클릭 → <b>Base Map 왼쪽의 작은 네모</b>(색깔 네모 말고!)에 이미지를 <b>드래그</b>",
-  "🖼️ 이미지가 어둡게 나오면 <b>Base Map 옆 색깔 네모를 흰색</b>으로 바꾸기",
-  "🖼️ 그 Material 을 바닥 Plane 에 입히고, <b>Tiling</b> 을 <code>X 5 · Y 5</code> 로 바꿔 보기 → 무늬가 반복되나요?",
-  "🖼️ 내 사진으로 Material 을 하나 더 만들어 <b>Cube 에 붙이기</b> (액자처럼!)",
-  "▶ <b>Play</b> 눌러 Game 화면 확인 → 다시 눌러 정지 → <code>Ctrl+S</code> 저장"
+  "아래 코드를 붙여넣고 <code>mole.html</code> 로 저장 (파일 형식 '모든 파일' 잊지 말기!)",
+  "<b>시작!</b> 을 눌러 두더지가 여기저기 나타나는지 확인",
+  "두더지를 눌러 점수가 오르는지, <b>빈 구멍을 누르면 점수가 안 오르는지</b> 확인",
+  "20초가 지나면 결과 창이 뜨는지 확인",
+  "난이도 올리기 — <code>setInterval(showMole, 800)</code> 의 <b>800을 400</b>으로",
+  "시간 늘리기 — <code>let time = 20</code> 의 <b>20을 30</b>으로 (아래 <code>timeText.innerText = 20</code> 도 같이!)",
+  "두더지 이모지를 <b>다른 걸로</b> 바꿔 보기 (🐹 → 🐸 🦔 👾)",
+  "구멍 색을 CSS에서 바꿔 나만의 디자인 만들기",
+  "친구와 <b>20초 최고 점수</b> 대결"
  ],
- code:[],
- tables:[
-  {cap:"오늘 꼭 외울 조작키",
-   head:["키","기능"],
-   rows:[["Q","뷰(화면) 이동"],["W","오브젝트 이동"],["E","오브젝트 회전"],["R","오브젝트 크기"],["T","오브젝트 사각툴"],
-         ["마우스 우클릭 드래그","카메라 회전"],["Alt + 좌클릭","카메라 축 이동"],["방향키","카메라 자유 이동"],
-         ["마우스 휠","줌 / 이동"],["F","선택한 오브젝트로 화면 확 이동"],["Ctrl + D","선택한 것 복제"],["Ctrl + S","저장"]]},
-  {cap:"Transform 세 가지 값",
-   head:["값","뜻","예시"],
-   rows:[["Position","위치 (미터)","<code>(0, 0.5, 2)</code> = 오른쪽0 · 위0.5 · 앞2"],
-         ["Rotation","회전 (도)","<code>(0, 90, 0)</code> = y축 기준 90도 돌림"],
-         ["Scale","크기 (배수)","<code>(2, 1, 2)</code> = 가로세로 2배, 높이는 그대로"]]}
- ],
- notes:[
-  ["warn","Play 중에 바꾼 건 저장되지 않아요","▶ 가 켜진 상태에서 위치를 옮기면 정지하는 순간 원래대로 돌아갑니다. <b>반드시 정지한 뒤에</b> 수정하세요."],
-  ["tip","창 배치가 엉망이 됐어요","오른쪽 위 <b>Layout</b> → <b>Default</b> 를 누르면 원래 배치로 돌아옵니다. 마음껏 망가뜨려도 됩니다."],
-  ["warn","Plane 이 너무 작아요","Plane 의 Scale 을 <code>(2, 1, 2)</code> 처럼 키우면 땅이 넓어집니다. Plane 은 두께가 없어서 y 는 바꿔도 소용없어요."],
-  ["tip","오늘 미션이 많아 보여도 괜찮아요","앞쪽 <b>1~12번</b>(프로젝트 만들고 도형 놓기)까지가 오늘의 <b>필수</b>입니다. <b>🎨 색</b>과 <b>🖼️ 이미지</b>는 여기까지 온 사람부터 차례로 하세요. <b>못 끝내도 전혀 문제 없습니다</b> — 다음 시간 시작할 때 이어서 합니다."],
-  ["tip","🖼️ 꿀팁 — 이미지를 그냥 던져도 됩니다","이미지 파일을 <b>Scene 창의 오브젝트 위로 바로 드래그</b>하면 유니티가 <b>Material 을 알아서 만들어서</b> 입혀 줍니다. 빠르게 확인할 때 편해요. 다만 이름이 제멋대로 붙으니, 제대로 정리할 땐 Material 을 직접 만드는 방식을 쓰세요."],
-  ["warn","🖼️ 이미지가 안 보여요","<ul><li><b>색깔만 나온다</b> → <b>왼쪽 작은 네모</b>(텍스처 슬롯)가 아니라 오른쪽 색깔 네모에 넣은 겁니다. 왼쪽에 넣으세요</li><li><b>사진이 칙칙하다</b> → Base Map <b>오른쪽 색을 흰색</b>으로</li><li><b>늘어나서 흐릿하다</b> → <b>Tiling</b> 을 (5, 5) 정도로 올리기</li><li><b>공(Sphere)에 붙이니 일그러진다</b> → 정상입니다. 둥근 면에 평평한 사진을 감싸서 그래요. 무늬가 작은 이미지를 쓰면 덜 티납니다</li><li><b>파일이 목록에 안 뜬다</b> → 이미지를 <b>Assets 폴더 안</b>에 넣었는지 확인 (바탕화면에 둔 파일은 안 보입니다)</li></ul>"],
-  ["warn","🎨 색이 안 입혀져요","<ul><li><b>색깔 칸을 못 찾겠다</b> → Material 을 <b>클릭</b>해야 인스펙터에 뜹니다. <b>Base Map</b> 옆 네모예요 (Albedo 아님)</li><li><b>드래그해도 안 먹는다</b> → 오브젝트를 고르고 인스펙터 <b>Mesh Renderer → Materials → Element 0</b> 칸에 끌어다 놓으세요</li><li><b>다른 도형까지 같이 바뀐다</b> → 같은 Material 을 쓴 겁니다. <b>Material 을 따로 하나 더</b> 만드세요 (정상 동작이에요!)</li><li><b>색이 칙칙하다</b> → 색 고르는 창 아래 <b>A(알파)</b> 가 낮진 않은지, 조명이 어둡진 않은지 확인</li></ul>"],
-  ["warn","★ Active Input Handling = Both, 오늘 꼭!","이걸 안 하면 <b>4차시부터 키보드가 아예 안 먹습니다.</b> 그리고 원인을 찾기가 아주 어려워요 (오류 메시지가 안 뜨거든요). 프로젝트를 만들자마자 <b>제일 먼저</b> 바꾸고, 재시작까지 하고 시작하세요."]
- ],
- bonus:["도형과 색만으로 <b>얼굴 · 눈사람 · 로봇 · 우리 학교</b> 중 하나 만들어 스크린샷 제출",
-        "🌈 <b>무지개 놀이터</b> — 빨주노초파남보 Material 7개를 만들어 도형 7개에 순서대로 입히기",
-        "🖼️ <b>내 방 만들기</b> — 나무 바닥 · 벽지 · 잔디 텍스처를 받아 진짜 공간처럼 꾸미기",
-        "🖼️ 친구 얼굴 사진을 Cube 에 붙여 <b>친구 큐브</b> 만들기 (친구 허락 먼저 받기!)",
-        "Scale 을 <code>0.3</code> 같은 소수로 넣어 아주 작은 오브젝트 만들기",
-        "Directional Light 를 선택하고 <b>Rotation</b> 을 바꿔 해가 지는 장면 만들기 — 색이 어떻게 달라지나요?",
-        "Directional Light 의 <b>색</b>도 바꿔 보기 (주황빛 노을 · 푸른 새벽)"]
-},
-{
- n:3, date:"09/07", lv:1, lvName:"기초",
- title:"첫 코드 & 게임오브젝트의 일생",
- sub:"Debug.Log로 첫 코드를 실행하고, Awake → Start → Update 순서를 눈으로 확인합니다.",
- clock:[["10분","지난 시간 복습"],["20분","스크립트 만들어 붙이기"],["25분","미션 : 생명주기 관찰"],["5분","정리"]],
- learn:[
-  ["스크립트도 '부품'입니다","코드 파일을 만들기만 하면 <b>아무 일도 일어나지 않습니다.</b> 오브젝트에 <b>붙여야(Add Component)</b> 비로소 작동해요. 스크립트는 오브젝트에 다는 <b>두뇌</b>라고 생각하세요."],
-  ["MonoBehaviour 가 뭐예요?","<code>: MonoBehaviour</code> 라고 써 두면 <b>유니티가 알아서 함수를 불러 줍니다.</b> Start 나 Update 를 우리가 직접 부른 적이 없는데도 실행되는 이유가 이것 때문이에요."],
-  ["프레임 = 화면 한 장","게임은 그림을 아주 빠르게 넘기는 만화입니다. 1초에 60장 그리면 60FPS. <b>Update 는 그 한 장마다 한 번씩</b> 실행됩니다."],
-  ["Debug.Log = 파이썬의 print","프로그램이 지금 뭘 하고 있는지 <b>콘솔(Console)</b> 창에 찍어 주는 함수입니다. 나중에 막힐 때 가장 강력한 무기예요. <b>의심되는 곳마다 Debug.Log 를 뿌리세요.</b>"],
-  ["Console 창 읽는 법","아래쪽 <b>Console</b> 탭입니다. <b>흰 글씨</b> = 내가 찍은 메시지, <b>노란 줄</b> = 경고(무시해도 됨), <b>빨간 줄</b> = 오류(반드시 고쳐야 함). 빨간 줄이 하나라도 있으면 Play 가 안 됩니다."],
-  ["지켜야 할 규칙 3개","① <b>파일 이름 = 클래스 이름</b> (다르면 컴포넌트로 안 붙음) ② 문장 끝에는 <b>반드시 세미콜론 <code>;</code></b> ③ 코드 고치면 <b><code>Ctrl+S</code> 저장</b> 후 유니티 창 한 번 클릭"]
- ],
- quests:[
-  "프로젝트 창 우클릭 → Create → Scripting → <b>MonoBehaviour Script</b> → 이름 <code>LifeCycleTest</code>",
-  "더블클릭해서 코드 편집기를 열고, 아래 코드를 <b>통째로 붙여넣기</b> → <code>Ctrl+S</code> 저장",
-  "계층구조에 Cylinder 하나 만들고, 스크립트 파일을 인스펙터의 <b>Add Component</b> 자리로 드래그",
-  "▶ Play → 아래 <b>Console</b> 창에 뜨는 <b>순서</b> 확인하기",
-  "Play 중에 인스펙터에서 스크립트 왼쪽 <b>체크를 껐다 켜기</b> → OnEnable / OnDisable 확인",
-  "정지한 뒤 오브젝트를 <b>Delete</b> → OnDestroy 가 언제 뜨는지 확인",
-  "Console 왼쪽 위 <b>Clear</b> 버튼으로 로그 지우는 법 익히기",
-  "메시지를 <b>내 이름</b>이 들어가게 바꿔서 다시 실행해 보기"
- ],
- code:[["LifeCycleTest.cs",
-`using UnityEngine;
+ code:[["mole.html", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>두더지 잡기</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 30px; }
+  h1 { font-size: 30px; margin: 0 0 6px; }
+  #info { font-size: 22px; margin-bottom: 16px; }
+  #score, #time { font-weight: bold; color: #2563eb; }
+  .grid { display: grid; grid-template-columns: repeat(3, 110px);
+          gap: 12px; justify-content: center; }
+  .hole { width: 110px; height: 110px; background: #cbd5e1; border-radius: 20px;
+          font-size: 60px; line-height: 110px; cursor: pointer; user-select: none; }
+  .hole:active { background: #94a3b8; }
+  button { font-size: 20px; padding: 14px 36px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; margin-top: 20px; }
+</style>
+</head>
+<body>
 
-public class LifeCycleTest : MonoBehaviour
-{
-    int count = 0;
+  <h1>🐹 두더지 잡기</h1>
+  <div id="info">점수 <span id="score">0</span> · 남은 시간 <span id="time">20</span>초</div>
 
-    // 1. 태어날 때 딱 한 번
-    void Awake()
-    {
-        Debug.Log("1. Awake  : 오브젝트가 태어났어요!");
+  <div class="grid">
+    <div class="hole" id="h0"></div>
+    <div class="hole" id="h1"></div>
+    <div class="hole" id="h2"></div>
+    <div class="hole" id="h3"></div>
+    <div class="hole" id="h4"></div>
+    <div class="hole" id="h5"></div>
+    <div class="hole" id="h6"></div>
+    <div class="hole" id="h7"></div>
+    <div class="hole" id="h8"></div>
+  </div>
+
+  <button id="start">시작!</button>
+
+<script>
+  let score = 0;
+  let time  = 20;
+  let now   = -1;      // 지금 두더지가 있는 구멍 번호
+  let moleTimer, clockTimer;
+
+  const scoreText = document.getElementById("score");
+  const timeText  = document.getElementById("time");
+
+  // 두더지를 아무 구멍에나 띄우기
+  function showMole() {
+    if (now >= 0) {
+      document.getElementById("h" + now).innerText = "";
     }
+    now = Math.floor(Math.random() * 9);   // 0~8 중 하나
+    document.getElementById("h" + now).innerText = "🐹";
+  }
 
-    // 2. 켜질 때마다
-    void OnEnable()
-    {
-        Debug.Log("2. OnEnable : 스위치가 켜졌어요!");
+  // 1초마다 시간 줄이기
+  function countDown() {
+    time = time - 1;
+    timeText.innerText = time;
+    if (time <= 0) {
+      clearInterval(moleTimer);
+      clearInterval(clockTimer);
+      if (now >= 0) document.getElementById("h" + now).innerText = "";
+      alert("끝! 점수는 " + score + "점");
     }
+  }
 
-    // 3. 첫 Update 직전에 딱 한 번
-    void Start()
-    {
-        Debug.Log("3. Start  : 준비 끝, 시작합니다!");
-    }
-
-    // 4. 매 프레임마다 계속 (1초에 수십~수백 번!)
-    void Update()
-    {
-        count = count + 1;
-        if (count <= 5)
-            Debug.Log("4. Update : " + count + "번째 프레임");
-    }
-
-    // 5. 꺼질 때마다
-    void OnDisable()
-    {
-        Debug.Log("5. OnDisable : 스위치가 꺼졌어요!");
-    }
-
-    // 6. 사라질 때 딱 한 번
-    void OnDestroy()
-    {
-        Debug.Log("6. OnDestroy : 안녕히 계세요!");
-    }
-}`]],
- tables:[{
-   cap:"게임오브젝트의 일생 (생명주기)",
-   head:["함수","언제 실행되나","주로 쓰는 곳"],
-   rows:[["Awake()","태어날 때 1번","변수 초기화 · 부품 찾아두기"],["OnEnable()","켜질 때마다","다시 시작 처리"],["Start()","첫 프레임 직전 1번","시작 세팅"],
-         ["FixedUpdate()","고정 주기 (1초 약 50번)","물리 · Rigidbody"],["Update()","매 프레임","입력 받기 · 게임 로직"],
-         ["LateUpdate()","모든 Update 끝난 뒤","카메라 따라가기"],["OnDestroy()","사라질 때 1번","마무리 정리"]]
- }],
- notes:[
-  ["warn","스크립트가 안 붙는다면","<ul><li><b>파일 이름 = 클래스 이름</b> 이어야 합니다. <code>LifeCycleTest.cs</code> 면 <code>class LifeCycleTest</code>.</li><li>코드를 고치고 <code>Ctrl+S</code> 를 안 하면 반영되지 않습니다.</li><li>Console 에 <b>빨간 줄</b>이 하나라도 있으면 Play 가 안 됩니다. 빨간 줄부터 해결!</li></ul>"],
-  ["tip","Awake 와 Start, 뭐가 달라요?","둘 다 딱 한 번 실행되지만 <b>Awake 가 먼저</b>입니다. 그래서 '준비물 챙기기'는 Awake 에, '다른 오브젝트한테 말 걸기'는 Start 에 쓰는 게 안전해요."]
- ],
- bonus:["<code>if (count &lt;= 5)</code> 의 5를 20으로 바꾸면 어떻게 될지 <b>먼저 예상</b>하고 실행해 보기","Cylinder 를 2개 만들어 같은 스크립트를 둘 다 붙이면 로그가 몇 줄 나올지 맞혀 보기","<code>Debug.Log</code> 대신 <code>Debug.LogWarning</code>, <code>Debug.LogError</code> 도 써 보기"]
-},
-{
- n:4, date:"09/14", lv:1, lvName:"기초",
- title:"인스펙터로 조종하는 움직임",
- sub:"public 변수와 transform.Translate 로, 코드를 안 고치고도 속도를 바꿔 봅니다.",
- clock:[["10분","복습 + C# 최소 문법"],["20분","코드 붙이고 움직이기"],["25분","미션 : 숫자 바꿔가며 관찰"],["5분","정리"]],
- learn:[
-  ["변수 = 값을 담는 상자","파이썬은 <code>speed = 2</code> 로 끝이지만, C# 은 <b>상자에 종류를 미리 적어야</b> 합니다 → <code>float speed = 2f;</code>. 귀찮아 보여도 실수를 미리 잡아 줘요."],
-  ["public 을 붙이면 마법이 일어납니다","<code>public float speed;</code> 라고 쓰면 <b>인스펙터 창에 칸이 생깁니다.</b> 코드를 열지 않고 마우스로 값을 바꿀 수 있어요. 게임 개발에서 <b>가장 많이 쓰는 기능</b>입니다. <code>private</code>(또는 안 씀)는 인스펙터에 안 보입니다."],
-  ["Vector3 = 숫자 3개 묶음","<code>new Vector3(0, 0, 1)</code> 은 (x, y, z) 세 값을 하나로 묶은 것. <b>위치</b>를 나타낼 수도 있고 <b>방향</b>을 나타낼 수도 있습니다. 3D 게임에서 제일 자주 나오는 단어예요."],
-  ["Translate = 지금 위치에 더하기","<code>transform.Translate(vec)</code> 는 <b>현재 위치 + vec</b> 로 옮깁니다. 순간이동이 아니라 '조금씩 더하기'를 Update 에서 반복하니까 <b>움직이는 것처럼</b> 보이는 거예요."],
-  ["Time.deltaTime 을 꼭 곱하세요","이전 프레임에서 지금까지 걸린 <b>시간</b>입니다. 좋은 컴퓨터는 1초에 200프레임, 낡은 컴퓨터는 30프레임인데, 곱해 주지 않으면 <b>좋은 컴퓨터에서 7배 빨라집니다.</b> 곱하면 어디서든 '1초에 speed 만큼'으로 똑같아져요."],
-  ["Rotate = 회전시키기","<code>transform.Rotate(Vector3.up * 90 * Time.deltaTime)</code> 은 y축을 중심으로 1초에 90도 돌립니다. 아이템이 빙글빙글 도는 연출이 전부 이겁니다."]
- ],
- quests:[
-  "Cube 하나 만들고 <code>MoveSimple</code> 스크립트를 만들어 붙이기",
-  "▶ Play → 앞으로 스르륵 움직이는지 확인",
-  "정지하고 인스펙터에서 <b>Speed</b> 를 <code>0.5</code> → <code>5</code> → <code>20</code> 으로 바꿔 보기 (코드는 안 건드림!)",
-  "<b>Direction</b> 을 <code>(1, 0, 0)</code> / <code>(0, 1, 0)</code> 으로 바꿔 보기 — 각각 어느 방향인가요?",
-  "<code>Spin</code> 스크립트도 같이 붙여서 빙글빙글 돌면서 이동시키기",
-  "코드에서 <code>* Time.deltaTime</code> 을 지우고 실행 → 왜 미친 듯이 빨라지는지 이야기해 보기 (<b>다시 복구!</b>)",
-  "도형 3개에 각각 다른 Speed 를 넣어 <b>레이스</b> 만들기",
-  "<b>Direction 을 <code>(0, -1, 0)</code></b> 으로 주면 어떻게 될지 예상하고 실행"
- ],
- code:[
-  ["MoveSimple.cs",
-`using UnityEngine;
-
-public class MoveSimple : MonoBehaviour
-{
-    // public 을 붙이면 인스펙터 창에 나타나요!
-    public float speed = 2f;
-    public Vector3 direction = new Vector3(0, 0, 1);
-
-    void Update()
-    {
-        // Translate : 지금 위치에 벡터를 더해서 이동
-        transform.Translate(direction * speed * Time.deltaTime);
-    }
-}`],
-  ["Spin.cs",
-`using UnityEngine;
-
-public class Spin : MonoBehaviour
-{
-    public float rotateSpeed = 90f;   // 1초에 90도
-
-    void Update()
-    {
-        transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
-    }
-}`]],
- tables:[
-  {cap:"C# 자료형 — 이 5개면 충분합니다",
-   head:["자료형","담는 것","예시"],
-   rows:[["<code>int</code>","정수","<code>int score = 0;</code>"],
-         ["<code>float</code>","소수 (뒤에 <b>f</b>!)","<code>float speed = 2.5f;</code>"],
-         ["<code>bool</code>","참/거짓","<code>bool isJump = false;</code>"],
-         ["<code>string</code>","글자","<code>string name = \"홍길동\";</code>"],
-         ["<code>Vector3</code>","숫자 3개 (x,y,z)","<code>Vector3 v = new Vector3(0,1,0);</code>"]]},
-  {cap:"방향은 외우지 말고 이걸 쓰세요",
-   head:["코드","뜻","같은 값"],
-   rows:[["<code>Vector3.up</code>","위","(0, 1, 0)"],["<code>Vector3.down</code>","아래","(0, -1, 0)"],
-         ["<code>Vector3.right</code>","오른쪽","(1, 0, 0)"],["<code>Vector3.left</code>","왼쪽","(-1, 0, 0)"],
-         ["<code>Vector3.forward</code>","앞","(0, 0, 1)"],["<code>Vector3.back</code>","뒤","(0, 0, -1)"],
-         ["<code>Vector3.zero</code>","원점","(0, 0, 0)"]]},
-  {cap:"파이썬 ↔ C# 대조표",
-   head:["하는 일","파이썬","C# (유니티)"],
-   rows:[["변수","<code>speed = 2</code>","<code>float speed = 2f;</code>"],
-         ["정수","<code>count = 0</code>","<code>int count = 0;</code>"],
-         ["참/거짓","<code>flag = False</code>","<code>bool flag = false;</code>"],
-         ["조건문","<code>if x > 3:</code>","<code>if (x > 3) { }</code>"],
-         ["아니면","<code>else:</code>","<code>else { }</code>"],
-         ["출력","<code>print(\"안녕\")</code>","<code>Debug.Log(\"안녕\");</code>"],
-         ["주석","<code># 메모</code>","<code>// 메모</code>"],
-         ["블록 표시","들여쓰기","<code>{ }</code> 중괄호"],
-         ["문장 끝","줄바꿈","<b>반드시 세미콜론 <code>;</code></b>"]]}
- ],
- notes:[
-  ["warn","코드를 고쳤는데 안 바뀌어요","<code>public</code> 변수는 <b>인스펙터 값이 코드보다 우선</b>입니다. 컴포넌트 오른쪽 <b>점 세 개</b> → <b>Reset</b> 을 누르면 코드에 쓴 값으로 돌아갑니다."],
-  ["warn","float 뒤에 f 를 빼먹으면","<code>float speed = 2.5;</code> 는 오류입니다. C# 에서 소수는 기본이 double 이라, float 임을 알려 주는 <b><code>f</code></b> 를 꼭 붙여야 해요. <code>2f</code>, <code>0.5f</code> 처럼요."],
-  ["tip","다 외우려고 하지 마세요","위 표들은 <b>필요할 때 찾아보는 사전</b>입니다. 상단 <b>치트키</b> 탭에도 똑같이 들어 있어요."]
- ],
- bonus:["Direction 을 대각선 <code>(1, 0, 1)</code> 로 주면 왜 더 빨라 보이는지 생각해 보기","<code>Vector3.up</code> 을 <code>Vector3.right</code> 로 바꿔 옆으로 구르게 만들기","Spin 의 rotateSpeed 에 <b>음수</b>를 넣으면?"]
-},
-{
- n:5, date:"09/21", lv:2, lvName:"조작",
- title:"마우스로 오브젝트 조작하기",
- sub:"클릭하면 색이 바뀌고, 바닥을 클릭하면 그 자리로 이동합니다.",
- clock:[["10분","복습"],["20분","클릭 이벤트 2종"],["25분","미션 : 두더지 잡기"],["5분","정리"]],
- learn:[
-  ["마우스 클릭을 받는 방법은 2가지","① <b><code>Input.GetMouseButtonDown(0)</code></b> — 화면 <b>어디를 눌러도</b> 감지. Update 안에 씁니다. ② <b><code>OnMouseDown()</code></b> — <b>이 오브젝트를 눌렀을 때만</b> 실행. 훨씬 간단하지만 Collider 가 있어야 해요."],
-  ["버튼 번호","<code>0</code> = 왼쪽, <code>1</code> = 오른쪽, <code>2</code> = 가운데(휠). <code>Down</code> 은 <b>누른 순간 1번</b>, 아무것도 안 붙이면 <b>누르는 동안 계속</b>, <code>Up</code> 은 <b>뗀 순간 1번</b>입니다."],
-  ["화면은 평평한데 세상은 3D","마우스는 화면(2D) 좌표만 알려 줍니다. 그래서 <b>카메라에서 마우스 방향으로 보이지 않는 레이저를 쏘는데</b>, 이걸 <b>Ray(광선)</b> 라고 해요."],
-  ["Raycast : 레이저를 쏴서 맞히기","<code>Physics.Raycast(ray, out hit)</code> 를 하면 레이저가 <b>처음 맞은 물체</b>의 정보가 <code>hit</code> 에 담깁니다. <code>hit.point</code> 는 <b>맞은 지점의 3D 좌표</b>, <code>hit.collider</code> 는 <b>맞은 물체</b>. 총 쏘는 게임도 전부 이 원리예요."],
-  ["Camera.main 이 뭔가요?","씬에서 <b>Tag 가 MainCamera 인 카메라</b>를 자동으로 찾아 줍니다. 카메라의 Tag 가 바뀌어 있으면 작동하지 않으니 확인하세요."],
-  ["Random 두 가지","<code>Random.value</code> → <b>0 ~ 1</b> 사이 소수 (색깔 만들 때 딱!). <code>Random.Range(-4f, 4f)</code> → <b>-4 ~ 4</b> 사이 값 (위치 정할 때). 정수 범위는 마지막 숫자가 포함되지 않으니 주의."],
-  ["코드로 색 바꾸기","<code>GetComponent&lt;MeshRenderer&gt;().material.color = ...</code>. MeshRenderer 는 '이 물체를 화면에 그리는 부품'이고, 그 안의 material 이 색을 갖고 있습니다."]
- ],
- quests:[
-  "도형 여러 개를 만들고 전부에 <code>MouseColor</code> 붙이기 → Play 후 마구 클릭해 보기",
-  "Sphere 하나에 <code>MouseClickMove</code> 붙이기 → 바닥을 클릭하면 그 자리로 이동하는지 확인",
-  "인스펙터에서 Speed 를 바꿔 이동 속도 조절해 보기",
-  "Console 에 찍히는 <b>좌표값</b> 확인 — 클릭한 곳의 x, y, z 가 보이나요?",
-  "Capsule 하나에 <code>Mole</code> 붙이고 클릭 → 점수가 오르고 순간이동 하는지 확인",
-  "Mole 을 <code>Ctrl+D</code> 로 <b>5마리</b>로 늘리기",
-  "★ <b>미션 : 두더지 잡기</b> — 30초 안에 몇 점 나오는지 친구와 대결",
-  "두더지에 <code>MouseColor</code> 도 같이 붙여서 클릭할 때 색까지 바뀌게 만들기"
- ],
- code:[
-  ["MouseColor.cs",
-`using UnityEngine;
-
-public class MouseColor : MonoBehaviour
-{
-    Material mat;
-
-    void Start()
-    {
-        // 이 오브젝트의 재질(Material)을 가져온다
-        mat = GetComponent<MeshRenderer>().material;
-    }
-
-    // 이 오브젝트를 마우스로 눌렀을 때 (Collider 가 있어야 작동!)
-    void OnMouseDown()
-    {
-        mat.color = new Color(Random.value, Random.value, Random.value);
-        Debug.Log(gameObject.name + " 클릭!");
-    }
-}`],
-  ["MouseClickMove.cs",
-`using UnityEngine;
-
-public class MouseClickMove : MonoBehaviour
-{
-    public float speed = 5f;
-    Vector3 target;
-
-    void Start()
-    {
-        target = transform.position;
-    }
-
-    void Update()
-    {
-        // 마우스 왼쪽 버튼을 누른 순간
-        if (Input.GetMouseButtonDown(0))
-        {
-            // 화면의 마우스 위치에서 3D 세상으로 광선(Ray)을 쏜다
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                target = hit.point;
-                target.y = transform.position.y;   // 높이는 그대로 유지
-                Debug.Log("여기로 이동! " + target);
-            }
-        }
-
-        // 목표 지점까지 일정한 속도로 이동
-        transform.position =
-            Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
-    }
-}`],
-  ["Mole.cs  (두더지 잡기)",
-`using UnityEngine;
-
-public class Mole : MonoBehaviour
-{
-    public static int score = 0;   // 모든 두더지가 함께 쓰는 점수
-
-    void OnMouseDown()
-    {
+  // 구멍 9개에 전부 클릭 기능 달기
+  for (let i = 0; i < 9; i = i + 1) {
+    document.getElementById("h" + i).onclick = function () {
+      if (i === now) {             // 두더지가 있는 구멍을 눌렀으면
         score = score + 1;
-        Debug.Log("점수 : " + score);
+        scoreText.innerText = score;
+        document.getElementById("h" + i).innerText = "";
+        now = -1;
+      }
+    };
+  }
 
-        // 바닥 위 아무 데나로 순간이동
-        transform.position = new Vector3(
-            Random.Range(-4f, 4f), 0.5f, Random.Range(-4f, 4f));
-    }
-}`]],
+  // 시작 버튼
+  document.getElementById("start").onclick = function () {
+    score = 0; time = 20;
+    scoreText.innerText = 0;
+    timeText.innerText = 20;
+    clearInterval(moleTimer);
+    clearInterval(clockTimer);
+    moleTimer  = setInterval(showMole, 800);   // 0.8초마다 두더지 이동
+    clockTimer = setInterval(countDown, 1000); // 1초마다 시간 감소
+  };
+<\/script>
+
+</body>
+</html>`]],
  tables:[{
-   cap:"입력 함수 사전",
-   head:["코드","언제 true 가 되나"],
-   rows:[["<code>Input.GetMouseButtonDown(0)</code>","왼쪽 버튼을 <b>누른 순간</b> 1번"],
-         ["<code>Input.GetMouseButton(0)</code>","누르고 <b>있는 동안</b> 계속"],
-         ["<code>Input.GetMouseButtonUp(0)</code>","<b>뗀 순간</b> 1번"],
-         ["<code>Input.GetKeyDown(KeyCode.A)</code>","A 키를 누른 순간"],
-         ["<code>Input.GetKey(KeyCode.A)</code>","A 키를 누르고 있는 동안"],
-         ["<code>Input.anyKeyDown</code>","아무 키나 누른 순간"],
-         ["<code>OnMouseDown()</code>","<b>이 오브젝트를</b> 클릭했을 때"],
-         ["<code>OnMouseEnter()</code>","마우스가 이 오브젝트 위에 올라왔을 때"]]
+   cap:"랜덤 숫자 만드는 법",
+   head:["코드","나오는 값"],
+   rows:[["<code>Math.random()</code>","0 ~ 1 사이 소수"],
+         ["<code>Math.random() * 9</code>","0 ~ 9 사이 소수"],
+         ["<code>Math.floor(Math.random() * 9)</code>","<b>0 ~ 8</b> 정수"],
+         ["<code>Math.floor(Math.random() * 6) + 1</code>","1 ~ 6 (주사위!)"]]
  }],
  notes:[
-  ["warn","클릭이 안 먹혀요","<ul><li>클릭하려는 오브젝트에 <b>Collider</b> 가 있어야 합니다 (기본 도형엔 자동으로 붙어 있어요)</li><li>카메라의 Tag 가 <b>MainCamera</b> 여야 <code>Camera.main</code> 이 작동합니다</li><li>Scene 창이 아니라 <b>Game 창</b>을 클릭해야 합니다</li></ul>"],
-  ["tip","out 이 뭐예요?","<code>Physics.Raycast(ray, out hit)</code> 의 <code>out</code> 은 <b>\"이 상자에 결과를 담아 줘\"</b> 라는 뜻입니다. 지금은 <b>그냥 이렇게 쓴다</b>고만 알아 두면 충분해요."]
+  ["warn","시간이 두 배로 빨리 줄어요","<b>시작 버튼을 두 번</b> 눌렀을 가능성이 큽니다. 타이머가 두 개 돌고 있는 거예요. 새로고침(F5)하면 해결됩니다."],
+  ["warn","두더지를 눌러도 점수가 안 올라요","<code>i === now</code> 에서 <b>=</b> 를 하나나 둘만 쓰지 않았는지 확인하세요. 꼭 <b>세 개</b>여야 합니다."],
+  ["tip","유니티에서 봤던 그것","<code>setInterval</code> 은 유니티의 <b>Update</b>, <code>Math.random()</code> 은 <b>Random.Range</b> 와 같은 역할입니다. <b>도구만 바뀌었지 생각하는 방법은 똑같아요.</b>"]
  ],
- bonus:["두더지가 <b>1초마다 저절로</b> 움직이게 만들어 보기 (힌트 : Update + 시간 재기)","<code>Random.Range</code> 범위를 넓혀 더 어려운 두더지 만들기","<code>OnMouseEnter()</code> 로 마우스만 올려도 색이 변하게 해 보기"]
+ bonus:["두더지가 <b>2마리</b> 동시에 나오게 만들기","시간이 5초 남으면 글자를 빨갛게","두더지 말고 <b>폭탄 💣</b> 을 섞어서, 폭탄을 누르면 점수가 깎이게","<code>alert</code> 대신 화면에 결과를 예쁘게 보여주기"]
 },
 {
- n:6, date:"10/12", lv:2, lvName:"조작",
- title:"키보드로 조작하기",
- sub:"WASD로 움직이고, 목표 지점까지 부드럽게 이동시키는 방법들을 비교합니다.",
- clock:[["10분","복습"],["15분","Input Manager 살펴보기"],["30분","미션 : WASD 조종 + 이동 비교"],["5분","정리"]],
+ n:3, date:"9차시 · 11/02", lv:2, lvName:"조작",
+ title:"키보드로 움직인다",
+ sub:"방향키로 캐릭터를 조종하고 아이템을 먹습니다. 유니티에서 하던 그 조작이에요.",
  learn:[
-  ["Input Manager = 키에 붙인 이름표","<code>Edit → Project Settings → Input Manager</code>. 유니티는 키를 직접 쓰는 대신 <b>이름</b>으로 부릅니다. <code>\"Horizontal\"</code> 이라고만 쓰면 <b>A · D · ← · →</b> 를 전부 알아서 처리해 줘요. 나중에 키 배치를 바꿔도 코드는 그대로!"],
-  ["GetAxis 와 GetAxisRaw 의 차이","<b>GetAxis</b> 는 0 → 0.3 → 0.7 → 1 처럼 <b>부드럽게</b> 올라갑니다(미끄러지는 느낌). <b>GetAxisRaw</b> 는 <b>-1 · 0 · 1</b> 딱 세 값만 줍니다(칼 같은 조작). 처음엔 이해하기 쉬운 <b>Raw</b> 를 씁니다."],
-  ["왜 h 와 v 두 개를 받나요?","<code>h</code>(가로) 는 <b>x축</b>, <code>v</code>(세로) 는 <b>z축</b> 에 넣습니다. 3D 에서 y 는 위아래(점프)라서 걸어 다니는 건 x 와 z 예요. <code>new Vector3(h, 0, v)</code> 의 가운데 0 이 그 이유입니다."],
-  ["GetButtonDown(\"Jump\")","Space 에 붙어 있는 이름표가 <code>Jump</code> 입니다. <b>누른 순간 딱 한 번</b> true 라서 점프에 딱 맞아요. <code>GetButton</code> 을 쓰면 누르고 있는 내내 점프가 걸립니다."],
-  ["목표 지점까지 이동하는 3가지","<b>MoveTowards</b> = 처음부터 끝까지 <b>같은 속도</b>(엘리베이터). <b>Lerp</b> = 가까워질수록 <b>느려짐</b>(부드러운 카메라). <b>Slerp</b> = <b>호를 그리며</b> 이동(위성 궤도). 표로 아래 정리했어요."],
-  ["Time.deltaTime, 다시 한 번","이동 · 회전 코드에는 <b>거의 항상</b> 곱합니다. \"1초에 speed 만큼\" 이라는 뜻이 돼요. 곱하지 않으면 \"1프레임에 speed 만큼\" 이 되어 컴퓨터마다 속도가 달라집니다."]
+  ["좌표는 유니티와 같아요 — 하나만 빼고","<b>x는 오른쪽</b>으로 갈수록 커집니다(같음). 그런데 <b>웹은 y가 아래로 갈수록 커져요!</b> 유니티는 위로 갈수록 커졌죠. <b>이것만 반대</b>라고 기억하세요."],
+  ["위치는 변수로 관리","<code>let x = 230; let y = 180;</code> 로 <b>지금 어디 있는지</b>를 숫자로 들고 있다가, 바뀔 때마다 화면에 그려 줍니다. 유니티의 <code>transform.position</code> 과 같은 역할이에요."],
+  ["style.left / style.top 으로 그리기","<code>player.style.left = x + \"px\";</code> → 캐릭터를 x 위치로 옮깁니다. <b><code>+ \"px\"</code> 를 빼먹으면 안 움직여요.</b> 단위를 꼭 붙여야 합니다."],
+  ["keydown = 키를 눌렀을 때","<code>document.addEventListener(\"keydown\", function (e) { ... })</code> 안에서 <code>e.key</code> 로 <b>어떤 키인지</b> 알 수 있습니다. 방향키는 <code>\"ArrowRight\"</code> 처럼 적어요."],
+  ["벽 막기도 if 하나로","<code>if (x &gt; 460) x = 460;</code> → 460을 넘으면 460으로 되돌립니다. 이 한 줄이 <b>보이지 않는 벽</b>이에요."],
+  ["가까우면 먹은 것으로","<code>Math.abs(x - ix) &lt; 40</code> 은 \"x와 ix의 차이가 40보다 작은가\"입니다. <code>Math.abs</code> 는 <b>부호를 뗀 거리</b>예요(-30도 30으로). 가로·세로 둘 다 가까우면 겹친 겁니다."]
  ],
  quests:[
-  "Edit → Project Settings → <b>Input Manager</b> 를 열어 <code>Horizontal</code> · <code>Vertical</code> · <code>Jump</code> 가 어떤 키에 붙어 있는지 확인",
-  "Sphere 에 <code>KeyMove</code> 붙이고 <b>WASD</b> · 방향키로 조종해 보기",
-  "<code>Space</code> 를 눌러 Console 에 점프 메시지가 뜨는지 확인",
-  "Speed 를 바꿔 가며 내 마음에 드는 조작감 찾기",
-  "Plane 의 Scale 을 <code>(2, 1, 2)</code> 로 키워 놀이터 넓히기",
-  "코드에서 <code>GetAxisRaw</code> 를 <code>GetAxis</code> 로 바꿔 보고 <b>느낌 차이</b> 말해 보기",
-  "<code>MoveCompare</code> 를 Cube 에 붙이고 <b>Mode</b> 를 1 → 2 → 3 으로 바꿔 관찰",
-  "셋 중 어떤 게 어떤 느낌인지 <b>한 줄로</b> 적어 보기"
+  "아래 코드를 <code>move.html</code> 로 저장하고 열기",
+  "<b>방향키</b>로 파란 네모가 움직이는지 확인 (화면을 한 번 클릭하고 누르세요)",
+  "⭐ 위로 가면 점수가 오르고 별이 다른 곳으로 가는지 확인",
+  "벽 끝까지 가 보기 — <b>밖으로 안 나가지죠?</b>",
+  "이동 속도 바꾸기 — <code>x + 20</code> 의 <b>20을 5나 50</b>으로",
+  "캐릭터 크기·색을 CSS에서 바꾸기",
+  "별 대신 <b>다른 이모지</b>로 바꿔 보기",
+  "<b>y 값을 더하면 위로 갈까 아래로 갈까?</b> 먼저 예상하고 확인해 보기"
  ],
- code:[
-  ["KeyMove.cs",
-`using UnityEngine;
+ code:[["move.html", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>캐릭터 조작 + 아이템 먹기</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score { font-weight: bold; color: #2563eb; }
+  #stage { position: relative; width: 500px; height: 400px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; width: 40px; height: 40px; background: #2563eb;
+            border-radius: 10px; }
+  #item { position: absolute; width: 36px; height: 36px; font-size: 32px;
+          line-height: 36px; }
+</style>
+</head>
+<body>
 
-public class KeyMove : MonoBehaviour
-{
-    public float speed = 5f;
+  <h1>🟦 캐릭터 조작</h1>
+  <div id="info">방향키로 움직여서 ⭐ 를 먹어요 · 점수 <span id="score">0</span></div>
 
-    void Update()
-    {
-        // GetAxisRaw 는 -1, 0, 1 중 하나를 딱 떨어지게 준다
-        float h = Input.GetAxisRaw("Horizontal");   // A / D , ← / →
-        float v = Input.GetAxisRaw("Vertical");     // W / S , ↑ / ↓
+  <div id="stage">
+    <div id="player"></div>
+    <div id="item">⭐</div>
+  </div>
 
-        // 3D 에서 걸어다니는 건 x 와 z! (y 는 위아래라서 0)
-        Vector3 dir = new Vector3(h, 0, v);
-        transform.Translate(dir * speed * Time.deltaTime);
+<script>
+  // 캐릭터 위치
+  let x = 230;
+  let y = 180;
+  let score = 0;
 
-        if (Input.GetButtonDown("Jump"))            // Space
-            Debug.Log("점프 키를 눌렀어요!");
+  const player    = document.getElementById("player");
+  const item      = document.getElementById("item");
+  const scoreText = document.getElementById("score");
+
+  // 화면에 실제로 그리기
+  function draw() {
+    player.style.left = x + "px";
+    player.style.top  = y + "px";
+  }
+
+  // 아이템을 아무 데나 옮기기
+  function moveItem() {
+    item.style.left = Math.floor(Math.random() * 460) + "px";
+    item.style.top  = Math.floor(Math.random() * 360) + "px";
+  }
+
+  // 키보드를 눌렀을 때
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") x = x + 20;
+    if (e.key === "ArrowLeft")  x = x - 20;
+    if (e.key === "ArrowDown")  y = y + 20;
+    if (e.key === "ArrowUp")    y = y - 20;
+
+    // 벽 밖으로 못 나가게
+    if (x < 0)   x = 0;
+    if (x > 460) x = 460;
+    if (y < 0)   y = 0;
+    if (y > 360) y = 360;
+
+    draw();
+    checkItem();
+  });
+
+  // 캐릭터와 아이템이 가까우면 먹은 것으로
+  function checkItem() {
+    const ix = parseInt(item.style.left);
+    const iy = parseInt(item.style.top);
+
+    if (Math.abs(x - ix) < 40 && Math.abs(y - iy) < 40) {
+      score = score + 1;
+      scoreText.innerText = score;
+      moveItem();
     }
-}`],
-  ["MoveCompare.cs",
-`using UnityEngine;
+  }
 
-public class MoveCompare : MonoBehaviour
+  draw();
+  moveItem();
+<\/script>
+
+</body>
+</html>`]],
+ tables:[{
+   cap:"키 이름 (e.key 에 들어오는 값)",
+   head:["키","코드에 쓰는 이름"],
+   rows:[["→","<code>\"ArrowRight\"</code>"],["←","<code>\"ArrowLeft\"</code>"],
+         ["↑","<code>\"ArrowUp\"</code>"],["↓","<code>\"ArrowDown\"</code>"],
+         ["스페이스","<code>\" \"</code> (공백 한 칸)"],["A 키","<code>\"a\"</code> (소문자)"]]
+ }],
+ notes:[
+  ["warn","키를 눌러도 안 움직여요","<b>브라우저 화면을 한 번 클릭</b>하고 누르세요. 다른 곳에 포커스가 있으면 키 입력이 안 들어옵니다."],
+  ["warn","캐릭터가 안 보여요","CSS에서 <code>#stage</code> 에 <code>position: relative</code>, <code>#player</code> 에 <code>position: absolute</code> 가 있어야 합니다. <b>이 두 줄이 짝</b>이에요. 하나라도 빠지면 엉뚱한 곳으로 갑니다."],
+  ["tip","유니티에서 봤던 그것","<code>keydown</code> 은 <b>Input.GetKeyDown</b>, <code>style.left</code> 는 <b>transform.position</b>, 거리 비교는 <b>Collider</b> 와 같은 일을 합니다."]
+ ],
+ bonus:["<b>WASD 키</b>로도 움직이게 추가하기","별을 2개로 늘리기","점수가 10점이 되면 \"클리어!\" 메시지 띄우기","별을 먹을 때마다 배경색이 바뀌게"]
+},
 {
-    public Vector3 target = new Vector3(5, 0.5f, 0);
-    public int mode = 1;        // 1=MoveTowards  2=Lerp  3=Slerp
-    public float speed = 2f;
+ n:4, date:"10차시 · 11/09", lv:3, lvName:"완성작",
+ title:"부딪히면 끝난다 — 피하기 게임 완성",
+ sub:"떨어지는 돌을 피하는 게임을 완성합니다. 오늘 만든 건 진짜 게임이에요.",
+ learn:[
+  ["충돌 판정은 결국 '숫자 비교'","게임에서 \"부딪혔다\"는 건 <b>두 물체의 좌표가 충분히 가까운가</b>를 계산하는 것뿐입니다. <code>Math.abs(x - rx) &lt; 42</code> — 가로 거리가 42보다 작고 세로도 겹치면 충돌이에요."],
+  ["코드로 물체 만들기","<code>document.createElement(\"div\")</code> 로 <b>HTML에 없던 것을 코드가 새로 만들어</b> 화면에 붙입니다. 돌이 계속 생겨야 하니까요. 유니티의 <b>Instantiate</b> 와 같은 일입니다."],
+  ["배열 = 여러 개를 담는 상자","<code>let rocks = [];</code> 는 돌을 <b>여러 개 담아두는 목록</b>입니다. <code>rocks.push(돌)</code> 로 넣고 <code>rocks[0]</code> 으로 꺼내요. 개수는 <code>rocks.length</code>."],
+  ["반복문으로 전부 움직이기","<code>for</code> 로 <b>목록에 있는 돌을 하나씩 꺼내</b> 5px씩 내립니다. 돌이 10개면 10개 전부 처리돼요."],
+  ["끝난 것은 치워야 합니다","바닥까지 간 돌은 <code>remove()</code> 로 화면에서 지우고 목록에서도 빼야 합니다. 안 치우면 <b>돌이 수천 개 쌓여서 점점 느려져요.</b>"],
+  ["게임오버와 다시하기","<code>playing = false</code> 로 <b>상태를 바꾸고</b>, 타이머를 전부 끄고, 결과 화면을 보여줍니다. 다시하기는 <b>모든 값을 처음으로 되돌리는 것</b>이에요."]
+ ],
+ quests:[
+  "아래 코드를 <code>dodge.html</code> 로 저장하고 열기",
+  "<b>← →</b> 로 피해 보기 — 돌에 맞으면 게임오버가 뜨나요?",
+  "<b>다시하기</b>를 눌러 처음부터 되는지 확인",
+  "난이도 낮추기 — <code>setInterval(makeRock, 700)</code> 의 <b>700을 1200</b>으로",
+  "난이도 올리기 — 돌 속도 <code>+ 5</code> 를 <b>+ 9</b> 로",
+  "돌 이모지를 바꿔 보기 (🪨 → ⚡ 🔥 🌧️)",
+  "캐릭터 이동 거리 <code>25</code> 를 바꿔 조작감 맞추기",
+  "★ <b>나만의 난이도</b>를 찾아 친구에게 플레이시키고 최고 점수 받아보기",
+  "친구 자리로 가서 <b>서로의 게임 3판씩</b> 해보기"
+ ],
+ code:[["dodge.html", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>피하기 게임</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score { font-weight: bold; color: #2563eb; }
+  #stage { position: relative; width: 500px; height: 420px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; bottom: 10px; width: 44px; height: 44px;
+            background: #2563eb; border-radius: 12px; }
+  .rock { position: absolute; width: 40px; height: 40px; font-size: 34px;
+          line-height: 40px; }
+  #over { position: absolute; inset: 0; display: none; place-items: center;
+          background: rgba(255,255,255,.92); font-size: 30px; font-weight: bold;
+          color: #dc2626; flex-direction: column; }
+  button { font-size: 20px; padding: 13px 34px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; margin-top: 14px; }
+</style>
+</head>
+<body>
 
-    void Update()
-    {
-        if (mode == 1)   // 등속 : 처음부터 끝까지 같은 속도
-            transform.position =
-                Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+  <h1>💥 피하기 게임</h1>
+  <div id="info">← → 로 피하세요 · 점수 <span id="score">0</span></div>
 
-        if (mode == 2)   // 선형보간 : 가까워질수록 느려짐
-            transform.position =
-                Vector3.Lerp(transform.position, target, speed * Time.deltaTime);
+  <div id="stage">
+    <div id="player"></div>
+    <div id="over">
+      <div id="overText">게임 오버!</div>
+      <button id="again">다시하기</button>
+    </div>
+  </div>
 
-        if (mode == 3)   // 구면보간 : 호를 그리며 이동
-            transform.position =
-                Vector3.Slerp(transform.position, target, speed * Time.deltaTime);
+<script>
+  let x = 228;          // 캐릭터 가로 위치
+  let score = 0;
+  let playing = true;
+  let rocks = [];       // 떨어지는 돌 목록
+  let gameTimer, makeTimer;
+
+  const stage     = document.getElementById("stage");
+  const player    = document.getElementById("player");
+  const scoreText = document.getElementById("score");
+  const over      = document.getElementById("over");
+
+  player.style.left = x + "px";
+
+  // ← → 키로 움직이기
+  document.addEventListener("keydown", function (e) {
+    if (!playing) return;
+    if (e.key === "ArrowLeft")  x = x - 25;
+    if (e.key === "ArrowRight") x = x + 25;
+    if (x < 0)   x = 0;
+    if (x > 456) x = 456;
+    player.style.left = x + "px";
+  });
+
+  // 돌 하나 새로 만들기
+  function makeRock() {
+    const rock = document.createElement("div");
+    rock.className = "rock";
+    rock.innerText = "🪨";
+    rock.style.left = Math.floor(Math.random() * 460) + "px";
+    rock.style.top  = "-40px";
+    stage.appendChild(rock);
+    rocks.push(rock);
+  }
+
+  // 0.03초마다 모든 돌을 아래로
+  function update() {
+    for (let i = 0; i < rocks.length; i = i + 1) {
+      const rock = rocks[i];
+      const top = parseInt(rock.style.top) + 5;
+      rock.style.top = top + "px";
+
+      // 캐릭터와 부딪혔나? (사각형 겹침 검사)
+      const rx = parseInt(rock.style.left);
+      if (top > 366 && top < 420 && Math.abs(x - rx) < 42) {
+        gameOver();
+        return;
+      }
+
+      // 바닥까지 내려가면 치우고 점수 +1
+      if (top > 420) {
+        rock.remove();
+        rocks.splice(i, 1);
+        i = i - 1;
+        score = score + 1;
+        scoreText.innerText = score;
+      }
     }
-}`]],
+  }
+
+  function gameOver() {
+    playing = false;
+    clearInterval(gameTimer);
+    clearInterval(makeTimer);
+    document.getElementById("overText").innerText = "게임 오버! " + score + "점";
+    over.style.display = "flex";
+  }
+
+  function start() {
+    clearInterval(gameTimer);    // 혹시 돌아가던 타이머가 있으면 먼저 끄기
+    clearInterval(makeTimer);
+    for (let i = 0; i < rocks.length; i = i + 1) rocks[i].remove();
+    rocks = [];
+    x = 228; score = 0; playing = true;
+    player.style.left = x + "px";
+    scoreText.innerText = 0;
+    over.style.display = "none";
+    gameTimer = setInterval(update, 30);
+    makeTimer = setInterval(makeRock, 700);
+  }
+
+  document.getElementById("again").onclick = start;
+  start();
+<\/script>
+
+</body>
+</html>`]],
+ tables:[{
+   cap:"숫자를 바꿔 난이도 조절하기",
+   head:["바꿀 곳","올리면","내리면"],
+   rows:[["<code>makeRock, 700</code>","돌이 드물게 (쉬움)","돌이 자주 (어려움)"],
+         ["<code>top) + 5</code>","빨리 떨어짐 (어려움)","천천히 (쉬움)"],
+         ["<code>x - 25 / x + 25</code>","많이 움직임","조금씩 정밀하게"],
+         ["<code>&lt; 42</code>","잘 부딪힘 (어려움)","잘 안 부딪힘 (쉬움)"]]
+ }],
+ notes:[
+  ["warn","게임이 점점 빨라져요","<b>다시하기를 여러 번</b> 눌러 타이머가 겹친 경우입니다. 코드 맨 위에 <code>clearInterval</code> 이 들어 있어 보통은 괜찮지만, 이상하면 새로고침(F5)하세요."],
+  ["warn","돌이 안 떨어져요","<code>#stage</code> 에 <code>position: relative</code>, <code>.rock</code> 에 <code>position: absolute</code> 가 있는지 확인하세요."],
+  ["tip","오늘이 1차 완성작입니다","지난 3주 동안 배운 <b>변수 · 조건 · 반복 · 랜덤 · 타이머 · 키입력 · 충돌</b> 이 전부 이 파일 하나에 들어 있습니다. 다음 주부터는 <b>이 재료로 우리 팀 앱</b>을 만듭니다."]
+ ],
+ bonus:["<b>목숨 3개</b>를 만들어 세 번 맞아야 끝나게","시간이 지날수록 돌이 빨라지게","좌우뿐 아니라 <b>위아래</b>로도 움직이게","좋은 아이템(⭐)을 섞어서 먹으면 점수 +5"]
+},
+{
+ n:5, date:"11차시 · 11/16", lv:1, lvName:"팀 기획",
+ title:"우리 팀이 풀 문제 정하기",
+ sub:"오늘부터 팀 프로젝트입니다. 코드는 안 씁니다 — 무엇을 만들지 정하는 날이에요.",
+ learn:[
+  ["좋은 주제는 '불편함'에서 나옵니다","거창할 필요 없어요. <b>\"우리 반에서 매번 귀찮은 일\"</b> 이 가장 좋은 주제입니다. 급식 메뉴 고르기, 자리 정하기, 청소 당번 뽑기 — 전부 훌륭한 소재예요."],
+  ["이미 배운 재료로만 만듭니다","지난 4주 동안 배운 <b>버튼 · 점수 · 랜덤 · 타이머 · 키입력 · 충돌</b>, 이 6개가 전부입니다. <b>새로 배울 필요 없이</b> 이것만 조합하면 돼요."],
+  ["역할을 나누면 빨라집니다","<b>기획</b>(무엇을 만들지 정하고 발표) · <b>디자인</b>(HTML/CSS로 화면) · <b>코딩</b>(JS 기능) · <b>테스트</b>(버그 찾고 친구들에게 시켜보기). 4명이면 하나씩, 3명이면 테스트를 나눠 맡으세요."],
+  ["화면을 먼저 그려보세요","코드를 짜기 전에 <b>종이에 화면을 그려봐야</b> 합니다. 버튼이 몇 개인지, 어디에 글자가 나오는지. 이걸 안 하면 만들다가 길을 잃어요."],
+  ["작게 시작하는 게 이깁니다","<b>기능 1개만 제대로</b> 되는 앱이, 기능 5개가 다 안 되는 앱보다 훨씬 좋습니다. 욕심내지 말고 <b>핵심 버튼 하나</b>부터 완성하세요."]
+ ],
+ quests:[
+  "<b>3~4명</b>으로 팀 만들기",
+  "각자 <b>\"우리 학교·우리 반에서 불편한 것\"</b> 3가지씩 포스트잇에 적기",
+  "팀에서 모아 보고 <b>하나</b> 고르기 (아래 후보 표를 참고해도 됩니다)",
+  "종이에 <b>화면 그림</b> 그리기 — 버튼은 어디에, 결과는 어디에 나올지",
+  "아래 <b>기능 체크표</b>에서 우리가 쓸 기능에 동그라미",
+  "<b>역할 분담</b> 정하기 (기획 / 디자인 / 코딩 / 테스트)",
+  "<b>한 줄 소개</b> 완성하기 — \"우리 앱은 ○○할 때 ○○해주는 앱이다\"",
+  "아래 <b>뼈대 코드</b>를 받아 저장해 두기 (다음 시간에 여기서 시작)",
+  "뼈대 코드의 <b>목록(list)만</b> 우리 주제로 바꿔 보기 → 벌써 절반은 된 겁니다!"
+ ],
+ code:[["team.html  (팀 프로젝트 뼈대 — 여기서 시작하세요)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>우리 팀 앱</title>
+<style>
+  /* ↓↓↓ 색과 글꼴은 마음대로 바꾸세요 ↓↓↓ */
+  body { font-family: sans-serif; text-align: center; background: #eef2f7;
+         padding: 30px; color: #15181c; }
+  h1 { font-size: 32px; margin-bottom: 4px; }
+  #desc { color: #64748b; margin-bottom: 24px; }
+  #box { background: white; width: 420px; margin: 0 auto; padding: 30px;
+         border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+  #result { font-size: 44px; font-weight: bold; color: #2563eb;
+            min-height: 60px; margin: 18px 0; }
+  button { font-size: 20px; padding: 14px 34px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; }
+  button:active { transform: scale(0.96); }
+</style>
+</head>
+<body>
+
+  <!-- ① 제목을 우리 앱 이름으로 바꾸세요 -->
+  <h1>🍚 오늘 뭐 먹지?</h1>
+  <p id="desc">버튼을 누르면 메뉴를 뽑아 드립니다</p>
+
+  <div id="box">
+    <div id="result">?</div>
+    <button id="btn">뽑기!</button>
+  </div>
+
+<script>
+  // ② 목록을 우리 주제에 맞게 바꾸세요
+  const list = ["떡볶이", "김밥", "라면", "돈까스", "제육덮밥", "짜장면"];
+
+  const result = document.getElementById("result");
+  const btn    = document.getElementById("btn");
+
+  // ③ 버튼을 누르면 목록에서 아무거나 하나 뽑기
+  btn.onclick = function () {
+    const i = Math.floor(Math.random() * list.length);
+    result.innerText = list[i];
+  };
+<\/script>
+
+</body>
+</html>`]],
  tables:[
-  {cap:"유니티가 기본으로 주는 입력 이름",
-   head:["이름","연결된 키","돌려주는 값"],
-   rows:[["<code>\"Horizontal\"</code>","← → / A D","-1, 0, 1"],["<code>\"Vertical\"</code>","↑ ↓ / W S","-1, 0, 1"],
-         ["<code>\"Jump\"</code>","Space","눌리면 true"],["<code>\"Fire1\"</code>","좌클릭 / Ctrl","눌리면 true"]]},
-  {cap:"목표 지점으로 이동하는 방법 비교",
-   head:["함수","움직임","어울리는 곳"],
-   rows:[["<code>MoveTowards</code>","같은 속도로 뚜벅뚜벅","엘리베이터 · 적 추격"],
-         ["<code>Lerp</code>","가까워질수록 느려짐","카메라 · UI 애니메이션"],
-         ["<code>Slerp</code>","호를 그리며 돌아감","위성 · 회전하는 물체"],
-         ["<code>SmoothDamp</code>","부드럽게 가속·감속","고급 카메라 추적"]]}
+  {cap:"주제 후보 — 그대로 골라도 됩니다",
+   head:["주제","하는 일","쓰는 기능"],
+   rows:[["🍚 오늘 뭐 먹지","급식·분식 메뉴 랜덤 추천","랜덤"],
+         ["🎯 자리 뽑기","자리·청소당번 랜덤 배정","랜덤 + 목록"],
+         ["⏰ 수행평가 D-day","남은 날짜 세어 보여주기","날짜 계산"],
+         ["🍅 공부 집중 타이머","25분 집중 + 5분 휴식","타이머"],
+         ["🧠 우리 반 퀴즈","문제 내고 점수 매기기","점수 + 조건"],
+         ["♻️ 분리수거 퀴즈","쓰레기 분류 맞히기 게임","점수 + 랜덤"],
+         ["🗳️ 우리 반 투표","버튼 누르면 표가 쌓임","숫자 세기"],
+         ["🎲 쉬는시간 룰렛","10분 동안 뭐 할지 뽑기","랜덤"]]},
+  {cap:"기능 체크표 — 우리가 쓸 것에 동그라미",
+   head:["기능","배운 차시","코드"],
+   rows:[["버튼 누르면 반응","1차시","<code>onclick</code>"],
+         ["숫자 세기 / 점수","1차시","<code>let score = 0</code>"],
+         ["조건에 따라 다르게","1차시","<code>if</code>"],
+         ["랜덤으로 뽑기","2차시","<code>Math.random()</code>"],
+         ["시간 흐르게 / 타이머","2차시","<code>setInterval</code>"],
+         ["키보드로 조작","3차시","<code>keydown</code>"],
+         ["부딪힘 판정","4차시","좌표 비교"]]}
  ],
  notes:[
-  ["warn","키를 눌러도 아무 반응이 없어요","<code>Edit → Project Settings → Player → Other Settings → <b>Active Input Handling</b></code> 을 <b>Both</b> 로 바꾸고 에디터를 다시 켜세요. Unity 6 는 새 입력 시스템이 기본이라 이 설정이 필요할 수 있습니다."],
-  ["warn","Game 창을 한 번 클릭하세요","키보드 입력은 <b>Game 창이 선택된 상태</b>에서만 들어갑니다. Play 를 누른 뒤 Game 화면을 한 번 클릭하세요."],
-  ["tip","대각선이 더 빠른 이유","오른쪽 위로 가면 x 로 1, z 로 1 이라 실제 이동거리는 √2 ≈ 1.41 배가 됩니다. 진짜 게임은 <code>dir.normalized</code> 로 길이를 1 로 맞춰서 해결해요."]
+  ["tip","오늘은 코드를 안 씁니다","기획이 탄탄하면 제작이 빨라집니다. <b>종이와 펜</b>만 있으면 돼요. 컴퓨터는 마지막 10분에 뼈대 코드 받을 때만 씁니다."],
+  ["warn","주제 고를 때 피해야 할 것","<ul><li><b>인터넷에서 정보를 가져와야 하는 것</b> (실시간 날씨, 진짜 급식표) — 우리 수준에서 어렵고 학교 와이파이에서 느립니다</li><li><b>로그인·회원가입이 필요한 것</b></li><li><b>저장이 꼭 필요한 것</b> (새로고침하면 사라집니다)</li></ul>버튼을 누르면 <b>그 자리에서 결과가 나오는</b> 주제가 가장 좋습니다."]
  ],
- bonus:["Shift 를 누르면 두 배 빨라지는 <b>달리기</b> 넣기 — <code>if (Input.GetKey(KeyCode.LeftShift)) speed = 10f;</code>","<code>dir.normalized</code> 를 써서 대각선 속도 문제 고쳐 보기","Target 자리에 작은 Cube 를 놓아 목표 지점이 눈에 보이게 하기"]
+ bonus:["우리 앱 <b>이름</b>과 <b>아이콘 이모지</b> 정하기","비슷한 앱이 이미 있는지 찾아보고 우리는 뭐가 다를지 적어보기","화면 그림을 <b>2가지 버전</b>으로 그려보고 팀에서 투표"]
 },
 {
- n:7, date:"10/19", lv:2, lvName:"물리",
- title:"진짜 같은 물체 만들기",
- sub:"Rigidbody·Collider·Material·Physics Material 로 무게와 탄성이 있는 공을 만듭니다.",
- clock:[["10분","복습"],["20분","씬 배치 + 물리 컴포넌트"],["25분","미션 : 재질 입히고 굴리기"],["5분","저장"]],
+ n:6, date:"12차시 · 11/23", lv:2, lvName:"제작",
+ title:"제작 ① — 화면 만들고 기능 하나 붙이기",
+ sub:"오늘 목표는 '완성'이 아니라 '버튼 하나가 제대로 되는 것'입니다.",
  learn:[
-  ["지금까지의 이동은 사실 '순간이동'","<code>transform.Translate</code> 는 위치를 <b>강제로 바꾸는</b> 것이라 <b>벽을 뚫고 지나갑니다.</b> 오늘부터는 <b>힘을 줘서</b> 움직이는 진짜 물리를 씁니다."],
-  ["Rigidbody = 물리 법칙을 적용해 줘","이걸 붙이는 순간 오브젝트가 <b>중력을 받고 떨어지고, 부딪히면 튕깁니다.</b> 유니티의 물리엔진이 위치를 대신 계산해 줘요."],
-  ["Collider = 보이지 않는 충돌 껍질","실제 모양과 <b>달라도 됩니다.</b> 복잡한 캐릭터도 충돌 판정은 단순한 캡슐 하나로 처리해요(그래야 빠릅니다). <b>Is Trigger</b> 를 켜면 막지 않고 <b>통과</b>시킵니다."],
-  ["Material vs Physics Material","<b>Material</b> = <b>겉모습</b>(색 · 광택 · 투명도). <b>Physics Material</b> = <b>물리 질감</b>(탄성 · 마찰). 이름이 비슷해서 제일 많이 헷갈리는 부분이니 조심!"],
-  ["AddForce = 힘을 주다","<code>rigid.AddForce(방향 * 세기, ForceMode.Impulse)</code>. Translate 처럼 위치를 바꾸는 게 아니라 <b>밀어 주는</b> 겁니다. 그래서 관성이 생기고, 미끄러지고, 벽에 막혀요."],
-  ["물리는 FixedUpdate 에서","Update 는 컴퓨터 성능에 따라 실행 횟수가 달라지지만, <b>FixedUpdate 는 1초에 정확히 약 50번</b> 실행됩니다. Rigidbody 를 다룰 땐 반드시 FixedUpdate 를 쓰세요. Update 에 쓰면 컴퓨터마다 세기가 달라집니다."],
-  ["Is Kinematic 은 언제?","체크하면 <b>물리를 무시</b>합니다(중력도 안 받고 밀려나지도 않음). 움직이는 발판이나 함정처럼 <b>내가 직접 조종하고 싶은 물체</b>에 씁니다."],
-  ["투명한 물체 만들기","Material 의 <b>Surface Type</b> 을 <code>Transparent</code> 로 바꾸고, 색 창의 <b>A(알파)</b> 를 <code>0</code> 으로. 눈엔 안 보이지만 Collider 는 살아 있어서 <b>보이지 않는 함정</b>이 됩니다."]
+  ["오늘의 목표는 딱 하나","<b>핵심 버튼 1개가 제대로 작동하는 것.</b> 그것만 되면 오늘은 성공입니다. 꾸미기와 추가 기능은 다음 시간에 해도 늦지 않아요."],
+  ["뼈대에서 시작하세요","빈 파일에서 시작하지 마세요. 지난 시간에 받은 <b>뼈대 코드(team.html)</b> 를 열고 <b>①제목 ②목록 ③동작</b> 세 군데만 우리 것으로 바꾸면 절반은 끝납니다."],
+  ["조금 바꾸고 바로 확인","코드를 <b>한 군데 고칠 때마다</b> 저장(Ctrl+S) → 새로고침(F5)으로 확인하세요. 열 군데 고치고 한 번에 확인하면 <b>어디서 틀렸는지 못 찾습니다.</b>"],
+  ["막히면 지난 코드를 베끼세요","타이머가 필요하면 2차시 <code>mole.html</code>, 점수가 필요하면 1차시 <code>click.html</code> 에서 <b>그 부분만 복사</b>해 오면 됩니다. 이게 진짜 프로그래밍하는 방법이에요."],
+  ["F12 콘솔이 알려줍니다","화면이 안 움직이면 <code>F12</code> → <b>Console</b> 탭을 보세요. 빨간 글씨가 <b>몇 번째 줄이 문제인지</b> 알려줍니다."]
  ],
  quests:[
-  "새 씬(또는 지금 씬 정리)에 <b>Sphere 6개 · Plane 1개 · Cube 1개</b> 만들고 아래 위치표대로 배치",
-  "이름 바꾸기 : <code>MyBall</code> · <code>Ball</code> ×5 · <code>Floor</code> (Cube 는 그대로)",
-  "모든 공에 <b>Add Component → Rigidbody</b> 추가 → ▶ Play 해서 떨어지는지 확인",
-  "<b>2차시에 배운 대로</b> Material 을 만들어 MyBall / Ball / Floor 색을 다르게 입히기 <b>(내 공은 눈에 띄는 색으로!)</b>",
-  "오늘은 색뿐 아니라 <b>Metallic</b> 과 <b>Smoothness</b> 도 올려 보기 → 쇠구슬 · 당구공 느낌 만들기",
-  "Cube 를 <b>투명 함정</b>으로 : Material 의 Surface Type = <code>Transparent</code>, 색의 <b>A(알파) = 0</b>",
-  "Cube 의 Box Collider 에서 <b>Is Trigger 체크</b>",
-  "Create → <b>Physics Material</b> → Bounciness <code>0.5</code> · Friction <code>0.6</code> · Bounce Combine <code>Maximum</code>",
-  "만든 Physics Material 을 공들의 <b>Sphere Collider → Material</b> 칸에 끌어다 놓기 → 통통 튀는지 확인",
-  "<code>MyBall</code> 코드 붙이고 <b>WASD</b> 로 공 굴려 보기",
-  "Power 값을 바꿔 가며 조작감 찾기"
- ],
- code:[["MyBall.cs  (기본형)",
-`using UnityEngine;
-
-public class MyBall : MonoBehaviour
-{
-    public float power = 0.5f;      // 너무 빠르면 낮추고, 느리면 올리세요
-    Rigidbody rigid;
-
-    void Start()
-    {
-        // 이 오브젝트에 붙은 Rigidbody 를 찾아서 보관해 둔다
-        rigid = GetComponent<Rigidbody>();
-    }
-
-    // 물리를 다룰 땐 Update 가 아니라 FixedUpdate!
-    void FixedUpdate()
-    {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        Vector3 dir = new Vector3(h, 0, v);
-
-        // AddForce : 힘을 준다. Impulse 는 순간적으로 툭!
-        rigid.AddForce(dir * power, ForceMode.Impulse);
-    }
-}`]],
- tables:[
-  {cap:"오브젝트 위치표 (Position)",
-   head:["이름","x","y","z"],
-   rows:[["Floor","0","0","0"],["MyBall","0","0.5","0"],["Ball","-0.91","0.5","-1.5"],["Ball","-1.96","0.5","0.43"],
-         ["Ball","0","0.5","2"],["Ball","2","0.5","0.95"],["Ball","1.38","0.5","-1.5"],["Cube","-4","1.5","4"]],
-   num:true},
-  {cap:"Rigidbody 주요 설정",
-   head:["설정","뜻","이렇게 해 보세요"],
-   rows:[["Mass","무게","크게 하면 잘 안 밀립니다"],
-         ["Linear Damping","공기 저항","크게 하면 금방 멈춥니다"],
-         ["Angular Damping","회전 저항","구르는 속도에 영향"],
-         ["Use Gravity","중력을 받을지","끄면 우주처럼 둥둥"],
-         ["Is Kinematic","물리 무시","움직이는 발판 · 함정에"],
-         ["Collision Detection","충돌 정밀도","빠른 물체는 <code>Continuous</code>"]]},
-  {cap:"AddForce 의 ForceMode 4가지",
-   head:["ForceMode","느낌","어울리는 곳"],
-   rows:[["<code>Force</code>","서서히 밀림 (무게 반영)","자동차 · 바람"],
-         ["<code>Impulse</code>","<b>순간적으로 툭!</b> (무게 반영)","점프 · 대포 · 우리 수업"],
-         ["<code>Acceleration</code>","서서히 밀림 (무게 무시)","특수 효과"],
-         ["<code>VelocityChange</code>","순간적으로 툭 (무게 무시)","즉각적인 조작감"]]},
-  {cap:"⚙️ 조작감이 이상할 때 바꿀 숫자 (아주 중요!)",
-   head:["증상","바꿀 값","어떻게"],
-   rows:[["공이 미쳐 날뛴다","<code>Power</code>","<b>절반으로</b> 줄이기 (0.5 → 0.25)"],
-         ["공이 굼뜨다","<code>Power</code>","<b>두 배로</b> 올리기 (0.5 → 1)"],
-         ["공이 안 멈춘다","Rigidbody <code>Linear Damping</code>","0 → <b>1</b> 정도로 올리기"],
-         ["점프가 로켓처럼 뜬다","<code>Jump Power</code>","절반으로 줄이기"],
-         ["점프를 거의 못 한다","<code>Jump Power</code>","두 배로 올리기"],
-         ["너무 잘 튕긴다","Physics Material <code>Bounciness</code>","0.5 → <b>0.2</b>"]]},
-  {cap:"헷갈리는 Material 두 가지",
-   head:["","Material","Physics Material"],
-   rows:[["역할","<b>겉모습</b>","<b>물리 질감</b>"],
-         ["주요 값","Base Map(색) · Metallic · Smoothness · Surface Type","Bounciness(탄성) · Friction(마찰)"],
-         ["어디에 넣나","Mesh Renderer → Materials","Collider → Material"],
-         ["만드는 곳","Create → Material","Create → Physics Material"]]}
- ],
- notes:[
-  ["warn","공이 바닥을 뚫고 떨어져요","Rigidbody → <b>Collision Detection</b> 을 <code>Continuous</code> 로 바꾸거나, 힘(power)을 줄이세요. 너무 빠른 물체는 한 프레임 사이에 바닥을 지나쳐 버립니다."],
-  ["warn","공이 안 움직여요","<ul><li>FixedUpdate 가 아니라 Update 에 썼는지 확인</li><li>Rigidbody 를 붙였는지 확인</li><li>Is Kinematic 이 켜져 있으면 힘을 줘도 안 움직입니다</li></ul>"],
-  ["tip","Cube 는 왜 투명하게?","보이지 않는 <b>점프대 / 함정</b>을 만들기 위해서예요. 다음 시간에 여기에 들어가면 공이 튀어오르게 만듭니다."],
-  ["tip","숫자에 정답은 없습니다","Power · Mass · Bounciness 에 <b>\"이게 맞다\"는 값은 없어요.</b> 코드에 적힌 건 <b>출발점</b>일 뿐입니다. 위 표를 보면서 <b>인스펙터에서 직접 바꿔 가며</b> 내 손에 맞는 조작감을 찾는 것 — 그게 오늘의 진짜 미션입니다. Mass 를 바꾸면 Power 와 Jump Power 도 같이 바꿔야 해요."]
- ],
- bonus:["Bounciness 를 <code>1</code> 로 올려 <b>슈퍼볼</b> 만들기","Mass 를 공마다 다르게 줘서 무거운 공 / 가벼운 공 만들기","Material 의 <b>Metallic</b> 과 <b>Smoothness</b> 를 올려 쇠구슬 만들기","<code>ForceMode.Force</code> 로 바꿔 보고 Impulse 와 뭐가 다른지 느껴 보기"]
-},
-{
- n:8, date:"10/26", lv:3, lvName:"완성작 1",
- title:"충돌 이벤트 & 볼링게임 완성",
- sub:"부딪히면 색이 변하고 함정에선 튀어오릅니다. 오늘 첫 게임을 완성합니다.",
- clock:[["10분","복습"],["20분","충돌 이벤트 6종"],["25분","미션 : 볼링게임 완성"],["5분","서로 플레이"]],
- learn:[
-  ["부딪히면 유니티가 알려 줍니다","우리가 매 프레임 \"닿았나?\" 검사할 필요가 없어요. <b>부딪히는 순간 유니티가 정해진 이름의 함수를 대신 불러 줍니다.</b> 우리는 그 함수를 만들어 두기만 하면 됩니다."],
-  ["Collision 과 Trigger","<b>Collision(충돌)</b> = <b>막힙니다.</b> 당구공처럼 서로 튕겨요. <b>Trigger(감지)</b> = <b>통과합니다.</b> 자동문 센서나 아이템처럼 지나가면서 신호만 보내요. 갈림길은 Collider 의 <b>Is Trigger</b> 체크 하나입니다."],
-  ["Enter / Stay / Exit","<b>Enter</b> = 닿기 <b>시작한 순간</b> 딱 1번. <b>Stay</b> = 닿아 있는 <b>동안 계속</b>. <b>Exit</b> = <b>떨어진 순간</b> 1번. 그래서 함수가 총 6개(2×3)입니다."],
-  ["이벤트가 불리는 조건","① <b>둘 다 Collider</b> 가 있어야 하고, ② <b>둘 중 하나 이상에 Rigidbody</b> 가 있어야 합니다. 이벤트가 아예 안 불리면 십중팔구 이 둘 중 하나예요."],
-  ["누가 부딪혔는지 알아내기","Collision 버전은 <code>collision.gameObject.name</code>, Trigger 버전은 <code>other.name</code>. <b>이름</b> 대신 <b>Tag</b> 로 확인하는 게 더 좋은 방법이고, 그건 10차시에 배웁니다."],
-  ["매개변수가 다른 이유","<code>OnCollisionEnter(<b>Collision</b> c)</code> 는 <b>부딪힌 정보 전체</b>(어디서 · 얼마나 세게)를 담고 있고, <code>OnTriggerEnter(<b>Collider</b> o)</code> 는 <b>상대 콜라이더만</b> 줍니다. 통과한 거라 '충돌 세기'가 없으니까요."],
-  ["AddTorque = 회전력","<code>rigid.AddTorque(Vector3.back * h)</code> 는 공을 <b>돌려 줍니다.</b> 앞으로 밀기만 하면 미끄러지는 느낌인데, 회전을 더하면 진짜로 <b>구르는</b> 느낌이 나요."]
- ],
- quests:[
-  "<code>OtherBall</code> 스크립트를 만들어 <b>Ball 5개 전부</b>에 붙이기",
-  "▶ Play → MyBall 로 부딪히면 <b>검정</b>, 떨어지면 <b>하양</b>으로 바뀌는지 확인",
-  "<code>MyBall</code> 코드를 아래 <b>완성형</b>으로 교체 (점프 + 회전 + 함정 반응)",
-  "Space 를 눌러 공이 점프하는지 확인",
-  "투명 Cube 위를 지나가면 <b>붕 떠오르는지</b> 확인",
-  "<code>OnCollisionEnter</code> 를 <code>OnCollisionStay</code> 로 바꿔 보고 뭐가 다른지 관찰 (다시 복구!)",
-  "★ <b>최종 미션</b> : 공 5개를 <b>볼링핀처럼</b> 세우고, 한 번에 다 맞히는 코스 만들기",
-  "친구 자리로 가서 서로의 볼링장을 3판씩 플레이해 보기"
- ],
- code:[
-  ["OtherBall.cs",
-`using UnityEngine;
-
-public class OtherBall : MonoBehaviour
-{
-    Material mat;
-
-    void Start()
-    {
-        mat = GetComponent<MeshRenderer>().material;
-    }
-
-    // 물리적으로 부딪히기 시작한 순간
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "MyBall")
-            mat.color = new Color(0, 0, 0);      // 검정
-    }
-
-    // 떨어진 순간
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.name == "MyBall")
-            mat.color = new Color(1, 1, 1);      // 하양
-    }
-}`],
-  ["MyBall.cs  (완성형 — 기존 코드 전체 교체)",
-`using UnityEngine;
-
-public class MyBall : MonoBehaviour
-{
-    public float power = 0.5f;      // 너무 빠르면 낮추고, 느리면 올리세요
-    public float jumpPower = 5f;    // 너무 높이 뜨면 낮추세요
-    Rigidbody rigid;
-
-    void Start()
-    {
-        rigid = GetComponent<Rigidbody>();
-    }
-
-    void Update()
-    {
-        if (Input.GetButtonDown("Jump"))
-            rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-    }
-
-    void FixedUpdate()
-    {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        rigid.AddForce(new Vector3(h, 0, v) * power, ForceMode.Impulse);
-
-        // 회전력을 줘서 미끄러지지 않고 '구르는' 느낌 내기
-        rigid.AddTorque(Vector3.back * h);
-    }
-
-    // 투명 Cube(함정) 안에 있는 동안 계속 위로!
-    void OnTriggerStay(Collider other)
-    {
-        if (other.name == "Cube")
-            rigid.AddForce(Vector3.up * 2, ForceMode.Impulse);
-    }
-}`]],
- tables:[{
-   cap:"충돌 이벤트 6종 — Is Trigger 하나로 갈립니다",
-   head:["함수","Is Trigger","언제 불리나"],
-   rows:[["<code>OnCollisionEnter(Collision c)</code>","꺼짐 ☐","부딪힌 순간 (막힘)"],
-         ["<code>OnCollisionStay(Collision c)</code>","꺼짐 ☐","붙어 있는 동안 계속"],
-         ["<code>OnCollisionExit(Collision c)</code>","꺼짐 ☐","떨어진 순간"],
-         ["<code>OnTriggerEnter(Collider o)</code>","<b>켜짐 ☑</b>","통과해 들어간 순간"],
-         ["<code>OnTriggerStay(Collider o)</code>","<b>켜짐 ☑</b>","안에 있는 동안 계속"],
-         ["<code>OnTriggerExit(Collider o)</code>","<b>켜짐 ☑</b>","빠져나온 순간"]]
- }],
- notes:[
-  ["warn","이벤트가 아예 안 불려요","<ul><li>부딪히는 <b>둘 중 하나</b>에 반드시 <b>Rigidbody</b> 가 있어야 합니다</li><li><b>둘 다</b> Collider 가 있어야 합니다</li><li>Trigger 함수를 쓰려면 <b>Is Trigger 체크</b>, Collision 함수를 쓰려면 <b>체크 해제</b></li><li>함수 이름 철자를 확인하세요. <code>OnColisionEnter</code>(l 하나) 는 그냥 무시됩니다</li></ul>"],
-  ["tip","이름 비교는 대소문자까지 정확히","<code>collision.gameObject.name == \"MyBall\"</code> 은 <b>MyBall</b> 과 <b>myball</b> 을 다르게 봅니다. 계층구조의 이름과 <b>글자 하나까지</b> 똑같이 쓰세요."]
- ],
- bonus:["부딪히면 색 대신 <b>공이 사라지게</b> 해 보기 — <code>gameObject.SetActive(false);</code>","공을 10개로 늘려 진짜 볼링핀 삼각형 배치 만들기","<code>OnCollisionStay</code> 로 <b>닿아 있는 동안 계속 색이 변하게</b> 만들어 보기","점수 세는 건 다음 주에! 오늘은 눈으로 세기"]
-},
-{
- n:9, date:"11/02", lv:2, lvName:"UI",
- title:"화면에 글자 띄우기",
- sub:"Canvas 위에 Image와 Text를 올리고, 스페이스를 누르면 숫자가 올라가게 만듭니다.",
- clock:[["10분","복습"],["25분","UI 배치"],["20분","미션 : 점수판 만들기"],["5분","정리"]],
- learn:[
-  ["UI 는 3D 세상 위에 붙은 스티커","점수 · 체력바 · 버튼은 <b>게임 세상 안에 있는 물건이 아닙니다.</b> 화면 앞에 놓인 <b>투명 유리판(Canvas)</b> 위에 붙은 스티커예요. 그래서 카메라가 움직여도 제자리에 있습니다."],
-  ["Canvas 는 자동으로 생깁니다","UI 요소를 처음 만들면 <b>Canvas</b> 와 <b>EventSystem</b> 이 함께 생성됩니다. Canvas 는 유리판, EventSystem 은 <b>클릭 · 터치를 감지하는 장치</b>예요. 둘 다 지우면 안 됩니다."],
-  ["Rect Transform : UI 전용 위치","일반 오브젝트는 Transform 이지만 UI 는 <b>Rect Transform</b> 을 씁니다. Position 대신 <b>앵커 기준 좌표 + Width/Height</b> 로 위치와 크기를 정해요."],
-  ["앵커(Anchor)가 제일 중요합니다","<b>화면 크기가 바뀌어도 붙어 있을 기준점</b>입니다. 점수는 <b>왼쪽 위</b>, 체력바는 <b>아래 가운데</b>, 설정 버튼은 <b>오른쪽 위</b>에 앵커를 두면 어떤 화면에서도 안 흐트러져요. Rect Transform 왼쪽 위의 네모 박스를 클릭하면 고를 수 있습니다."],
-  ["Text 는 두 종류가 있어요","<b>Text (Legacy)</b> 는 옛날 방식이지만 <b>단순해서 배우기 쉽습니다.</b> <b>TextMeshPro</b> 는 예쁘지만 초기 설정이 필요해요. 우리는 <b>Legacy Text</b> 를 씁니다 (UI → Legacy → Text)."],
-  ["코드에서 UI 를 건드리려면","맨 위에 <b><code>using UnityEngine.UI;</code></b> 를 꼭 쓰고, <code>public Text scoreText;</code> 로 칸을 만든 뒤 <b>인스펙터에 드래그</b>해서 연결합니다. 이 '드래그 연결'이 유니티의 기본 방식이에요."],
-  [".text 에는 글자만 들어갑니다","<code>scoreText.text = 5;</code> 는 오류입니다. 숫자는 <b><code>.ToString()</code></b> 으로 글자로 바꿔 주세요 → <code>scoreText.text = score.ToString();</code>"],
-  ["Scene 창의 2D 버튼","UI 를 만지고 있으면 3D 시점에선 보기 어렵습니다. Scene 창 위쪽 <b>2D</b> 버튼을 누르면 캔버스를 <b>정면에서</b> 볼 수 있어요."]
- ],
- quests:[
-  "★ <b>Assets → Scenes 우클릭 → Create → Scene → Scene</b> 으로 <b>새 씬</b>을 만들고 이름을 <code>Stage0</code> 으로 → 더블클릭해서 열기 <b>(볼링게임 씬은 그대로 둡니다. 오늘부터 여기서 2차 완성작을 만들어요)</b>",
-  "Plane 하나 깔아 바닥 만들기 (다음 시간에 쓸 무대입니다)",
-  "계층구조 우클릭 → <b>UI → Image</b> (Canvas 와 EventSystem 이 자동으로 생깁니다)",
-  "Image 의 Rect Transform 왼쪽 위 박스를 눌러 <b>앵커를 왼쪽 위</b>로 설정",
-  "Pos <code>(78, -65, -2)</code> · Width/Height <code>50</code> · Color 는 마음대로",
-  "우클릭 → UI → <b>Legacy → Text</b> 를 <b>2개</b> 만들고 이름을 <code>PlayerItemText</code>, <code>StageItemText</code> 로 변경",
-  "<code>PlayerItemText</code> : 앵커 왼쪽 위 · Pos <code>(140, -64, 0)</code> · 50×60 · Text <code>0</code> · Bold · Font Size <code>50</code>",
-  "<code>StageItemText</code> : 앵커 왼쪽 위 · Pos <code>(190, -64, 0)</code> · 110×60 · Text <code>/ 0</code> · Bold · Font Size <code>50</code>",
-  "Scene 창 위쪽 <b>2D</b> 버튼을 눌러 캔버스를 정면으로 확인",
-  "빈 오브젝트 하나 만들고(Create Empty) <code>ScoreTest</code> 붙이기",
-  "인스펙터의 <b>Score Text</b> 칸에 <code>PlayerItemText</code> 를 <b>끌어다 놓기</b>",
-  "▶ Play → Space 를 누를 때마다 숫자가 올라가면 성공!",
-  "Game 창 크기를 늘였다 줄여 보며 <b>앵커가 왜 필요한지</b> 확인",
-  "<code>Ctrl+S</code> 로 저장! <b>다음 시간에 이 씬에서 이어서 만듭니다</b> (ScoreTest 붙인 빈 오브젝트는 지워도 됩니다)"
- ],
- code:[["ScoreTest.cs",
-`using UnityEngine;
-using UnityEngine.UI;      // UI 를 쓰려면 이 줄이 꼭 필요!
-
-public class ScoreTest : MonoBehaviour
-{
-    public Text scoreText;   // 인스펙터에 Text 오브젝트를 끌어다 넣으세요
-    int score = 0;
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            score = score + 1;
-
-            // 숫자를 글자로 바꿔서 화면에 표시
-            scoreText.text = score.ToString();
-        }
-    }
-}`]],
- tables:[
-  {cap:"UI 용어 정리",
-   head:["이름","뜻"],
-   rows:[["Canvas","모든 UI 가 올라가는 투명 유리판"],
-         ["EventSystem","클릭 · 터치를 감지하는 장치 (자동 생성)"],
-         ["Rect Transform","UI 전용 위치·크기 (Transform 대신)"],
-         ["Anchor (앵커)","화면이 커져도 붙어 있을 기준점"],
-         ["Pivot","회전·크기 변화의 중심점"],
-         ["Image","네모난 그림 · 색 박스"],
-         ["Text (Legacy)","글자"],
-         ["Button","누를 수 있는 버튼"],
-         ["Slider","체력바 · 볼륨 조절"]]},
-  {cap:"Canvas 의 Render Mode 3종",
-   head:["모드","화면에서","쓰는 곳"],
-   rows:[["Screen Space - Overlay","항상 화면 맨 앞 <b>(기본값)</b>","점수 · 체력바 · 메뉴"],
-         ["Screen Space - Camera","카메라 앞 일정 거리","화면 효과가 필요할 때"],
-         ["World Space","게임 세상 안에 놓임","캐릭터 머리 위 이름표"]]}
- ],
- notes:[
-  ["warn","Text 가 안 보여요","<ul><li>앵커나 Pos 때문에 <b>화면 밖으로 나가</b> 있진 않은지</li><li><b>Width / Height</b> 가 글자보다 작으면 잘립니다</li><li>Color 의 <b>A(알파)</b> 가 0 은 아닌지</li><li>Font Size 가 너무 작진 않은지</li></ul>"],
-  ["warn","using UnityEngine.UI; 를 빼먹으면","<code>The type or namespace name 'Text' could not be found</code> 오류가 납니다. 맨 윗줄을 확인하세요."],
-  ["tip","드래그 연결이 핵심입니다","<code>public Text scoreText;</code> 라고 써 두면 인스펙터에 <b>빈 칸(None)</b> 이 생깁니다. 여기에 오브젝트를 끌어다 넣는 것이 유니티의 기본 연결 방식이에요. <b>빈 칸을 남겨 두면 반드시 오류가 납니다.</b>"],
-  ["tip","메뉴에 Legacy → Text 가 없다면","TextMeshPro 로 대신하면 됩니다. <b>UI → Text - TextMeshPro</b> 로 만들고(처음 한 번 <b>Import TMP Essentials</b> 팝업이 뜨면 누르세요), 코드에서 <b>세 군데</b>만 바꾸면 나머지는 그대로예요.<ul><li><code>using UnityEngine.UI;</code> → <code>using TMPro;</code></li><li><code>public Text scoreText;</code> → <code>public TMP_Text scoreText;</code></li><li><code>public Text stageCountText;</code> 등 <b>모든 Text 를 TMP_Text 로</b></li></ul><code>.text = ...</code> 쓰는 방식은 완전히 똑같습니다."]
- ],
- bonus:["Space 말고 <b>마우스 클릭</b>으로 점수가 오르게 바꾸기","점수가 10 이 넘으면 글자 색이 빨갛게 — <code>scoreText.color = Color.red;</code>","UI → Legacy → <b>Button</b> 을 만들어 눌러 보기","앵커를 <b>오른쪽 아래</b>로 바꾸고 Game 창 크기를 조절해 보기"]
-},
-{
- n:10, date:"11/09", lv:3, lvName:"UI",
- title:"아이템을 먹으면 점수가 오른다",
- sub:"Tag와 GameManager로 게임의 두뇌를 만들고, 효과음까지 넣습니다.",
- clock:[["10분","복습"],["25분","Tag · GameManager 세팅"],["20분","미션 : 아이템 먹기 완성"],["5분","정리"]],
- learn:[
-  ["지난 시간 만든 Stage0 씬에서 이어서","9차시에 UI 를 올려 둔 <code>Stage0</code> 씬을 그대로 씁니다. <b>볼링게임 씬은 건드리지 마세요.</b> 오늘부터 여기서 만드는 게임이 13차시에 실행 파일로 나갑니다."],
-  ["효과음 파일은 어디서?","가장 간단한 건 짧은 <code>.wav</code> · <code>.mp3</code> 파일을 <b>프로젝트 창에 그냥 끌어다 놓는 것</b>입니다. Asset Store 에서 받고 싶다면 <b>웹(assetstore.unity.com)에서 무료 에셋을 \"Add to My Assets\"</b> 한 뒤, 유니티에서 <code>Window → Package Manager → My Assets</code> 로 가서 <b>Download → Import</b> 하면 됩니다. 시간이 걸리니 오늘은 파일 드래그를 권해요."],
-  ["Tag = 오브젝트에 붙이는 이름표","아이템이 5개면 이름은 <code>Item</code>, <code>Item (1)</code>, <code>Item (2)</code>... 로 제각각입니다. 하지만 <b>Tag 를 전부 <code>Item</code> 으로</b> 달아 두면 <code>if (other.tag == \"Item\")</code> <b>한 줄로 5개를 전부</b> 처리할 수 있어요."],
-  ["Tag 만드는 법","오브젝트를 고르고 인스펙터 맨 위 <b>Tag → Add Tag...</b> → <b>+</b> 버튼 → 이름 입력. 만든 뒤에는 <b>다시 오브젝트로 돌아와서</b> 그 Tag 를 골라 줘야 합니다 (여기서 많이 놓쳐요!)."],
-  ["GameManager 패턴","점수 · 스테이지 번호처럼 <b>게임 전체가 알아야 하는 정보</b>는 한 오브젝트가 모아서 관리합니다. 모양이 필요 없으니 <b>Create Empty</b>(빈 오브젝트)로 만들어요. 거의 모든 게임에 있는 방식입니다."],
-  ["스크립트끼리 대화하기","<code>public GameManagerLogic manager;</code> 로 칸을 만들고 인스펙터에 <b>GameManager 를 드래그</b>하면, 이제 <code>manager.GetItem(3)</code> 처럼 <b>다른 스크립트의 함수를 부를 수 있습니다.</b> 오늘의 진짜 핵심이에요."],
-  ["SetActive(false) 와 Destroy","<code>SetActive(false)</code> 는 <b>껐다</b>(숨김 · 다시 켤 수 있음), <code>Destroy()</code> 는 <b>아예 삭제</b>. 먹은 아이템은 보통 SetActive(false) 로 숨깁니다."],
-  ["효과음 넣는 법","오브젝트에 <b>Audio Source</b> 컴포넌트를 붙이고 소리 파일을 <b>AudioClip</b> 칸에 넣습니다. <b>Play On Awake 는 체크를 꺼야</b> 시작하자마자 울리지 않아요. 코드에서 <code>audioSource.Play()</code> 로 울립니다."],
-  ["떨어지면 다시 시작하는 원리","바닥 한참 아래(<code>y = -10.6</code>)에 <b>거대한 투명 Trigger 판</b>을 깔아 둡니다. 낭떠러지로 떨어진 플레이어가 이 판에 닿으면 <code>OnTriggerEnter</code> 가 불려서 스테이지를 다시 시작해요. <b>보이지도 않고 막지도 않는 감지판</b>입니다."],
-  ["★ 씬을 Build 목록에 넣어야 합니다","<code>SceneManager.LoadScene(0)</code> 은 <b>Build 목록의 0번 씬</b>을 부릅니다. <code>Stage0</code> 을 등록하지 않으면 <b>엉뚱한 빈 씬(SampleScene)이 열려서</b> \"떨어지면 다시 시작\"이 이상하게 동작해요. <code>File → Build Profiles → Scene List</code> 에서 <b>Stage0 이 0번</b>인지 꼭 확인하세요."]
- ],
- quests:[
-  "지난 시간에 만든 <code>Stage0</code> 씬 열기 (UI 가 이미 올라가 있어야 합니다)",
-  "인스펙터 Tag → <b>Add Tag...</b> → <b>+</b> 버튼으로 <code>Item</code> · <code>Floor</code> 두 개 만들어 두기",
-  "바닥 Plane 을 고르고 Tag 를 <b>Floor</b> 로 지정",
-  "Sphere 하나를 <b>Player</b> 로 : Tag = <b>Player</b>, Position <code>(0, 0.7, 0)</code>, <b>Rigidbody</b>(Mass 15) + <b>Audio Source</b> 추가",
-  "Capsule 5개 만들어 이름 <code>Item</code>, Tag = <b>Item</b>, Scale <code>(0.7, 0.4, 0.7)</code>, <b>Capsule Collider → Is Trigger 체크</b>",
-  "Item 5개 전부에 <code>ItemCan</code> 붙이기 → Play 해서 빙글빙글 도는지 확인",
-  "지난 시간에 만든 <b>PlayerItemText</b> · <b>StageItemText</b> 가 그대로 있는지 확인 (없으면 9차시 미션을 다시 보고 만들기)",
-  "★ <b>File → Build Profiles</b> → <b>Scene List</b> → <b>Add Open Scenes</b> 로 <code>Stage0</code> 등록 → 원래 있던 <code>SampleScene</code> 은 <b>체크 해제하거나 삭제</b> → <b><code>Stage0</code> 이 0번</b>이 되어야 합니다",
-  "계층구조 우클릭 → <b>Create Empty</b> → 이름 <code>GameManager</code>, Position <code>(0, -10.6, 0)</code>",
-  "GameManager 에 <b>Box Collider</b> 추가 → Size <code>(100, 1, 100)</code> → <b>Is Trigger 반드시 체크!</b>",
-  "GameManager 에 <code>GameManagerLogic</code> 붙이고 : Total Item Count = <b>5</b> · Stage = <b>0</b> · Text 2개 <b>드래그 연결</b>",
-  "Player 에 <code>PlayerBall</code> 붙이고 <b>Manager</b> 칸에 GameManager <b>드래그</b>",
-  "효과음 넣기 — <b>가장 쉬운 방법</b> : 짧은 <code>.wav</code> / <code>.mp3</code> 파일을 <b>프로젝트 창으로 그냥 드래그</b> → 그 파일을 Player 의 Audio Source 의 <b>AudioClip</b> 칸에 끌어다 놓기",
-  "Audio Source 의 <b>Play On Awake 체크 해제</b> (안 그러면 시작하자마자 울립니다) · Volume 은 <code>0.5</code> 정도로",
-  "▶ Play → 아이템을 먹으면 숫자가 오르고 소리가 나면 성공!",
-  "일부러 바닥 밖으로 떨어져 보기 → 스테이지가 다시 시작되면 성공"
- ],
- code:[
-  ["ItemCan.cs",
-`using UnityEngine;
-
-public class ItemCan : MonoBehaviour
-{
-    public float rotateSpeed = 40f;
-
-    void Update()
-    {
-        // 아이템이 제자리에서 빙글빙글 (눈에 잘 띄게!)
-        transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime, Space.World);
-    }
-}`],
-  ["GameManagerLogic.cs",
-`using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-
-public class GameManagerLogic : MonoBehaviour
-{
-    public int totalItemCount;      // 이 스테이지의 아이템 총 개수
-    public int stage;               // 이 스테이지 번호 (0부터)
-    public Text stageCountText;     // "/ 5" 를 보여줄 글자
-    public Text playerCountText;    // "0"  을 보여줄 글자
-
-    void Awake()
-    {
-        stageCountText.text = "/ " + totalItemCount;
-        playerCountText.text = "0";
-    }
-
-    // 아이템을 먹었을 때 화면 숫자 갱신
-    public void GetItem(int count)
-    {
-        playerCountText.text = count.ToString();
-    }
-
-    // 다음 스테이지로 이동
-    public void NextStage()
-    {
-        int next = stage + 1;
-        if (next >= SceneManager.sceneCountInBuildSettings)
-            next = 0;
-        SceneManager.LoadScene(next);
-    }
-
-    // 이 스테이지 다시하기
-    public void RetryStage()
-    {
-        SceneManager.LoadScene(stage);
-    }
-
-    // 바닥 아래로 떨어지면 다시하기
-    // (이 오브젝트의 Box Collider 는 Is Trigger 체크!)
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-            RetryStage();
-    }
-}`],
-  ["PlayerBall.cs",
-`using UnityEngine;
-
-public class PlayerBall : MonoBehaviour
-{
-    public float power = 1f;         // Mass 15 기준. 느리면 올리세요
-    public float jumpPower = 100f;   // Mass 15 기준. 안 뛰면 올리세요
-    public int itemCount = 0;
-    public GameManagerLogic manager;   // GameManager 를 끌어다 넣으세요
-
-    bool isJump;
-    Rigidbody rigid;
-    AudioSource audioSource;
-
-    void Awake()
-    {
-        isJump = false;
-        rigid = GetComponent<Rigidbody>();
-        audioSource = GetComponent<AudioSource>();
-    }
-
-    void Update()
-    {
-        // 땅에 있을 때만 점프 (공중 2단 점프 방지)
-        if (Input.GetButtonDown("Jump") && isJump == false)
-        {
-            isJump = true;
-            rigid.AddForce(new Vector3(0, jumpPower, 0), ForceMode.Impulse);
-        }
-    }
-
-    void FixedUpdate()
-    {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        rigid.AddForce(new Vector3(h, 0, v) * power, ForceMode.Impulse);
-    }
-
-    // 바닥에 닿으면 다시 점프 가능
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Floor")
-            isJump = false;
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Item")
-        {
-            itemCount = itemCount + 1;
-            if (audioSource != null) audioSource.Play();
-            manager.GetItem(itemCount);
-            other.gameObject.SetActive(false);   // 먹은 아이템 숨기기
-        }
-        else if (other.tag == "Finish")
-        {
-            if (itemCount == manager.totalItemCount)
-                manager.NextStage();
-            else
-                Debug.Log("아이템을 다 모아야 통과할 수 있어요! "
-                          + itemCount + " / " + manager.totalItemCount);
-        }
-    }
-}`]],
- tables:[{
-   cap:"오늘 쓰는 Tag 4개",
-   head:["Tag","붙이는 곳","코드에서 하는 일"],
-   rows:[["<code>Player</code>","플레이어 Sphere","낙하 감지 · 카메라 추적"],
-         ["<code>Floor</code>","바닥 Plane · 발판 Cube","땅에 닿으면 점프 가능"],
-         ["<code>Item</code>","캡슐 아이템 5개","먹으면 점수 +1"],
-         ["<code>Finish</code>","골인 지점 (11차시)","다음 스테이지로"]]
- }],
- notes:[
-  ["warn","자주 나는 오류 5종","<ul><li><b>NullReferenceException</b> → 인스펙터의 빈 칸(Manager · Text)에 드래그를 안 했습니다. <b>인스펙터부터 보세요.</b></li><li><b>아이템을 먹어도 반응이 없다</b> → 아이템의 <b>Is Trigger 체크</b> 와 <b>Tag = Item</b> 확인</li><li><b>떨어져도 재시작이 안 된다</b> → GameManager 의 Box Collider <b>Is Trigger 체크</b> 확인</li><li><b>떨어졌더니 텅 빈 화면이 뜬다</b> → Build 목록에 <b>Stage0 이 0번</b>으로 있는지 확인 (SampleScene 이 0번이면 그게 열립니다)</li><li><b>Tag 를 만들었는데 적용이 안 됐다</b> → Add Tag 로 만든 뒤 <b>오브젝트로 돌아와 다시 골라야</b> 합니다</li></ul>"],
-  ["tip","Total Item Count 를 꼭 맞추세요","아이템 개수를 바꿨으면 GameManager 의 <b>Total Item Count</b> 도 같이 바꿔야 골인이 됩니다. 안 그러면 영원히 통과 못 해요."]
- ],
- bonus:["아이템마다 Rotate Speed 를 다르게 줘서 속도 차이 만들기","아이템을 먹을 때 <b>위아래로 둥실둥실</b> 뜨게 만들기 (힌트 : <code>Mathf.Sin(Time.time)</code>)","효과음을 다른 것으로 바꿔 내 취향 게임 만들기","<code>itemCount</code> 를 인스펙터에서 지켜보며 정말 올라가는지 확인"]
-},
-{
- n:11, date:"11/16", lv:3, lvName:"완성작 2",
- title:"3D 게임 만들기 ① 카메라와 골인 지점",
- sub:"플레이어를 따라다니는 카메라를 만들고, 아이템을 다 모아야 통과하는 골인 지점을 놓습니다.",
- clock:[["10분","복습"],["20분","카메라 추적 · 골인 지점"],["25분","미션 : 스테이지 완성"],["5분","저장"]],
- learn:[
-  ["카메라도 그냥 게임 오브젝트입니다","특별한 존재가 아니에요. <b>Transform 을 옮기면 화면이 바뀝니다.</b> 그러니 매 프레임 플레이어 위치를 따라 옮겨 주면 '따라다니는 카메라'가 됩니다."],
-  ["offset(간격)이 핵심 아이디어","시작할 때 <b>카메라 위치 − 플레이어 위치</b> 를 계산해서 기억해 둡니다. 그리고 매 프레임 <b>플레이어 위치 + 그 간격</b> 으로 카메라를 옮기면, 처음 잡아 둔 <b>각도와 거리가 그대로 유지</b>돼요."],
-  ["왜 LateUpdate 인가요?","Update 에서 카메라를 옮기면 <b>플레이어보다 먼저 움직여서 화면이 떨립니다.</b> LateUpdate 는 그 프레임의 모든 움직임이 <b>끝난 뒤 마지막에</b> 실행돼요. 카메라는 항상 LateUpdate."],
-  ["FindGameObjectWithTag","씬 전체에서 <b>Tag 가 Player 인 오브젝트</b>를 찾아 줍니다. <b>이름이 Player 인 것으로는 안 됩니다</b> — 반드시 Tag 여야 해요. 못 찾으면 바로 오류가 납니다."],
-  ["Finish Tag 는 유니티가 준 것","<code>Finish</code> 는 Untagged · Player · MainCamera 처럼 <b>유니티가 기본으로 만들어 둔 Tag</b> 입니다. 따로 만들 필요 없이 목록에서 고르기만 하면 돼요."],
-  ["골인 조건을 코드로 표현하면","<code>if (itemCount == manager.totalItemCount)</code> → <b>내가 먹은 개수 == 총 개수</b> 일 때만 통과. 아니면 Console 에 안내 메시지. 이게 게임의 '규칙'을 코드로 쓴 것입니다."]
- ],
- quests:[
-  "Cylinder 하나 만들어 이름 <code>Point</code>, <b>Tag = Finish</b>, Scale <code>(2, 2, 2)</code>, 코스 끝쪽에 배치",
-  "Point 의 <b>Capsule Collider → Is Trigger 체크</b>",
-  "Point 에 밝은 Material 을 입혀 눈에 확 띄게 만들기",
-  "Main Camera 를 플레이어가 잘 보이는 <b>위치와 각도</b>로 옮기기 (Game 창을 보면서!)",
-  "Main Camera 에 <code>CameraMove</code> 붙이기",
-  "▶ Play → 카메라가 플레이어를 <b>따라오는지</b> 확인",
-  "아이템을 <b>다 안 먹고</b> Point 에 닿아 보기 → Console 에 안내 메시지가 뜨나요?",
-  "아이템을 <b>다 먹고</b> Point 에 닿아 보기 → 스테이지가 처음부터 다시 시작됩니다 (다음 씬이 아직 없으니까요. 다음 시간에!)",
-  "일부러 바닥 밖으로 떨어져 보기 → 다시 시작되면 성공",
-  "코스를 조금 더 재미있게 다듬기 (Cube 발판 · 아이템 위치)"
- ],
- code:[["CameraMove.cs",
-`using UnityEngine;
-
-public class CameraMove : MonoBehaviour
-{
-    Transform playerTransform;
-    Vector3 offset;
-
-    void Awake()
-    {
-        // Tag 가 Player 인 오브젝트를 씬에서 찾는다
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
-        // 처음의 '카메라 - 플레이어' 간격을 기억해 둔다
-        offset = transform.position - playerTransform.position;
-    }
-
-    // LateUpdate : 플레이어가 다 움직인 뒤에 카메라를 옮긴다
-    void LateUpdate()
-    {
-        transform.position = playerTransform.position + offset;
-    }
-}`]],
- notes:[
-  ["warn","카메라 스크립트에서 오류가 나요","<code>FindGameObjectWithTag(\"Player\")</code> 는 <b>Tag 가 Player 인 오브젝트</b>를 찾습니다. 플레이어 Sphere 의 <b>Tag</b> 를 확인하세요. <b>이름이 Player 인 것만으로는 안 됩니다!</b>"],
-  ["warn","골인해도 아무 일이 없어요","<ul><li>Point 의 Tag 가 <b>Finish</b> 인지</li><li>Point 의 Collider 가 <b>Is Trigger</b> 인지</li><li>PlayerBall 의 <b>Manager</b> 칸이 연결돼 있는지</li></ul>"],
-  ["tip","카메라 각도 잡는 요령","Scene 창에서 원하는 시점을 만든 뒤 Main Camera 를 선택하고 <code>Ctrl + Shift + F</code> 를 누르면 <b>지금 보고 있는 시점으로 카메라가 이동</b>합니다. 아주 편해요."]
- ],
- bonus:["offset 을 <code>public Vector3 offset;</code> 으로 바꿔 인스펙터에서 조절해 보기","카메라가 <b>부드럽게</b> 따라오게 — <code>transform.position = Vector3.Lerp(transform.position, playerTransform.position + offset, 5f * Time.deltaTime);</code>","골인 지점을 회전시키기 (<code>ItemCan</code> 스크립트를 그냥 붙이면 됩니다!)"]
-},
-{
- n:12, date:"11/23", lv:3, lvName:"완성작 2",
- title:"3D 게임 만들기 ② 스테이지를 넘나들자",
- sub:"Scene을 여러 개 만들어 이어 붙이면, 진짜 게임의 구조가 완성됩니다.",
- clock:[["10분","복습"],["20분","씬 3개 만들고 등록"],["25분","미션 : 나만의 스테이지 디자인"],["5분","저장"]],
- learn:[
-  ["Scene = 무대 한 개","스테이지 1, 스테이지 2, 제목 화면, 게임오버 화면이 각각 하나의 씬입니다. 씬을 바꾸면 <b>무대 세트를 통째로 갈아끼우는</b> 것과 같아요."],
-  ["Build 목록 = 씬에 번호 붙이기","<code>File → Build Profiles(Build Settings)</code> 의 <b>Scene List</b> 에 등록된 씬만 코드로 부를 수 있습니다. 등록하면 위에서부터 <b>0, 1, 2...</b> 번호가 붙어요. <b>여기 없는 씬은 절대 못 부릅니다.</b>"],
-  ["SceneManager.LoadScene(번호)","현재 씬을 <b>통째로 갈아끼웁니다.</b> 지금 씬에 있던 것들은 <b>전부 사라집니다</b> — 점수도 초기화돼요. 그래서 우리는 스테이지마다 아이템 개수를 새로 세는 겁니다."],
-  ["씬을 넘어가도 남기고 싶다면 (참고)","<code>DontDestroyOnLoad</code> 나 <code>static</code> 변수를 쓰면 됩니다. 조금 어려우니 <b>오늘은 쓰지 않습니다.</b> 나중에 혼자 게임 만들 때 검색해 보세요."],
-  ["복사 - 붙여넣기로 스테이지 늘리기","처음부터 다시 만들 필요 없어요. Stage0 의 계층구조를 <b>전체 선택 → 복사</b> 하고, 새 씬에서 <b>기본으로 있는 것들을 지운 뒤 붙여넣기</b>. 그 다음 발판만 다시 배치하면 새 스테이지 완성입니다."],
-  ["각 씬의 Stage 값을 꼭 바꾸세요","<code>stage</code> 는 <b>이 씬의 번호</b>입니다. 떨어지면 <code>stage</code> 로 다시 시작하고, 골인하면 <code>stage + 1</code> 로 넘어가요. Stage1 씬인데 값이 0 이면 <b>떨어질 때 엉뚱한 씬</b>으로 갑니다."]
- ],
- quests:[
-  "Assets → Scenes 폴더 우클릭 → Create → Scene → <b>Scene</b> 을 <b>2번</b> 해서 씬을 두 개 더 만들기",
-  "새로 만든 두 개의 이름을 <code>Stage1</code> · <code>Stage2</code> 로 변경 (지금까지 만든 게 <code>Stage0</code>)",
-  "<b>File → Build Profiles</b> → Scene List 에 <b>Stage1 · Stage2</b> 를 드래그해 추가 (Stage0 은 지난 시간에 넣어 뒀습니다)",
-  "순서가 <b>Stage0(0) → Stage1(1) → Stage2(2)</b> 인지 확인 — 다르면 드래그해서 순서 바꾸기",
-  "Stage0 을 열고 계층구조 <b>전체 선택 → 복사</b>",
-  "Stage1 을 열고 <b>기본으로 있는 것들을 모두 지운 뒤</b> 붙여넣기 (Stage2 도 동일)",
-  "각 씬의 GameManager 에서 <b>Stage</b> 값을 <b>0 / 1 / 2</b> 로 맞추기",
-  "Stage1 · Stage2 는 Cube 로 <b>발판 코스</b>를 만들어 점프 스테이지로 꾸미기 <b>(자유 디자인!)</b>",
-  "발판 Cube 들의 Tag 를 <b>Floor</b> 로 (안 그러면 점프가 한 번밖에 안 됩니다)",
-  "아이템 개수를 바꿨다면 <b>Total Item Count</b> 도 꼭 같이 수정",
-  "▶ Play → Stage0 → Stage1 → Stage2 → 다시 Stage0 까지 끝까지 확인"
- ],
- code:[],
- tables:[{
-   cap:"씬 번호와 Stage 값 맞추기",
-   head:["씬 이름","Build 번호","GameManager 의 Stage","골인하면"],
-   rows:[["Stage0","0","0","Stage1 로"],["Stage1","1","1","Stage2 로"],["Stage2","2","2","Stage0 으로 (처음부터)"]],
-   num:true
- }],
- notes:[
-  ["warn","\"Scene couldn't be loaded\" 오류","씬을 <b>Build 목록에 등록하지 않았을 때</b> 나는 오류입니다. File → Build Profiles 에서 씬을 드래그해 넣으세요."],
-  ["warn","붙여넣기 전에 먼저 지우세요","새 씬에는 <b>Main Camera</b> 와 <b>Directional Light</b> 가 기본으로 들어 있습니다. 지우지 않고 붙여넣으면 카메라가 두 개가 되어 화면이 이상해져요."],
-  ["tip","발판에 Tag = Floor 를 꼭","<code>PlayerBall</code> 은 <b>Floor 태그에 닿아야</b> 점프를 다시 허용합니다. 새로 만든 발판에 Tag 를 안 붙이면 <b>한 번 점프하고 끝</b>이에요."],
-  ["warn","★ 복사는 반드시 '한꺼번에'","계층구조의 오브젝트를 <b>전부 선택해서 한 번에</b> 복사해야 인스펙터의 <b>드래그 연결(Manager · Text)이 그대로 따라옵니다.</b> 하나씩 나눠 복사하면 <b>연결이 전부 끊겨서</b> 새 씬에서 NullReferenceException 이 쏟아져요. 붙여넣은 뒤에는 GameManager 와 Player 의 인스펙터를 열어 <b>빈 칸(None)이 없는지 꼭 확인</b>하세요."]
- ],
- bonus:["스테이지마다 <b>하늘 색이나 바닥 색</b>을 다르게 해서 분위기 바꾸기","Stage2 를 아주 어렵게 만들어 선생님에게 도전장 내밀기","떨어지면 다시 시작되는 걸 이용해 <b>낭떠러지 코스</b> 만들기","움직이는 발판 만들기 — 4차시의 <code>MoveSimple</code> 을 Cube 에 붙여 보세요!"]
-},
-{
- n:13, date:"11/30", lv:3, lvName:"발표",
- title:"게임쇼 & 내 게임 빌드하기",
- sub:"내가 만든 게임을 실행 파일로 뽑아, 친구들과 서로 플레이합니다.",
- clock:[["15분","마무리 다듬기"],["15분","빌드 걸어놓기"],["25분","게임쇼 · 투표"],["5분","수료"]],
- learn:[
-  ["빌드(Build) 가 뭔가요?","유니티 없이도 돌아가는 <b>실행 파일로 굽는 것</b>입니다. 지금까지는 유니티 안에서만 플레이할 수 있었지만, 빌드하면 <b>유니티가 없는 컴퓨터에서도</b> 돌아가요."],
-  ["빌드하면 나오는 것 3가지","<b><code>내게임.exe</code></b> + <b><code>내게임_Data</code> 폴더</b> + <b><code>UnityPlayer.dll</code></b>. <b>셋 다 있어야 실행됩니다!</b> exe 파일 하나만 친구에게 보내면 절대 안 돌아가요. <b>폴더를 통째로 압축</b>해서 보내세요."],
-  ["플랫폼 고르기","Windows · Mac · Android · iOS · WebGL 중에 고릅니다. 우리는 <b>Windows</b>. 다른 플랫폼은 설치할 때 모듈을 추가해야 해요."],
-  ["Product Name = 창 제목","<code>Edit → Project Settings → Player → Product Name</code> 에 적은 이름이 <b>게임 창의 제목</b>이자 <b>exe 파일 이름</b>이 됩니다. 멋진 제목을 지어 보세요."],
-  ["빌드 전 체크리스트","① Console 에 <b>빨간 오류 0개</b> (하나라도 있으면 빌드 실패) ② 모든 씬이 <b>Build 목록에 등록</b> ③ 시작 씬이 <b>0번</b>인지 확인"],
-  ["빌드는 시간이 걸립니다","처음 빌드는 <b>3~10분</b>. 그동안 유니티를 건드리지 마세요. 그래서 오늘은 <b>빌드를 먼저 걸어 놓고</b> 게임쇼를 합니다."]
- ],
- quests:[
-  "마지막 다듬기 : 색 · 배치 · 아이템 개수 · 난이도 · 플레이어 속도",
-  "게임 제목 정하기 → <code>Edit → Project Settings → Player → <b>Product Name</b></code>",
-  "Console 에 <b>빨간 오류가 0개</b> 인지 확인 (있으면 먼저 해결!)",
-  "<b>File → Build Profiles</b> → <b>Windows</b> 선택 → <b>Build</b> → 바탕화면에 새 폴더 만들어 지정",
-  "빌드 도는 동안 <b>게임쇼 준비</b> (친구들과 자리 정하기)",
-  "만들어진 <code>.exe</code> 를 실행해서 진짜 게임처럼 플레이해 보기",
-  "폴더를 <b>통째로 압축(zip)</b> 해서 제출 (exe 하나만 보내면 안 됩니다!)",
-  "🎮 <b>게임쇼</b> : 친구 게임 3개 이상 플레이하고 한 줄 후기 남기기",
-  "베스트 게임 투표 (가장 재미있는 / 가장 어려운 / 가장 예쁜)",
-  "1차시에 쓴 <b>한 줄 기획서</b> 다시 꺼내 보기 — 얼마나 왔나요?"
+  "팀에서 <b>한 대의 컴퓨터</b>를 '메인'으로 정하기 (완성본은 여기에 모읍니다)",
+  "<code>team.html</code> 을 열고 파일 이름을 우리 앱 이름으로 바꾸기",
+  "<b>①</b> 제목(<code>&lt;h1&gt;</code>)과 설명을 우리 앱으로 수정",
+  "<b>②</b> 목록(<code>list</code>)을 우리 주제 내용으로 교체",
+  "저장 → 새로고침 → <b>버튼이 우리 내용으로 작동하나요?</b>",
+  "CSS에서 <b>색·글꼴·크기</b>를 우리 팀 스타일로 꾸미기",
+  "필요한 기능을 지난 차시 코드에서 <b>복사해 붙이기</b>",
+  "오늘 한 것을 팀원 전체 USB·메일·드라이브에 <b>백업</b>하기",
+  "안 되는 것 1~2개를 <b>메모</b>해 두기 (다음 시간에 먼저 해결)"
  ],
  code:[],
  notes:[
-  ["warn","빌드가 실패하면","Console 의 <b>빨간 오류를 전부 없애야</b> 빌드가 됩니다. 오류가 하나라도 있으면 무조건 실패해요. 노란 경고는 무시해도 됩니다."],
-  ["warn","친구 컴퓨터에서 안 켜져요","<b>exe 파일 하나만</b> 보냈을 가능성이 큽니다. <code>_Data</code> 폴더와 <code>UnityPlayer.dll</code> 까지 <b>폴더 통째로</b> 압축해서 보내세요."],
-  ["tip","게임을 끄는 방법도 넣어 주면 좋아요","전체 화면으로 켜지면 끄기 어렵습니다. <code>Alt + F4</code> 로 종료되고, 빌드 설정에서 창 모드로 바꿀 수도 있어요."]
+  ["warn","가장 흔한 사고 — 저장 안 하고 닫기","학교 컴퓨터는 껐다 켜면 초기화되는 경우가 있습니다. <b>끝나기 5분 전에 반드시</b> 팀원 각자의 저장소에 백업하세요."],
+  ["tip","한 명만 코딩하지 않게","코딩 담당이 혼자 치고 나머지가 구경만 하면 안 됩니다. <b>10분마다 자리를 바꿔</b> 번갈아 치게 하세요. 성취기준의 '협력적 설계·구현'이 바로 이 부분입니다."]
  ],
- bonus:["<b>제목 화면</b> 만들기 : 새 씬에 Text + Button 을 놓고, 버튼의 On Click 에 <code>SceneManager.LoadScene</code> 연결","배경 음악 넣기 (Audio Source 에 Play On Awake · Loop 체크)","내 게임을 <b>2D 로 다시</b> 만들어 보기 — 여기까지 왔으면 혼자서도 할 수 있어요","itch.io 같은 곳에 내 게임 올려 보기"]
+ bonus:["우리 앱에 <b>소리</b> 넣어보기","결과가 나올 때 <b>애니메이션</b> 넣기 (CSS <code>transition</code>)","휴대폰에서도 보기 좋게 만들기"]
+},
+{
+ n:7, date:"보충 · 날짜 미정", lv:2, lvName:"제작",
+ title:"제작 ② — 완성하고 서로 테스트",
+ sub:"기능을 마무리하고, 다른 팀에게 직접 써보게 합니다.",
+ learn:[
+  ["남이 써봐야 버그가 보입니다","만든 사람은 <b>될 것 같은 길로만</b> 눌러봅니다. 다른 팀에게 주고 <b>아무렇게나 눌러보게</b> 하면 생각 못 한 문제가 쏟아져요. 이게 진짜 테스트입니다."],
+  ["버그는 '언제·무엇이'로 적기","\"안 돼요\"는 고칠 수 없습니다. <b>\"버튼을 두 번 빠르게 누르면 숫자가 두 번 올라간다\"</b> 처럼 <b>언제 / 무엇이 / 어떻게</b> 를 적어야 고칠 수 있어요."],
+  ["발표 준비도 오늘","마지막 시간은 발표만 합니다. <b>누가 무슨 말을 할지</b> 오늘 정해 두세요. 30초면 충분합니다."]
+ ],
+ quests:[
+  "지난 시간에 메모한 <b>안 되는 것부터</b> 해결하기",
+  "기능 마무리 — 욕심내지 말고 <b>되는 것을 확실하게</b>",
+  "🔄 <b>교차 테스트</b> — 옆 팀과 자리를 바꿔 서로의 앱을 <b>5분씩</b> 써보기",
+  "받은 피드백을 <b>언제·무엇이·어떻게</b> 형식으로 적기",
+  "그중 <b>고칠 수 있는 것 2개</b>만 골라 수정 (전부 고치려 하지 마세요)",
+  "앱 이름과 설명 문구 최종 확인",
+  "<b>발표 역할</b> 정하기 — 누가 소개하고 누가 시연할지",
+  "<b>30초 발표 대본</b> 적기 (아래 틀 참고)",
+  "최종본 <b>백업</b>"
+ ],
+ code:[],
+ tables:[{
+   cap:"30초 발표 대본 틀",
+   head:["순서","말할 것","예시"],
+   rows:[["①","우리 팀과 앱 이름","\"저희는 3팀, 오늘 뭐 먹지를 만들었습니다\""],
+         ["②","어떤 불편함을 풀었나","\"점심마다 메뉴 고르느라 10분씩 걸렸습니다\""],
+         ["③","시연 (직접 눌러보기)","\"버튼을 누르면 이렇게 추천해 줍니다\""],
+         ["④","어려웠던 점 · 배운 것","\"랜덤이 같은 게 계속 나와서 고생했습니다\""]]
+ }],
+ notes:[
+  ["tip","이 차시가 없다면","보충 수업이 없으면 <b>6차시(제작①)와 이 차시를 합쳐</b> 진행하고, 교차 테스트는 마지막 발표회 직전 10분에 하시면 됩니다."]
+ ],
+ bonus:["다른 팀 앱에서 <b>좋았던 점 1가지</b>를 우리 앱에 반영해보기","우리 앱을 <b>진짜로 반 친구들에게</b> 써보게 하고 반응 적어오기"]
+},
+{
+ n:8, date:"13차시 · 11/30", lv:3, lvName:"발표",
+ title:"발표회 & 수료",
+ sub:"만든 것을 보여주고, 서로의 작품을 써보고, 한 학기를 마무리합니다.",
+ learn:[
+  ["우리가 한 학기 동안 한 것","<b>게임이 왜 움직이는지</b> 이해했고(공룡게임 해부), <b>화면을 만들고</b>(HTML·CSS), <b>움직이게 만들었고</b>(JS 4주), <b>팀으로 진짜 문제를 풀었습니다</b>(3주). 처음에 코드를 한 줄도 몰랐다면 <b>굉장한 거리</b>를 온 거예요."],
+  ["여기서 더 가고 싶다면","오늘 만든 것은 <b>전부 표준 웹 기술</b>입니다. 똑같은 걸로 진짜 서비스도 만듭니다. 더 하고 싶으면 <b>게임을 하나 더 만들어보는 것</b>이 가장 빠른 길이에요."]
+ ],
+ quests:[
+  "최종본 열어서 <b>잘 작동하는지</b> 마지막 확인",
+  "🏆 <b>팀별 발표</b> (30초~1분) — 문제 소개 → 시연 → 배운 점",
+  "🎮 <b>자유 체험</b> — 돌아다니며 다른 팀 앱 전부 써보기",
+  "투표하기 — <b>가장 쓸모있는 · 가장 재미있는 · 가장 예쁜</b>",
+  "학기 초에 썼던 <b>한 줄 기획서</b> 꺼내 보기 — 얼마나 왔나요?",
+  "만든 파일 <b>최종 백업</b> (집에서도 열어볼 수 있게)",
+  "한 학기 소감 한 줄 남기기"
+ ],
+ code:[],
+ notes:[
+  ["tip","발표가 부담스러운 학생에게","말하기 힘들어하는 학생은 <b>시연만</b> 맡겨도 됩니다. 버튼을 누르며 보여주는 것도 충분한 참여예요."],
+  ["tip","수고하셨습니다","유니티로 시작해서 웹으로 바뀌었지만 <b>배운 생각의 방법은 그대로</b>였습니다. 입력 → 처리 → 출력, 변수, 조건, 반복, 충돌 — 어떤 도구를 쓰든 똑같이 쓰입니다."]
+ ],
+ bonus:["방학 때 게임 하나 더 만들어보기","만든 앱을 실제로 반에서 써보기","다음에 배울 것 찾아보기"]
 }
 ];
 
 const CHEAT = {
  title:"치트키",
- sub:"막힐 때 여기부터. 링크 · 조작키 · 코드 사전 · 오류 응급처치를 한 장에 모았습니다.",
+ sub:"막힐 때 여기부터. 코드 사전 · 오류 응급처치를 한 장에 모았습니다.",
  links:[
-  ["Unity 내려받기","unity.com/download","https://unity.com/download","계정을 먼저 만들어야 다운로드 페이지가 열립니다"],
-  ["다운로드 아카이브","unity.com/releases/editor/archive","https://unity.com/releases/editor/archive","로그인 없이 열립니다. 버전을 직접 고를 때"],
-  ["우리가 쓰는 버전","Unity 6.3 LTS (6000.3.xx)","https://unity.com/releases/unity-6/support","2027년 12월까지 지원. 6000.0 · 6000.1 · 6000.2 는 쓰지 마세요"],
-  ["공식 매뉴얼 (한국어)","docs.unity3d.com","https://docs.unity3d.com/6000.3/Documentation/Manual/index.html","함수 이름을 검색하면 설명이 나옵니다"]
+  ["1차시 클릭 게임","click.html","#stage1","버튼 · 점수 · if 가 필요하면 여기서 복사"],
+  ["2차시 두더지 잡기","mole.html","#stage2","랜덤 · 타이머가 필요하면 여기서 복사"],
+  ["3차시 캐릭터 조작","move.html","#stage3","키보드 · 좌표가 필요하면 여기서 복사"],
+  ["4차시 피하기 게임","dodge.html","#stage4","충돌 · 게임오버가 필요하면 여기서 복사"]
  ],
  tables:[
-  {cap:"유니티 조작키",
-   head:["키","기능"],
-   rows:[["Q","뷰(화면) 이동"],["W","오브젝트 이동"],["E","오브젝트 회전"],["R","오브젝트 크기"],["T","오브젝트 사각툴"],
-         ["마우스 우클릭","카메라 회전"],["Alt + 마우스 좌클릭","카메라 축 이동"],["키보드 방향키","카메라 자유 이동"],
-         ["마우스 휠","카메라 줌 / 이동"],["Ctrl + S","저장 (자주 하세요!)"],["Ctrl + D","선택한 오브젝트 복제"],
-         ["Ctrl + Z","되돌리기"],["F","선택한 오브젝트로 화면 이동"]]},
   {cap:"자주 쓰는 코드 사전",
    head:["코드","하는 일"],
-   rows:[["Debug.Log(\"글자\")","콘솔에 출력 (파이썬의 print)"],
-         ["transform.Translate(vec)","벡터만큼 이동"],
-         ["transform.Rotate(vec)","회전"],
-         ["transform.position","현재 위치 (읽기 · 쓰기)"],
-         ["Input.GetAxisRaw(\"Horizontal\")","좌우 입력 → -1 / 0 / 1"],
-         ["Input.GetButtonDown(\"Jump\")","Space 를 누른 순간"],
-         ["Input.GetKeyDown(KeyCode.A)","A 를 누른 순간"],
-         ["Input.GetMouseButtonDown(0)","마우스 좌클릭 순간"],
-         ["GetComponent&lt;Rigidbody&gt;()","같은 오브젝트의 부품 가져오기"],
-         ["rigid.AddForce(vec, ForceMode.Impulse)","힘을 툭 주기"],
-         ["Time.deltaTime","프레임 간 시간 (속도 보정)"],
-         ["Vector3.MoveTowards(a, b, t)","일정 속도로 이동"],
-         ["Vector3.Lerp(a, b, t)","부드럽게 감속 이동"],
-         ["other.gameObject.SetActive(false)","오브젝트 숨기기"],
-         ["SceneManager.LoadScene(0)","0번 씬 불러오기"],
-         ["gameObject.tag","이 오브젝트의 이름표"]]},
-  {cap:"이벤트 함수 언제 쓰나",
-   head:["함수","타이밍"],
-   rows:[["Awake()","태어날 때 1번 — 변수 초기화"],["Start()","첫 프레임 직전 1번"],["Update()","매 프레임 — 입력 처리"],
-         ["FixedUpdate()","고정 주기 — Rigidbody 물리"],["LateUpdate()","맨 마지막 — 카메라 추적"],
-         ["OnCollisionEnter(c)","부딪힌 순간 (Is Trigger ☐)"],["OnTriggerEnter(c)","통과한 순간 (Is Trigger ☑)"],
-         ["OnMouseDown()","이 오브젝트를 클릭"],["OnDestroy()","사라질 때"]]},
-  {cap:"파이썬 ↔ C#",
-   head:["","파이썬","C#"],
-   rows:[["변수","<code>x = 5</code>","<code>int x = 5;</code>"],
-         ["소수","<code>y = 1.5</code>","<code>float y = 1.5f;</code>"],
-         ["참/거짓","<code>True / False</code>","<code>true / false</code>"],
-         ["조건","<code>if x > 3:</code>","<code>if (x > 3) { }</code>"],
+   rows:[["<code>let score = 0;</code>","상자를 만들고 값 넣기"],
+         ["<code>document.getElementById(\"id\")</code>","화면에서 그것을 잡아오기"],
+         ["<code>어떤것.innerText = 값;</code>","글자 바꾸기"],
+         ["<code>어떤것.style.color = \"red\";</code>","색 바꾸기"],
+         ["<code>어떤것.style.left = x + \"px\";</code>","위치 옮기기 (px 필수!)"],
+         ["<code>버튼.onclick = function(){ }</code>","누르면 실행"],
+         ["<code>if (조건) { } else { }</code>","만약 ~라면"],
+         ["<code>Math.random()</code>","0~1 랜덤 소수"],
+         ["<code>Math.floor(숫자)</code>","소수점 버리기"],
+         ["<code>Math.abs(숫자)</code>","부호 떼기 (거리 잴 때)"],
+         ["<code>setInterval(함수, 1000)</code>","1초마다 반복"],
+         ["<code>clearInterval(타이머)</code>","반복 멈추기"],
+         ["<code>addEventListener(\"keydown\", ...)</code>","키를 눌렀을 때"],
+         ["<code>목록.push(값)</code>","목록에 넣기"],
+         ["<code>목록.length</code>","목록 개수"],
+         ["<code>alert(\"글자\")</code>","알림창 띄우기"],
+         ["<code>console.log(값)</code>","F12 콘솔에 찍어보기 (파이썬 print)"]]},
+  {cap:"= 와 === 의 차이",
+   head:["기호","뜻","예시"],
+   rows:[["<code>=</code>","<b>넣어라</b>","<code>score = 5</code> (score에 5를 넣음)"],
+         ["<code>===</code>","<b>같은가?</b>","<code>if (score === 5)</code> (5인지 물음)"],
+         ["<code>!==</code>","<b>다른가?</b>","<code>if (score !== 5)</code>"],
+         ["<code>&gt;= &lt;=</code>","크거나같다 · 작거나같다","<code>if (score &gt;= 20)</code>"]]},
+  {cap:"파이썬 ↔ 자바스크립트",
+   head:["","파이썬","자바스크립트"],
+   rows:[["변수","<code>x = 5</code>","<code>let x = 5;</code>"],
+         ["출력","<code>print(x)</code>","<code>console.log(x);</code>"],
+         ["조건","<code>if x &gt; 3:</code>","<code>if (x &gt; 3) { }</code>"],
          ["아니면","<code>else:</code>","<code>else { }</code>"],
-         ["출력","<code>print(x)</code>","<code>Debug.Log(x);</code>"],
+         ["반복","<code>for i in range(9):</code>","<code>for (let i=0; i&lt;9; i=i+1) { }</code>"],
+         ["목록","<code>[1, 2, 3]</code>","<code>[1, 2, 3]</code> (같음!)"],
+         ["랜덤","<code>random.randint()</code>","<code>Math.random()</code>"],
          ["주석","<code># 메모</code>","<code>// 메모</code>"],
          ["블록","들여쓰기","<code>{ }</code> 중괄호"],
          ["문장 끝","줄바꿈","<b>세미콜론 <code>;</code></b>"]]}
@@ -1503,18 +1078,16 @@ const CHEAT = {
  notes:[
   ["warn","오류 응급처치 7선",
    "<ul>"+
-   "<li><b>The type or namespace name ... could not be found</b><br>→ 맨 위 <code>using UnityEngine.UI;</code> 같은 줄이 빠졌어요.</li>"+
-   "<li><b>NullReferenceException</b><br>→ 인스펙터의 <b>빈 칸(None)</b> 에 오브젝트를 드래그하지 않았어요. 인스펙터를 먼저 보세요.</li>"+
-   "<li><b>; expected</b><br>→ 세미콜론을 빠뜨렸어요. Console 에 적힌 <b>줄 번호</b>로 가세요.</li>"+
-   "<li><b>스크립트가 Add Component 로 안 붙어요</b><br>→ 파일 이름과 <code>class</code> 이름이 다릅니다. 똑같이 맞추세요.</li>"+
-   "<li><b>코드를 고쳤는데 반영이 안 돼요</b><br>→ VS Code 에서 <code>Ctrl+S</code> 저장 후, 유니티 창을 한 번 클릭해 주세요.</li>"+
-   "<li><b>키 입력이 안 먹혀요</b><br>→ <code>Edit → Project Settings → Player → Configuration → <b>Active Input Handling = Both</b></code> 로 바꾸고 에디터 재시작. Unity 6.3 새 프로젝트는 기본값이 <b>Input System (New)</b> 라서 옛 방식인 <code>Input.GetAxisRaw</code> 가 안 먹습니다. <b>오류 메시지가 안 뜨니 제일 먼저 의심하세요.</b></li>"+
-   "<li><b>충돌 · 트리거가 안 불려요</b><br>→ 둘 중 하나에 <b>Rigidbody</b>, 둘 다에 <b>Collider</b>, 트리거면 <b>Is Trigger 체크</b>.</li>"+
+   "<li><b>파일이 브라우저로 안 열려요</b><br>→ 이름이 <code>파일.html.txt</code> 가 됐습니다. 메모장 저장 창에서 <b>파일 형식 → 모든 파일</b> 로 다시 저장하세요.</li>"+
+   "<li><b>한글이 깨져요</b><br>→ 저장할 때 <b>인코딩을 UTF-8</b> 로. 그리고 <code>&lt;meta charset=\"utf-8\"&gt;</code> 가 맨 위에 있는지 확인.</li>"+
+   "<li><b>아무 반응이 없어요</b><br>→ ① <code>&lt;script&gt;</code> 가 <code>&lt;/body&gt;</code> 바로 위에 있는지 ② <code>id</code> 이름이 대소문자까지 똑같은지.</li>"+
+   "<li><b>고쳤는데 그대로예요</b><br>→ 저장(<code>Ctrl+S</code>) 후 브라우저에서 <b>새로고침(F5)</b>.</li>"+
+   "<li><b>움직여야 하는데 안 움직여요</b><br>→ <code>style.left</code> 에 <b><code>+ \"px\"</code></b> 를 빼먹지 않았는지. CSS에 <code>position: absolute</code> 가 있는지.</li>"+
+   "<li><b>키보드가 안 먹혀요</b><br>→ <b>브라우저 화면을 한 번 클릭</b>하고 누르세요.</li>"+
+   "<li><b>점점 빨라져요</b><br>→ 타이머가 겹쳤습니다. 새로고침(F5)하거나 <code>clearInterval</code> 을 먼저 부르세요.</li>"+
    "</ul>"],
-  ["tip","매 시간 시작 루틴 (3단계)","<ol style='margin:6px 0 0;padding-left:19px'><li><b>Unity Hub</b> 실행 → <b>Projects</b> → <code>MyGame</code> 클릭 (첫 로딩 1~2분)</li><li>Assets → Scenes 에서 <b>오늘 작업할 씬을 더블클릭</b>해서 열기</li><li>이 페이지에서 <b>오늘 차시</b>를 열어 두기</li></ol>끝날 때는 언제나 <b><code>Ctrl+S</code></b> — 저장 안 하면 다음 주에 처음부터입니다."],
-  ["tip","창이 사라졌어요 / 화면이 엉망이에요","<ul><li><b>Console · Project · Inspector 창이 없어졌다</b> → 상단 <code>Window</code> 메뉴 → <code>General</code> → 원하는 창 선택</li><li><b>배치가 통째로 망가졌다</b> → 오른쪽 위 <code>Layout</code> → <code>Default</code></li><li><b>Scene 창에서 오브젝트를 잃어버렸다</b> → 계층구조에서 이름을 클릭하고 <code>F</code> 키</li></ul>"],
   ["tip","막혔을 때 순서",
-   "<ol style='margin:6px 0 0;padding-left:19px'><li>Console 의 <b>빨간 줄</b>을 읽는다 (영어여도 파일명과 줄 번호는 보여요)</li><li>인스펙터에 <b>비어 있는 칸(None)</b> 이 없는지 본다</li><li>체크박스(Is Trigger, Use Gravity)를 확인한다</li><li>그래도 모르겠으면 <b>손 들기</b> 🙋</li></ol>"]
+   "<ol style='margin:6px 0 0;padding-left:19px'><li><b>F12</b> 를 눌러 <b>Console</b> 탭의 빨간 글씨를 읽는다 (몇 번째 줄인지 알려줍니다)</li><li>저장하고 <b>새로고침(F5)</b> 했는지 확인</li><li>지난 차시 코드에서 <b>되던 부분을 복사</b>해 와서 비교</li><li>그래도 모르겠으면 <b>손 들기</b> 🙋</li></ol>"]
  ]
 };
 
@@ -1596,7 +1169,7 @@ const mainEl  = document.getElementById("main");
 
 function renderRail(){
   let h = '<button class="node' + (tab === "home" && view === "home" ? " on" : "") +
-          '" data-go="home"><span class="dot">◎</span><span class="lb"><b>코스 안내</b><i>전체 13차시</i></span></button>';
+          '" data-go="home"><span class="dot">◎</span><span class="lb"><b>코스 안내</b><i>남은 8개 미션</i></span></button>';
   h += STAGES.map(s => {
     const on = tab === "home" && view === s.n;
     const dn = stageDone(s.n);
@@ -1623,14 +1196,14 @@ function homeHTML(){
 
   return '<div class="card pane"><div class="hero">' +
     '<div class="axis"><i style="background:var(--x)"></i><i style="background:var(--y)"></i><i style="background:var(--z)"></i></div>' +
-    "<h1>13번의 미션으로<br>내 게임 하나 만들기</h1>" +
-    '<p class="lead">코딩을 한 번도 안 해 봤어도 괜찮습니다. <b>코드는 대부분 여기서 받아 가세요.</b> ' +
-    "여러분이 할 일은 붙여넣고, 숫자를 바꿔 보고, 뭐가 달라지는지 눈으로 확인하는 것. " +
-    "13주 뒤에는 친구에게 보낼 수 있는 진짜 게임 파일이 남습니다.</p>" +
+    "<h1>8번의 미션으로<br>내 게임과 우리 팀 앱 만들기</h1>" +
+    '<p class="lead">여러분은 이미 <b>HTML로 뼈대</b>를 만들고 <b>CSS로 꾸밀</b> 줄 압니다. ' +
+    "이제 마지막 하나, <b>움직이게 만드는 법</b>을 배웁니다. " +
+    "코드는 여기서 받아 가세요. 할 일은 붙여넣고, 숫자를 바꿔 보고, 뭐가 달라지는지 확인하는 것뿐이에요.</p>" +
     '<div class="grid3" style="margin-top:22px">' +
-      '<div class="mini"><b>🎳 1차 완성작 · 8차시</b><p>공을 굴려 핀을 맞히는 볼링게임. 중력·충돌·재질을 배웁니다.</p></div>' +
-      '<div class="mini"><b>🏁 2차 완성작 · 13차시</b><p>아이템을 모아 골인하는 3D 스테이지 게임. 실행 파일로 뽑아 갑니다.</p></div>' +
-      '<div class="mini"><b>🧰 준비물</b><p>노트북 하나면 됩니다. Unity Hub · Unity 6 LTS 설치는 <b>1차시에 같이</b> 합니다.</p></div>' +
+      '<div class="mini"><b>💥 1차 완성작 · 4번째 미션</b><p>떨어지는 돌을 피하는 게임. 변수·조건·반복·랜덤·충돌이 전부 들어갑니다.</p></div>' +
+      '<div class="mini"><b>🏆 2차 완성작 · 마지막 미션</b><p>팀으로 만드는 <b>우리 학교 문제 해결 앱</b>. 발표회로 마무리합니다.</p></div>' +
+      '<div class="mini"><b>🧰 준비물</b><p>메모장과 브라우저면 끝. <b>인터넷이 끊겨도</b> 돌아갑니다.</p></div>' +
     "</div></div>" +
     '<div class="body">' +
       sec("전체 코스", "카드를 누르면 그 차시로 이동합니다", '<div class="chapters">' + chaps + "</div>") +
@@ -1639,6 +1212,7 @@ function homeHTML(){
         "<li><b>천천히 갑니다.</b> 못 따라와도 괜찮아요. 옆 친구랑 같이 하세요.</li>" +
         "<li><b>코드는 외우지 않습니다.</b> 필요할 때 이 페이지에서 복사하세요.</li>" +
         "<li><b>숫자를 마음대로 바꿔 보세요.</b> 망가뜨리는 게 가장 빠른 학습입니다. (Ctrl+Z 가 있어요)</li>" +
+        "<li><b>저장(Ctrl+S) 하고 새로고침(F5).</b> 이걸 안 하면 아무것도 안 바뀝니다.</li>" +
         "<li><b>5분 넘게 막히면 손을 드세요.</b> 🙋</li></ul></div>") +
       sec("내 진행 상황", "",
         '<p style="color:var(--ink-2);font-size:.93rem;margin:0 0 12px">체크한 미션은 이 브라우저에 저장됩니다. ' +
@@ -1654,7 +1228,7 @@ function stageHTML(s){
   let h = '<div class="card pane"><div class="head">' +
     '<div class="eyebrow">' +
       '<span class="pill stg">STAGE ' + String(s.n).padStart(2, "0") + "</span>" +
-      '<span class="pill date">' + s.date + " (월) 16:50–17:50</span>" +
+      '<span class="pill date">' + s.date + (s.date.indexOf("/") >= 0 ? " (월) 16:50–17:50" : "") + "</span>" +
       '<span class="pill lv' + s.lv + '">' + s.lvName + "</span>" +
       (stageDone(s.n) ? '<span class="pill lv1">✓ 클리어</span>' : "") +
     "</div><h1>" + s.title + "</h1><p>" + s.sub + "</p></div><div class=\"body\">";
@@ -1709,11 +1283,15 @@ function cheatHTML(){
   let h = '<div class="card pane"><div class="head">' +
     '<div class="eyebrow"><span class="pill stg">CHEAT SHEET</span></div>' +
     "<h1>" + CHEAT.title + "</h1><p>" + CHEAT.sub + "</p></div><div class=\"body\">";
-  h += sec("🔗 자주 가는 링크", "새 탭으로 열립니다",
-        '<div class="links">' + CHEAT.links.map(l =>
-          '<a class="lk" href="' + l[2] + '" target="_blank" rel="noopener">' +
-          '<span class="lt"><b>' + l[0] + "</b><i>" + l[1] + "</i><em>" + l[3] + "</em></span>" +
-          '<span class="ar">↗</span></a>').join("") + "</div>");
+  h += sec("🔗 코드 가져오기", "누르면 그 차시로 이동합니다",
+        '<div class="links">' + CHEAT.links.map(l => {
+          const stage = (l[2].match(/stage(\d+)/) || [])[1];
+          const open = stage ? '<button class="lk" data-go="' + stage + '">'
+                             : '<a class="lk" href="' + l[2] + '" target="_blank" rel="noopener">';
+          const close = stage ? "</button>" : "</a>";
+          return open + '<span class="lt"><b>' + l[0] + "</b><i>" + l[1] + "</i><em>" + l[3] +
+                 "</em></span><span class=\"ar\">" + (stage ? "›" : "↗") + "</span>" + close;
+        }).join("") + "</div>");
   CHEAT.notes.forEach(n => { h += '<section class="sec">' + noteHTML(n) + "</section>"; });
   CHEAT.tables.forEach(t => { h += '<section class="sec">' + tableHTML(t) + "</section>"; });
   h += "</div></div>";
