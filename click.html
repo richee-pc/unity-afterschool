@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>클릭 연타 게임</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 40px; }
+  h1 { font-size: 34px; }
+  #score { font-size: 90px; font-weight: bold; color: #2563eb; margin: 10px; }
+  #msg { font-size: 28px; color: #16a34a; height: 40px; }
+  button { font-size: 26px; padding: 18px 46px; border: 0; border-radius: 16px;
+           background: #2563eb; color: white; cursor: pointer; }
+  button:active { transform: scale(0.94); }
+  #reset { background: #94a3b8; font-size: 16px; padding: 10px 24px; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+  <h1>🖱️ 클릭 연타 게임</h1>
+  <p>목표 : <b>20번</b> 누르기!</p>
+
+  <div id="score">0</div>
+  <div id="msg"></div>
+
+  <button id="btn">눌러!</button>
+  <br>
+  <button id="reset">다시하기</button>
+
+<script>
+  // 1. 점수를 담을 상자(변수)
+  let score = 0;
+
+  // 2. 화면에 있는 것들을 잡아 온다
+  const btn       = document.getElementById("btn");
+  const scoreText = document.getElementById("score");
+  const msg       = document.getElementById("msg");
+  const resetBtn  = document.getElementById("reset");
+
+  // 3. 버튼을 누르면 이 안이 실행된다
+  btn.onclick = function () {
+    score = score + 1;           // 점수 1 올리기
+    scoreText.innerText = score; // 화면에 보여주기
+
+    if (score >= 20) {           // 20점이 넘으면
+      msg.innerText = "🎉 클리어!";
+    }
+  };
+
+  // 4. 다시하기
+  resetBtn.onclick = function () {
+    score = 0;
+    scoreText.innerText = 0;
+    msg.innerText = "";
+  };
+</script>
+
+</body>
+</html>

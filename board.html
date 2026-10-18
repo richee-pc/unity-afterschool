@@ -332,7 +332,7 @@ const STAGES = [
 {
  n:1, date:"7차시 · 10/19", lv:1, lvName:"첫 JS",
  title:"버튼이 살아난다",
- sub:"지금까지 만든 화면에 처음으로 '움직임'을 넣습니다. 오늘 클릭 게임 하나를 완성해요.",
+ sub:"오늘 완성품은 두 개입니다. 클릭 게임을 만들고, 거기에 내 코드를 직접 보태 봅니다.",
  learn:[
   ["HTML · CSS · JS 셋의 역할","<b>HTML은 뼈대</b>(무엇이 있는가), <b>CSS는 옷</b>(어떻게 생겼는가), <b>JS는 움직임</b>(누르면 무슨 일이 생기는가). 여러분은 이미 뼈대와 옷을 만들 줄 압니다. <b>오늘 마지막 하나를 배웁니다.</b>"],
   ["&lt;script&gt; 는 맨 아래에","코드는 <code>&lt;/body&gt;</code> 바로 위에 씁니다. <b>화면이 다 만들어진 다음에</b> 코드가 실행되어야 하거든요. 위에 쓰면 \"그런 버튼 없는데요?\" 하고 에러가 납니다."],
@@ -340,20 +340,26 @@ const STAGES = [
   ["글자 바꾸기 innerText","<code>scoreText.innerText = 5;</code> → 그 자리 글자가 5로 바뀝니다. 유니티에서 쓰던 <code>.text</code> 와 똑같은 역할이에요."],
   ["변수 = 값을 담는 상자","<code>let score = 0;</code> 는 score라는 상자를 만들고 0을 넣는다는 뜻. <code>score = score + 1</code> 은 \"지금 값에 1을 더해서 다시 넣어라\"입니다."],
   ["onclick = 누르면 실행","<code>btn.onclick = function () { ... }</code> 안에 적은 것이 <b>버튼을 누를 때마다</b> 실행됩니다. 유니티의 <code>Update</code> 가 \"매 순간\"이었다면, 이건 <b>\"누를 때만\"</b>이에요."],
-  ["if = 만약 ~라면","<code>if (score &gt;= 20) { ... }</code> → 점수가 20 이상일 때만 안쪽이 실행됩니다. 게임의 '규칙'은 전부 이걸로 만듭니다."]
+  ["버튼을 하나 더 만드는 법","세트로 외우세요. ① HTML에 <code>&lt;button id=\"이름\"&gt;</code> 추가 → ② JS에서 <code>getElementById</code> 로 잡고 → ③ <code>.onclick</code> 에 할 일 적기. <b>이 3단계가 전부</b>이고, 앞으로 계속 이것만 반복합니다."],
+  ["if · else if · else","<code>if</code> 는 \"만약 ~라면\", <code>else if</code> 는 \"그게 아니고 ~라면\", <code>else</code> 는 \"그 외 전부\". <b>위에서부터 차례로 검사</b>해서 <b>처음 맞는 것 하나만</b> 실행하고 끝납니다. 그래서 <b>큰 숫자를 위에</b> 써야 해요."]
  ],
  quests:[
-  "메모장(또는 VS Code)을 열고 아래 코드를 <b>통째로 붙여넣기</b>",
-  "★ <b>저장할 때 함정 주의!</b> 메모장이면 <b>파일 형식을 '모든 파일'</b> 로 바꾸고 이름을 <code>click.html</code> 로 저장 (안 그러면 <code>click.html.txt</code> 가 됩니다)",
-  "저장한 파일을 <b>더블클릭</b> → 브라우저에서 열리면 성공!",
-  "버튼을 눌러 숫자가 올라가는지 확인",
-  "20번 눌러서 <b>🎉 클리어!</b> 가 뜨는지 확인",
-  "코드에서 <code>score &gt;= 20</code> 의 <b>20을 5로</b> 바꾸고 저장 → 새로고침(F5) → 훨씬 빨리 클리어되나요?",
-  "<b>클리어 메시지</b>를 내 마음대로 바꿔 보기",
-  "CSS에서 버튼 <b>색깔</b>을 바꿔 보기 (이건 이미 할 줄 알죠!)",
-  "<b>다시하기</b> 버튼을 눌러 0으로 돌아가는지 확인"
+  "<b>[1단계]</b> 메모장(또는 VS Code)을 열고 아래 <code>click.html</code> 코드를 <b>통째로 붙여넣기</b>",
+  "★ <b>저장 함정 주의!</b> 메모장이면 <b>파일 형식을 '모든 파일'</b> 로 바꾸고 이름을 <code>click.html</code> 로 저장 (안 그러면 <code>click.html.txt</code> 가 됩니다)",
+  "저장한 파일을 <b>더블클릭</b> → 브라우저에서 열리고, 버튼을 누르면 숫자가 오르나요? <b>여기까지가 오늘의 필수입니다.</b>",
+  "<b>[2단계]</b> <code>score &gt;= 20</code> 의 <b>20을 5로</b> 바꾸고 저장 → 새로고침(F5) → 빨리 클리어되나요?",
+  "<b>[2단계]</b> 클리어 메시지와 버튼 글자를 <b>내 마음대로</b> 바꾸기",
+  "<b>[2단계]</b> CSS에서 <b>배경색·버튼색·글자 크기</b>를 바꿔 나만의 디자인 만들기",
+  "<b>[3단계·직접 코딩]</b> 🔧 <b>-1 버튼</b>을 직접 추가하기 — 아래 '직접 만들기' 표를 보고 3줄만 따라 쓰면 됩니다",
+  "<b>[3단계·직접 코딩]</b> 🔧 <b>+10 버튼</b>도 하나 더 추가해 보기 (방법은 똑같아요)",
+  "<b>[4단계]</b> 새 파일 <code>grow.html</code> 을 만들어 <b>클릭해서 키우기</b> 완성하기",
+  "<b>[4단계]</b> 🥚 가 🐣 🐥 🐓 로 변하는 <b>기준 숫자(10·20·30)</b>를 바꿔 보기",
+  "<b>[4단계]</b> 이모지를 내 것으로 바꾸기 — 🌱🌿🌳🌲 · 🐛🦋 · 🌑🌓🌕 등 자유롭게",
+  "<b>[5단계·도전]</b> 단계를 <b>5개</b>로 늘리기 (<code>else if</code> 를 하나 더 추가)",
+  "짝과 바꿔서 서로의 작품 해보고, <b>좋은 점 한 가지</b>씩 말해 주기"
  ],
- code:[["click.html", `<!doctype html>
+ code:[
+  ["click.html  ─ [1단계] 먼저 이것부터", `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -410,21 +416,97 @@ const STAGES = [
 <\/script>
 
 </body>
-</html>`]],
- tables:[{
-   cap:"오늘 외울 건 이 4개뿐",
+</html>`],
+  ["grow.html  ─ [4단계] 두 번째 작품", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>클릭해서 키우기</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 30px; }
+  h1 { font-size: 30px; margin-bottom: 4px; }
+  #pet { font-size: 130px; line-height: 1.1; margin: 10px; }
+  #info { font-size: 22px; color: #64748b; }
+  #count { font-weight: bold; color: #2563eb; }
+  #msg { font-size: 24px; color: #16a34a; height: 36px; }
+  button { font-size: 24px; padding: 16px 40px; border: 0; border-radius: 16px;
+           background: #2563eb; color: white; cursor: pointer; }
+  button:active { transform: scale(0.95); }
+</style>
+</head>
+<body>
+
+  <h1>🍼 클릭해서 키우기</h1>
+  <div id="info">먹이 <span id="count">0</span>개</div>
+
+  <div id="pet">🥚</div>
+  <div id="msg"></div>
+
+  <button id="btn">먹이 주기</button>
+
+<script>
+  let count = 0;
+
+  const btn       = document.getElementById("btn");
+  const pet       = document.getElementById("pet");
+  const countText = document.getElementById("count");
+  const msg       = document.getElementById("msg");
+
+  btn.onclick = function () {
+    count = count + 1;
+    countText.innerText = count;
+
+    // 먹이 수에 따라 모습이 달라진다 (위에서부터 차례로 검사!)
+    if (count >= 30) {
+      pet.innerText = "🐓";
+      msg.innerText = "다 컸다!";
+    } else if (count >= 20) {
+      pet.innerText = "🐥";
+      msg.innerText = "삐약삐약";
+    } else if (count >= 10) {
+      pet.innerText = "🐣";
+      msg.innerText = "껍질이 깨졌어요!";
+    } else {
+      pet.innerText = "🥚";
+      msg.innerText = "";
+    }
+  };
+<\/script>
+
+</body>
+</html>`]
+ ],
+ tables:[
+  {cap:"🔧 [3단계] 직접 만들기 — 버튼 추가하는 3줄",
+   head:["순서","어디에","무엇을 쓰나"],
+   rows:[["①","HTML 의 버튼들 옆","<code>&lt;button id=\"minus\"&gt;-1&lt;/button&gt;</code>"],
+         ["②","JS 의 <code>const</code> 줄들 아래","<code>const minusBtn = document.getElementById(\"minus\");</code>"],
+         ["③","JS 맨 아래 (<code>&lt;/script&gt;</code> 위)","<code>minusBtn.onclick = function () { score = score - 1; scoreText.innerText = score; };</code>"]],
+   num:false},
+  {cap:"오늘 외울 건 이 4개뿐",
    head:["코드","뜻"],
    rows:[["<code>let score = 0;</code>","score 라는 상자를 만들고 0을 넣기"],
          ["<code>document.getElementById(\"btn\")</code>","화면에서 id가 btn 인 것을 잡아오기"],
          ["<code>어떤것.innerText = 값;</code>","그 자리 글자를 바꾸기"],
-         ["<code>버튼.onclick = function(){ }</code>","누르면 { } 안을 실행"]]
- }],
+         ["<code>버튼.onclick = function(){ }</code>","누르면 { } 안을 실행"]]},
+  {cap:"[4단계] else if 순서가 중요한 이유",
+   head:["이렇게 쓰면","결과"],
+   rows:[["<code>30 → 20 → 10</code> 순 (큰 것부터)","✅ 정상 작동"],
+         ["<code>10 → 20 → 30</code> 순 (작은 것부터)","❌ 30개를 먹어도 🐣 에서 멈춤"]]}
+ ],
  notes:[
   ["warn","★ 저장이 제일 큰 함정입니다","메모장에서 그냥 저장하면 <code>click.html.txt</code> 가 되어 <b>브라우저로 안 열립니다.</b><ul><li>저장 창에서 <b>파일 형식 → 모든 파일(*.*)</b> 로 바꾸기</li><li>이름을 <code>click.html</code> 로 (<b>.html 까지</b> 직접 입력)</li><li>인코딩이 <b>UTF-8</b> 인지 확인 (한글 안 깨지게)</li></ul>"],
-  ["warn","코드를 고쳤는데 안 바뀌어요","<b>저장(<code>Ctrl+S</code>)하고 브라우저에서 새로고침(<code>F5</code>)</b> 해야 반영됩니다. 유니티의 '저장하고 Play 다시 누르기'와 같은 것이에요."],
-  ["warn","아무 반응이 없어요","<ul><li><code>&lt;script&gt;</code> 가 <b>&lt;/body&gt; 바로 위</b>에 있는지</li><li>HTML의 <code>id</code> 와 JS의 <code>getElementById</code> 안 이름이 <b>글자 하나까지 똑같은지</b> (대소문자 구분!)</li><li>브라우저에서 <code>F12</code> → <b>Console</b> 탭에 빨간 글씨가 있는지</li></ul>"]
+  ["warn","코드를 고쳤는데 안 바뀌어요","<b>저장(<code>Ctrl+S</code>) → 브라우저 새로고침(<code>F5</code>)</b>. 이 두 개를 한 세트로 외우세요. 유니티의 '저장하고 Play 다시 누르기'와 같습니다."],
+  ["warn","추가한 버튼이 안 눌려요","<ul><li>HTML 의 <code>id</code> 와 JS 의 <code>getElementById</code> 안 글자가 <b>완전히 똑같은지</b> (대소문자까지!)</li><li>줄 끝에 <b>세미콜론 <code>;</code></b> 을 빠뜨리지 않았는지</li><li>중괄호 <code>{ }</code> 가 짝이 맞는지</li><li><code>F12</code> → <b>Console</b> 탭에 빨간 글씨가 있는지</li></ul>"],
+  ["tip","빨리 끝났다면 멈추지 마세요","3단계부터는 <b>정답이 없습니다.</b> 버튼을 몇 개든 추가해도 되고, 디자인을 완전히 뜯어고쳐도 됩니다. <b>망가뜨려 보는 게 가장 빠른 공부</b>예요 — 안 되면 다시 복사하면 그만입니다."]
  ],
- bonus:["목표를 <b>100번</b>으로 올려서 친구와 최고 기록 대결","누를 때마다 버튼 글자가 바뀌게 만들기","CSS를 고쳐서 <b>나만의 디자인</b>으로 꾸미기","점수가 10이 넘으면 글자 색이 빨개지게 — <code>scoreText.style.color = \"red\";</code>"]
+ bonus:[
+  "클릭할 때마다 <b>배경색이 랜덤으로</b> 바뀌게 — <code>document.body.style.background = \"hsl(\" + score * 20 + \", 70%, 90%)\";</code>",
+  "점수가 10을 넘으면 <b>글자 색이 빨개지게</b> — <code>scoreText.style.color = \"red\";</code>",
+  "키우기에 <b>'굶기기' 버튼</b>을 만들어 먹이를 줄여 보기 (단계가 거꾸로 돌아가나요?)",
+  "두 작품을 <b>한 파일로 합쳐</b> 보기",
+  "친구 컴퓨터에서 내 파일을 열어 보기 — <b>USB 하나면 어디서든 됩니다</b>"
+ ]
 },
 {
  n:2, date:"8차시 · 10/26", lv:2, lvName:"시간·랜덤",
