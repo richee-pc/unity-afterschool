@@ -161,7 +161,7 @@ button{font-family:inherit}
 .slab + .slab{margin-top:12px}
 .slab-top{display:flex; align-items:center; gap:9px; padding:8px 10px 8px 14px;
   background:var(--slab-2); border-bottom:1px solid var(--slab-line)}
-.cs{width:17px; height:17px; border-radius:4px; background:#3E7A3B; color:#DFF5DC;
+.cs{height:17px; padding:0 5px; border-radius:4px; background:#2F5FA8; color:#DCE8FA;
   font-size:.6rem; font-weight:700; display:grid; place-items:center; flex:none;
   font-family:"IBM Plex Mono",monospace}
 .slab-top b{font-family:"IBM Plex Mono",monospace; font-size:.82rem; color:var(--slab-ink); font-weight:400}
@@ -335,27 +335,29 @@ const STAGES = [
  sub:"오늘 완성품은 두 개입니다. 클릭 게임을 만들고, 거기에 내 코드를 직접 보태 봅니다.",
  learn:[
   ["HTML · CSS · JS 셋의 역할","<b>HTML은 뼈대</b>(무엇이 있는가), <b>CSS는 옷</b>(어떻게 생겼는가), <b>JS는 움직임</b>(누르면 무슨 일이 생기는가). 여러분은 이미 뼈대와 옷을 만들 줄 압니다. <b>오늘 마지막 하나를 배웁니다.</b>"],
+  ["한 파일 안에 셋이 다 들어 있어요","<code>click.html</code> 을 열면 위에서부터 <b>①&lt;style&gt; 안이 CSS</b> → <b>②&lt;body&gt; 안이 HTML</b> → <b>③&lt;script&gt; 안이 JS</b> 순서로 들어 있습니다. <b>고치고 싶은 게 뭐냐에 따라 가는 구역이 달라요.</b> 아래 '지도'를 꼭 보세요."],
   ["&lt;script&gt; 는 맨 아래에","코드는 <code>&lt;/body&gt;</code> 바로 위에 씁니다. <b>화면이 다 만들어진 다음에</b> 코드가 실행되어야 하거든요. 위에 쓰면 \"그런 버튼 없는데요?\" 하고 에러가 납니다."],
   ["화면의 것을 '잡아오기'","HTML에 <code>id=\"btn\"</code> 처럼 이름표를 붙이고, JS에서 <code>document.getElementById(\"btn\")</code> 으로 잡아옵니다. <b>이름표를 붙여야 코드가 그걸 찾을 수 있어요.</b>"],
   ["글자 바꾸기 innerText","<code>scoreText.innerText = 5;</code> → 그 자리 글자가 5로 바뀝니다. 유니티에서 쓰던 <code>.text</code> 와 똑같은 역할이에요."],
   ["변수 = 값을 담는 상자","<code>let score = 0;</code> 는 score라는 상자를 만들고 0을 넣는다는 뜻. <code>score = score + 1</code> 은 \"지금 값에 1을 더해서 다시 넣어라\"입니다."],
   ["onclick = 누르면 실행","<code>btn.onclick = function () { ... }</code> 안에 적은 것이 <b>버튼을 누를 때마다</b> 실행됩니다. 유니티의 <code>Update</code> 가 \"매 순간\"이었다면, 이건 <b>\"누를 때만\"</b>이에요."],
-  ["버튼을 하나 더 만드는 법","세트로 외우세요. ① HTML에 <code>&lt;button id=\"이름\"&gt;</code> 추가 → ② JS에서 <code>getElementById</code> 로 잡고 → ③ <code>.onclick</code> 에 할 일 적기. <b>이 3단계가 전부</b>이고, 앞으로 계속 이것만 반복합니다."],
+  ["🔧 버튼을 하나 더 만드는 법","세트로 외우세요. <b>① HTML에 버튼 놓기 → ② JS에서 잡아오기 → ③ 할 일 적기.</b> 이 3단계가 전부이고, 앞으로 8주 내내 이것만 반복합니다. <b>세 줄이 각각 어느 구역에 들어가는지</b>가 오늘의 핵심이에요."],
   ["if · else if · else","<code>if</code> 는 \"만약 ~라면\", <code>else if</code> 는 \"그게 아니고 ~라면\", <code>else</code> 는 \"그 외 전부\". <b>위에서부터 차례로 검사</b>해서 <b>처음 맞는 것 하나만</b> 실행하고 끝납니다. 그래서 <b>큰 숫자를 위에</b> 써야 해요."]
  ],
  quests:[
   "<b>[1단계]</b> 메모장(또는 VS Code)을 열고 아래 <code>click.html</code> 코드를 <b>통째로 붙여넣기</b>",
   "★ <b>저장 함정 주의!</b> 메모장이면 <b>파일 형식을 '모든 파일'</b> 로 바꾸고 이름을 <code>click.html</code> 로 저장 (안 그러면 <code>click.html.txt</code> 가 됩니다)",
   "저장한 파일을 <b>더블클릭</b> → 브라우저에서 열리고, 버튼을 누르면 숫자가 오르나요? <b>여기까지가 오늘의 필수입니다.</b>",
-  "<b>[2단계]</b> <code>score &gt;= 20</code> 의 <b>20을 5로</b> 바꾸고 저장 → 새로고침(F5) → 빨리 클리어되나요?",
-  "<b>[2단계]</b> 클리어 메시지와 버튼 글자를 <b>내 마음대로</b> 바꾸기",
-  "<b>[2단계]</b> CSS에서 <b>배경색·버튼색·글자 크기</b>를 바꿔 나만의 디자인 만들기",
-  "<b>[3단계·직접 코딩]</b> 🔧 <b>-1 버튼</b>을 직접 추가하기 — 아래 '직접 만들기' 표를 보고 3줄만 따라 쓰면 됩니다",
-  "<b>[3단계·직접 코딩]</b> 🔧 <b>+10 버튼</b>도 하나 더 추가해 보기 (방법은 똑같아요)",
+  "<b>[2단계]</b> 아래 <b>📍 지도</b>를 보면서 내 파일의 <b>CSS 구역</b>을 찾아보기",
+  "<b>[2단계]</b> 🎨 <code>body</code> 의 <code>background</code> 를 바꿔 <b>바탕색</b> 바꾸기 (색 이름표 참고)",
+  "<b>[2단계]</b> 🎨 <code>button</code> 의 <code>background</code> 로 <b>버튼 색</b>, <code>font-size</code> 로 <b>글자 크기</b> 바꾸기",
+  "<b>[2단계]</b> 🎨 <code>#score</code> 의 <code>font-size</code> 를 <code>150px</code> 로 키워 보기",
+  "<b>[2단계]</b> <code>score &gt;= 20</code> 의 <b>20을 5로</b> 바꾸고, 클리어 메시지도 내 말로 바꾸기",
+  "<b>[3단계·직접 코딩]</b> 🔧 <b>-1 버튼</b> 추가하기 — 지도의 <b>①②③ 자리</b>에 세 줄을 각각 써 넣습니다",
+  "<b>[3단계·직접 코딩]</b> 🔧 <b>+10 버튼</b>도 똑같은 방법으로 하나 더 (막히면 아래 <b>정답 코드</b>를 보세요)",
   "<b>[4단계]</b> 새 파일 <code>grow.html</code> 을 만들어 <b>클릭해서 키우기</b> 완성하기",
-  "<b>[4단계]</b> 🥚 가 🐣 🐥 🐓 로 변하는 <b>기준 숫자(10·20·30)</b>를 바꿔 보기",
-  "<b>[4단계]</b> 이모지를 내 것으로 바꾸기 — 🌱🌿🌳🌲 · 🐛🦋 · 🌑🌓🌕 등 자유롭게",
-  "<b>[5단계·도전]</b> 단계를 <b>5개</b>로 늘리기 (<code>else if</code> 를 하나 더 추가)",
+  "<b>[4단계]</b> 🥚 가 🐣 🐥 🐓 로 변하는 <b>기준 숫자(10·20·30)</b>와 <b>이모지</b>를 내 것으로 바꾸기",
+  "<b>[5단계·도전]</b> 키우기 단계를 <b>5개</b>로 늘리기 (<code>else if</code> 하나 더 추가)",
   "짝과 바꿔서 서로의 작품 해보고, <b>좋은 점 한 가지</b>씩 말해 주기"
  ],
  code:[
@@ -412,6 +414,134 @@ const STAGES = [
     score = 0;
     scoreText.innerText = 0;
     msg.innerText = "";
+  };
+<\/script>
+
+</body>
+</html>`],
+  ["📍 지도 ─ 어느 구역을 고칠까? (읽기용)", `★ 이 블록은 읽기용 '지도'입니다. 복사해서 쓰는 코드가 아니에요!
+   click.html 을 열면 크게 세 덩어리로 나뉘어 있습니다.
+
+
+┌─ ① CSS 구역 ── 모양을 바꾸는 곳 (위쪽 <style> 안) ───────────┐
+
+  body   { background: #eef2f7; }    /* 바탕 색        */
+  h1     { font-size: 34px;   }      /* 제목 크기      */
+  #score { font-size: 90px;          /* 숫자 크기      */
+           color: #2563eb;  }        /* 숫자 색        */
+  #msg   { font-size: 28px;
+           color: #16a34a;  }        /* 클리어 글자 색 */
+  button { font-size: 26px;          /* 버튼 글자 크기 */
+           padding: 18px 46px;       /* 버튼 두께      */
+           border-radius: 16px;      /* 모서리 둥글기  */
+           background: #2563eb;      /* 버튼 색        */
+           color: white;    }        /* 버튼 글자 색   */
+
+└──────────────────────────────────────────────────────────────┘
+
+
+┌─ ② HTML 구역 ── 화면에 무엇을 놓을지 (<body> 안) ────────────┐
+
+  <div id="score">0</div>
+  <div id="msg"></div>
+
+  <button id="btn">눌러!</button>
+
+        ▲ ①번 작업 : 새 버튼은 바로 이 줄 아래에 추가
+
+  <br>
+  <button id="reset">다시하기</button>
+
+└──────────────────────────────────────────────────────────────┘
+
+
+┌─ ③ JS 구역 ── 움직임 (아래쪽 <script> 안) ───────────────────┐
+
+  let score = 0;
+
+  const btn       = document.getElementById("btn");
+  const scoreText = document.getElementById("score");
+  const msg       = document.getElementById("msg");
+  const resetBtn  = document.getElementById("reset");
+
+        ▲ ②번 작업 : 새 버튼을 잡아오는 줄은 이 아래에 추가
+
+  btn.onclick = function () { ... };
+
+  resetBtn.onclick = function () { ... };
+
+        ▲ ③번 작업 : 새 버튼이 할 일은 맨 아래에 추가
+
+└──────────────────────────────────────────────────────────────┘`],
+  ["click.html  ─ [3단계] 정답 (막혔을 때만 보세요!)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>클릭 연타 게임</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 40px; }
+  h1 { font-size: 34px; }
+  #score { font-size: 90px; font-weight: bold; color: #2563eb; margin: 10px; }
+  #msg { font-size: 28px; color: #16a34a; height: 40px; }
+  button { font-size: 26px; padding: 18px 46px; border: 0; border-radius: 16px;
+           background: #2563eb; color: white; cursor: pointer; }
+  button:active { transform: scale(0.94); }
+  #minus { background: #ef4444; }
+  #plus10 { background: #16a34a; }
+  #reset { background: #94a3b8; font-size: 16px; padding: 10px 24px; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+  <h1>🖱️ 클릭 연타 게임</h1>
+  <p>목표 : <b>20번</b> 누르기!</p>
+
+  <div id="score">0</div>
+  <div id="msg"></div>
+
+  <button id="btn">눌러!</button>
+  <button id="minus">-1</button>          <!-- ① 추가한 줄 -->
+  <button id="plus10">+10</button>        <!-- ① 추가한 줄 -->
+  <br>
+  <button id="reset">다시하기</button>
+
+<script>
+  let score = 0;
+
+  const btn       = document.getElementById("btn");
+  const scoreText = document.getElementById("score");
+  const msg       = document.getElementById("msg");
+  const resetBtn  = document.getElementById("reset");
+  const minusBtn  = document.getElementById("minus");    // ② 추가한 줄
+  const plus10Btn = document.getElementById("plus10");   // ② 추가한 줄
+
+  btn.onclick = function () {
+    score = score + 1;
+    scoreText.innerText = score;
+    if (score >= 20) {
+      msg.innerText = "🎉 클리어!";
+    }
+  };
+
+  resetBtn.onclick = function () {
+    score = 0;
+    scoreText.innerText = 0;
+    msg.innerText = "";
+  };
+
+  // ③ 추가한 줄 : -1 버튼이 할 일
+  minusBtn.onclick = function () {
+    score = score - 1;
+    scoreText.innerText = score;
+  };
+
+  // ③ 추가한 줄 : +10 버튼이 할 일
+  plus10Btn.onclick = function () {
+    score = score + 10;
+    scoreText.innerText = score;
+    if (score >= 20) {
+      msg.innerText = "🎉 클리어!";
+    }
   };
 <\/script>
 
@@ -477,18 +607,35 @@ const STAGES = [
 </html>`]
  ],
  tables:[
-  {cap:"🔧 [3단계] 직접 만들기 — 버튼 추가하는 3줄",
-   head:["순서","어디에","무엇을 쓰나"],
-   rows:[["①","HTML 의 버튼들 옆","<code>&lt;button id=\"minus\"&gt;-1&lt;/button&gt;</code>"],
-         ["②","JS 의 <code>const</code> 줄들 아래","<code>const minusBtn = document.getElementById(\"minus\");</code>"],
-         ["③","JS 맨 아래 (<code>&lt;/script&gt;</code> 위)","<code>minusBtn.onclick = function () { score = score - 1; scoreText.innerText = score; };</code>"]],
-   num:false},
-  {cap:"오늘 외울 건 이 4개뿐",
-   head:["코드","뜻"],
-   rows:[["<code>let score = 0;</code>","score 라는 상자를 만들고 0을 넣기"],
-         ["<code>document.getElementById(\"btn\")</code>","화면에서 id가 btn 인 것을 잡아오기"],
-         ["<code>어떤것.innerText = 값;</code>","그 자리 글자를 바꾸기"],
-         ["<code>버튼.onclick = function(){ }</code>","누르면 { } 안을 실행"]]},
+  {cap:"🎨 [2단계] 바꾸고 싶은 것 → 어디를 고치나",
+   head:["바꾸고 싶은 것","CSS 구역에서 찾을 줄","고칠 값"],
+   rows:[["바탕(배경) 색","<code>body { ... }</code>","<code>background: skyblue;</code>"],
+         ["버튼 색","<code>button { ... }</code>","<code>background: tomato;</code>"],
+         ["버튼 글자 색","<code>button { ... }</code>","<code>color: black;</code>"],
+         ["버튼 글자 크기","<code>button { ... }</code>","<code>font-size: 40px;</code>"],
+         ["버튼 두께(여백)","<code>button { ... }</code>","<code>padding: 30px 70px;</code>"],
+         ["버튼 모서리 둥글기","<code>button { ... }</code>","<code>border-radius: 40px;</code>"],
+         ["점수 숫자 크기","<code>#score { ... }</code>","<code>font-size: 150px;</code>"],
+         ["점수 숫자 색","<code>#score { ... }</code>","<code>color: hotpink;</code>"],
+         ["제목 크기","<code>h1 { ... }</code>","<code>font-size: 50px;</code>"],
+         ["클리어 글자 색","<code>#msg { ... }</code>","<code>color: orange;</code>"]]},
+  {cap:"🎨 색 이름 — 그냥 영어로 써도 됩니다",
+   head:["써 넣을 말","색","써 넣을 말","색"],
+   rows:[["<code>red</code>","빨강","<code>skyblue</code>","하늘"],
+         ["<code>orange</code>","주황","<code>navy</code>","남색"],
+         ["<code>gold</code>","금색","<code>purple</code>","보라"],
+         ["<code>yellowgreen</code>","연두","<code>hotpink</code>","분홍"],
+         ["<code>green</code>","초록","<code>black</code>","검정"],
+         ["<code>tomato</code>","토마토","<code>white</code>","하양"],
+         ["<code>#FFD700</code>","직접 지정도 가능","<code>#222831</code>","(# + 여섯 자리)"]]},
+  {cap:"🔧 [3단계] 버튼 추가 — 세 줄이 각각 어디로 가나",
+   head:["","어느 구역","써 넣을 줄"],
+   rows:[["①","<b>HTML</b> 구역<br><code>&lt;button id=\"btn\"&gt;</code> 바로 아래",
+          "<code>&lt;button id=\"minus\"&gt;-1&lt;/button&gt;</code>"],
+         ["②","<b>JS</b> 구역<br><code>const</code> 줄들 맨 아래",
+          "<code>const minusBtn = document.getElementById(\"minus\");</code>"],
+         ["③","<b>JS</b> 구역<br>맨 아래 (<code>&lt;/script&gt;</code> 바로 위)",
+          "<code>minusBtn.onclick = function () {<br>&nbsp;&nbsp;score = score - 1;<br>&nbsp;&nbsp;scoreText.innerText = score;<br>};</code>"]]},
   {cap:"[4단계] else if 순서가 중요한 이유",
    head:["이렇게 쓰면","결과"],
    rows:[["<code>30 → 20 → 10</code> 순 (큰 것부터)","✅ 정상 작동"],
@@ -497,15 +644,17 @@ const STAGES = [
  notes:[
   ["warn","★ 저장이 제일 큰 함정입니다","메모장에서 그냥 저장하면 <code>click.html.txt</code> 가 되어 <b>브라우저로 안 열립니다.</b><ul><li>저장 창에서 <b>파일 형식 → 모든 파일(*.*)</b> 로 바꾸기</li><li>이름을 <code>click.html</code> 로 (<b>.html 까지</b> 직접 입력)</li><li>인코딩이 <b>UTF-8</b> 인지 확인 (한글 안 깨지게)</li></ul>"],
   ["warn","코드를 고쳤는데 안 바뀌어요","<b>저장(<code>Ctrl+S</code>) → 브라우저 새로고침(<code>F5</code>)</b>. 이 두 개를 한 세트로 외우세요. 유니티의 '저장하고 Play 다시 누르기'와 같습니다."],
-  ["warn","추가한 버튼이 안 눌려요","<ul><li>HTML 의 <code>id</code> 와 JS 의 <code>getElementById</code> 안 글자가 <b>완전히 똑같은지</b> (대소문자까지!)</li><li>줄 끝에 <b>세미콜론 <code>;</code></b> 을 빠뜨리지 않았는지</li><li>중괄호 <code>{ }</code> 가 짝이 맞는지</li><li><code>F12</code> → <b>Console</b> 탭에 빨간 글씨가 있는지</li></ul>"],
-  ["tip","빨리 끝났다면 멈추지 마세요","3단계부터는 <b>정답이 없습니다.</b> 버튼을 몇 개든 추가해도 되고, 디자인을 완전히 뜯어고쳐도 됩니다. <b>망가뜨려 보는 게 가장 빠른 공부</b>예요 — 안 되면 다시 복사하면 그만입니다."]
+  ["warn","🎨 CSS 고칠 때 자주 하는 실수","<ul><li><b>세미콜론 <code>;</code></b> 을 빠뜨림 → 그 줄부터 전부 무시됩니다</li><li>중괄호 <code>{ }</code> 밖에 씀 → <code>button { 여기 안에 }</code> 써야 해요</li><li><code>px</code> 를 빼먹음 → <code>font-size: 40</code> ❌ / <code>font-size: 40px</code> ⭕</li><li>색 이름 철자 틀림 → <code>skyblue</code> 는 붙여 씁니다 (<code>sky blue</code> ❌)</li></ul>"],
+  ["warn","🔧 추가한 버튼이 안 눌려요","<ul><li>HTML의 <code>id=\"minus\"</code> 와 JS의 <code>getElementById(\"minus\")</code> 글자가 <b>완전히 똑같은지</b> (대소문자까지!)</li><li>②번 줄을 <b>HTML 구역</b>에 잘못 쓰지 않았는지 — <b>JS 구역(&lt;script&gt; 안)</b>이어야 합니다</li><li>줄 끝 <b>세미콜론</b>, 중괄호 <code>{ }</code> 짝</li><li><code>F12</code> → <b>Console</b> 탭의 빨간 글씨 확인</li></ul>"],
+  ["tip","빨리 끝났다면 멈추지 마세요","3단계부터는 <b>정답이 없습니다.</b> 버튼을 몇 개든 추가해도 되고 디자인을 완전히 뜯어고쳐도 됩니다. <b>망가뜨려 보는 게 가장 빠른 공부</b>예요 — 안 되면 다시 복사하면 그만입니다."]
  ],
  bonus:[
-  "클릭할 때마다 <b>배경색이 랜덤으로</b> 바뀌게 — <code>document.body.style.background = \"hsl(\" + score * 20 + \", 70%, 90%)\";</code>",
-  "점수가 10을 넘으면 <b>글자 색이 빨개지게</b> — <code>scoreText.style.color = \"red\";</code>",
+  "버튼을 <b>5개</b>로 늘리기 (+1 · -1 · +10 · -10 · ×2)",
+  "클릭할 때마다 <b>배경색이 바뀌게</b> — <code>document.body.style.background = \"hsl(\" + score * 20 + \", 70%, 90%)\";</code>",
+  "점수가 10을 넘으면 <b>숫자 색이 빨개지게</b> — <code>scoreText.style.color = \"red\";</code>",
   "키우기에 <b>'굶기기' 버튼</b>을 만들어 먹이를 줄여 보기 (단계가 거꾸로 돌아가나요?)",
   "두 작품을 <b>한 파일로 합쳐</b> 보기",
-  "친구 컴퓨터에서 내 파일을 열어 보기 — <b>USB 하나면 어디서든 됩니다</b>"
+  "친구 컴퓨터에서 내 파일 열어 보기 — <b>USB 하나면 어디서든 됩니다</b>"
  ]
 },
 {
@@ -1238,7 +1387,7 @@ const CODES = [];   // 복사 버튼용 원본 코드 보관
 
 function slabHTML(name, code){
   const id = CODES.push(code) - 1;
-  return '<div class="slab"><div class="slab-top"><span class="cs">C#</span><b>' + esc(name) +
+  return '<div class="slab"><div class="slab-top"><span class="cs">&lt;/&gt;</span><b>' + esc(name) +
          '</b><button class="copy" data-code="' + id + '">복사</button></div><pre><code>' +
          hl(code) + "</code></pre></div>";
 }
