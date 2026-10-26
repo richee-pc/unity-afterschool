@@ -10,7 +10,7 @@
   --ink:#15181C; --ink-2:#495159; --ink-3:#79838D;
   --line:#DBE1E7; --line-2:#C6CFD8;
   --x:#D9433F; --y:#4E9410; --z:#2360CE;
-  --y-soft:#EAF5DC; --x-soft:#FBE7E6; --z-soft:#E3ECFC;
+  --y-soft:#EAF5DC; --x-soft:#FBE7E6; --z-soft:#E3ECFC; --gold:#F2B705; --gold-soft:#FFF6DC;
   --shadow:0 1px 2px rgba(20,30,40,.06), 0 8px 24px -12px rgba(20,30,40,.18);
   --slab:#1D2226; --slab-2:#272D33; --slab-line:#343C43; --slab-ink:#DDE3E8;
   --slab-kw:#7FB3FF; --slab-ty:#9BDE4F; --slab-st:#FF8A84; --slab-cm:#6E7A85; --slab-fn:#E9C46A;
@@ -23,7 +23,7 @@
     --ink:#ECEFF2; --ink-2:#AFB7BF; --ink-3:#828B95;
     --line:#3C4248; --line-2:#4A5158;
     --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7;
-    --y-soft:#2C3A22; --x-soft:#3B2725; --z-soft:#22303F;
+    --y-soft:#2C3A22; --x-soft:#3B2725; --z-soft:#22303F; --gold:#F5C542; --gold-soft:#3A3113;
     --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
   }
 }
@@ -32,7 +32,7 @@
   --ink:#ECEFF2; --ink-2:#AFB7BF; --ink-3:#828B95;
   --line:#3C4248; --line-2:#4A5158;
   --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7;
-  --y-soft:#2C3A22; --x-soft:#3B2725; --z-soft:#22303F;
+  --y-soft:#2C3A22; --x-soft:#3B2725; --z-soft:#22303F; --gold:#F5C542; --gold-soft:#3A3113;
   --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
 }
 
@@ -234,10 +234,39 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
 @media (max-width:520px){ .card2{padding:4px 14px} .step{grid-template-columns:28px 1fr; gap:11px}
   .step .sn{width:28px;height:28px;font-size:.85rem} }
 
-/* 보너스 */
-.bonus{border:2px dashed var(--line-2); border-radius:12px; padding:15px 18px}
-.bonus > b{color:var(--y); display:block; margin-bottom:2px}
-.bonus ul{margin:7px 0 0; padding-left:19px} .bonus li{margin:4px 0; font-size:.93rem}
+/* 🔥 오늘의 도전 */
+.chal{border:2.5px solid var(--gold); border-radius:16px; overflow:hidden;
+  background:var(--gold-soft); box-shadow:0 10px 26px -16px var(--gold)}
+.chal-top{display:flex; align-items:center; gap:11px; flex-wrap:wrap;
+  padding:15px 19px; background:var(--gold); color:#2A1C00}
+.chal-top .fire{font-size:1.4rem; line-height:1}
+.chal-top b{font-size:1.08rem; letter-spacing:-.01em}
+.chal-top .rw{font-size:.85rem; font-weight:600; opacity:.85}
+.chal-top .cnt{margin-left:auto; background:#2A1C00; color:var(--gold);
+  font-family:"IBM Plex Mono",monospace; font-size:.8rem; font-weight:600;
+  padding:4px 12px; border-radius:99px; white-space:nowrap}
+.chal-body{padding:14px 16px 16px; display:flex; flex-direction:column; gap:8px}
+.cq{display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left; cursor:pointer;
+  background:var(--surface); border:1.5px solid var(--line); border-radius:12px;
+  padding:13px 15px; color:var(--ink); font-size:.95rem; line-height:1.64; transition:.14s}
+.cq:hover{border-color:var(--gold)}
+.cq .bx{width:21px; height:21px; border-radius:6px; border:2px solid var(--line-2);
+  flex:none; margin-top:3px; display:grid; place-items:center; font-size:.78rem;
+  color:transparent; font-weight:700; transition:.14s}
+.cq[aria-pressed="true"]{background:var(--gold-soft); border-color:var(--gold)}
+.cq[aria-pressed="true"] .bx{background:var(--gold); border-color:var(--gold);
+  color:#2A1C00; transform:scale(1.07)}
+.cq .ct b{font-weight:700}
+.cq .ct > b{font-size:1rem; letter-spacing:-.01em}
+.cq .ct em{font-style:normal; display:block; font-size:.87rem; color:var(--ink-2);
+  line-height:1.72; margin-top:5px}
+.cq .ct em b{color:var(--ink)}
+.cq .ct code{font-size:.85em}
+.reward{display:none; margin:4px 16px 16px; padding:16px; border-radius:13px;
+  background:var(--gold); color:#2A1C00; text-align:center; font-weight:700; font-size:1.02rem}
+.chal.clear .reward{display:block; animation:pop .4s ease}
+@keyframes pop{from{transform:scale(.94); opacity:0}to{transform:none; opacity:1}}
+.reward span{display:block; font-size:.86rem; font-weight:500; opacity:.8; margin-top:3px}
 
 /* 하단 이동 */
 .nav{display:flex; gap:10px; margin-top:30px}
@@ -773,6 +802,130 @@ const STAGES = [
 <\/script>
 
 </body>
+</html>`],
+  ["mole.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>두더지 잡기 — 도전 완성본</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 30px; }
+  h1 { font-size: 30px; margin: 0 0 6px; }
+  #info { font-size: 22px; margin-bottom: 16px; }
+  #score, #time, #best { font-weight: bold; color: #2563eb; }
+  .grid { display: grid; grid-template-columns: repeat(3, 110px);
+          gap: 12px; justify-content: center; }
+  .hole { width: 110px; height: 110px; background: #cbd5e1; border-radius: 20px;
+          font-size: 60px; line-height: 110px; cursor: pointer; user-select: none; }
+  .hole:active { background: #94a3b8; }
+  #msg { font-size: 26px; color: #16a34a; height: 40px; margin-top: 14px; }
+  button { font-size: 20px; padding: 14px 36px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+  <h1>🐹 두더지 잡기</h1>
+  <div id="info">
+    점수 <span id="score">0</span> ·
+    남은 시간 <span id="time">20</span>초 ·
+    최고 <span id="best">0</span>점
+  </div>
+
+  <div class="grid">
+    <div class="hole" id="h0"></div>
+    <div class="hole" id="h1"></div>
+    <div class="hole" id="h2"></div>
+    <div class="hole" id="h3"></div>
+    <div class="hole" id="h4"></div>
+    <div class="hole" id="h5"></div>
+    <div class="hole" id="h6"></div>
+    <div class="hole" id="h7"></div>
+    <div class="hole" id="h8"></div>
+  </div>
+
+  <div id="msg"></div>
+  <button id="start">시작!</button>
+
+<script>
+  let score = 0;
+  let time  = 20;
+  let now   = -1;        // 지금 두더지(또는 폭탄)가 있는 구멍 번호
+  let isBomb = false;    // [도전1] 지금 나온 게 폭탄인가?
+  let best  = 0;         // [도전3] 최고 점수
+  let moleTimer, clockTimer;
+
+  const scoreText = document.getElementById("score");
+  const timeText  = document.getElementById("time");
+  const bestText  = document.getElementById("best");
+  const msg       = document.getElementById("msg");
+
+  function showMole() {
+    if (now >= 0) {
+      document.getElementById("h" + now).innerText = "";
+    }
+    now = Math.floor(Math.random() * 9);
+
+    // [도전1] 4번에 1번꼴로 폭탄이 나온다
+    isBomb = Math.random() < 0.25;
+    document.getElementById("h" + now).innerText = isBomb ? "💣" : "🐹";
+  }
+
+  function countDown() {
+    time = time - 1;
+    timeText.innerText = time;
+
+    // [도전2] 5초 이하로 남으면 빨갛게
+    if (time <= 5) {
+      timeText.style.color = "red";
+    }
+
+    if (time <= 0) {
+      clearInterval(moleTimer);
+      clearInterval(clockTimer);
+      if (now >= 0) document.getElementById("h" + now).innerText = "";
+
+      // [도전3] 최고 점수 갱신
+      if (score > best) {
+        best = score;
+        bestText.innerText = best;
+      }
+
+      // [도전4] alert 대신 화면에 결과 보여주기
+      msg.innerText = "끝! " + score + "점 🎉";
+    }
+  }
+
+  for (let i = 0; i < 9; i = i + 1) {
+    document.getElementById("h" + i).onclick = function () {
+      if (i === now) {
+        if (isBomb) {
+          score = score - 2;        // [도전1] 폭탄은 -2점
+        } else {
+          score = score + 1;
+        }
+        scoreText.innerText = score;
+        document.getElementById("h" + i).innerText = "";
+        now = -1;
+      }
+    };
+  }
+
+  document.getElementById("start").onclick = function () {
+    clearInterval(moleTimer);
+    clearInterval(clockTimer);
+    score = 0; time = 20; now = -1;
+    scoreText.innerText = 0;
+    timeText.innerText = 20;
+    timeText.style.color = "#2563eb";   // [도전2] 색 되돌리기
+    msg.innerText = "";
+    for (let i = 0; i < 9; i = i + 1) document.getElementById("h" + i).innerText = "";
+    moleTimer  = setInterval(showMole, 800);
+    clockTimer = setInterval(countDown, 1000);
+  };
+<\/script>
+
+</body>
 </html>`]],
  tables:[{
    cap:"랜덤 숫자 만드는 법",
@@ -787,7 +940,33 @@ const STAGES = [
   ["warn","두더지를 눌러도 점수가 안 올라요","<code>i === now</code> 에서 <b>=</b> 를 하나나 둘만 쓰지 않았는지 확인하세요. 꼭 <b>세 개</b>여야 합니다."],
   ["tip","유니티에서 봤던 그것","<code>setInterval</code> 은 유니티의 <b>Update</b>, <code>Math.random()</code> 은 <b>Random.Range</b> 와 같은 역할입니다. <b>도구만 바뀌었지 생각하는 방법은 똑같아요.</b>"]
  ],
- bonus:["두더지가 <b>2마리</b> 동시에 나오게 만들기","시간이 5초 남으면 글자를 빨갛게","두더지 말고 <b>폭탄 💣</b> 을 섞어서, 폭탄을 누르면 점수가 깎이게","<code>alert</code> 대신 화면에 결과를 예쁘게 보여주기"]
+ challenge:{
+  reward:"쉬는시간 + 간식 🍪",
+  items:[
+   ["💣 <b>도전 1 · 폭탄을 섞어라</b>",
+    "가끔 두더지 대신 <b>폭탄 💣</b> 이 나오게 하고, 폭탄을 누르면 점수가 <b>2점 깎이게</b> 만드세요.<br>" +
+    "힌트 ① 맨 위에 <code>let isBomb = false;</code> 변수를 하나 더 만듭니다.<br>" +
+    "힌트 ② <code>showMole</code> 안에서 <code>isBomb = Math.random() &lt; 0.25;</code> 로 정하고, " +
+    "<code>innerText</code> 에 넣을 글자를 폭탄이면 <code>\"💣\"</code>, 아니면 <code>\"🐹\"</code> 로.<br>" +
+    "힌트 ③ 클릭하는 곳에서 <code>if (isBomb) score = score - 2; else score = score + 1;</code>"],
+
+   ["⏰ <b>도전 2 · 5초 남으면 빨갛게</b>",
+    "남은 시간이 <b>5초 이하</b>가 되면 숫자가 <b>빨간색</b>으로 변하게 만드세요. 긴장감이 확 살아납니다.<br>" +
+    "힌트 <code>countDown</code> 안에 <code>if (time &lt;= 5) { timeText.style.color = \"red\"; }</code><br>" +
+    "주의 — <b>시작 버튼을 다시 눌렀을 때 색도 되돌려</b> 놓아야 해요!"],
+
+   ["🏆 <b>도전 3 · 최고 점수 기록</b>",
+    "게임이 끝날 때마다 <b>지금까지의 최고 점수</b>를 화면에 남기세요.<br>" +
+    "힌트 ① HTML 구역에 <code>최고 &lt;span id=\"best\"&gt;0&lt;/span&gt;점</code> 추가<br>" +
+    "힌트 ② JS 맨 위에 <code>let best = 0;</code><br>" +
+    "힌트 ③ 시간이 0이 됐을 때 <code>if (score &gt; best) { best = score; bestText.innerText = best; }</code>"],
+
+   ["🎨 <b>도전 4 · 알림창 없애기</b>",
+    "결과를 <code>alert</code> 창 대신 <b>화면 안에 예쁘게</b> 보여주세요. 진짜 게임처럼 보입니다.<br>" +
+    "힌트 ① HTML 구역에 <code>&lt;div id=\"msg\"&gt;&lt;/div&gt;</code> 를 추가하고 CSS로 크고 예쁘게<br>" +
+    "힌트 ② <code>alert(...)</code> 줄을 지우고 <code>msg.innerText = \"끝! \" + score + \"점 🎉\";</code> 로 교체"]
+  ]
+ }
 },
 {
  n:3, date:"9차시 · 11/02", lv:2, lvName:"조작",
@@ -1516,9 +1695,28 @@ function stageHTML(s){
   if (s.notes && s.notes.length)
     h += sec("🆘 막히면 여기", "", s.notes.map(noteHTML).join(""));
 
-  if (s.bonus && s.bonus.length)
-    h += sec("🏆 보너스 미션", "다 끝냈다면 도전!",
-          '<div class="bonus"><b>여유가 있다면</b><ul>' + s.bonus.map(b => "<li>" + b + "</li>").join("") + "</ul></div>");
+  const ch = s.challenge ||
+    (s.bonus && s.bonus.length ? { items: s.bonus.map(b => [b, ""]) } : null);
+
+  if (ch) {
+    const reward = ch.reward || "쉬는시간 + 간식 🍪";
+    const done = ch.items.filter((_, i) => isDone(s.n, "c" + i)).length;
+    h += sec("", "",
+      '<div class="chal' + (done === ch.items.length ? " clear" : "") + '" data-ch="' + s.n + '">' +
+        '<div class="chal-top"><span class="fire">🔥</span>' +
+          "<b>오늘의 도전</b>" +
+          '<span class="rw">· 다 하면 ' + reward + "</span>" +
+          '<span class="cnt"><span class="cd">' + done + "</span> / " + ch.items.length + " 완료</span>" +
+        "</div>" +
+        '<div class="chal-body">' + ch.items.map((c, i) =>
+          '<button class="cq" data-n="' + s.n + '" data-c="' + i + '" aria-pressed="' +
+          isDone(s.n, "c" + i) + '"><span class="bx">✓</span><span class="ct"><b>' +
+          c[0] + "</b>" + (c[1] ? "<em>" + c[1] + "</em>" : "") + "</span></button>").join("") +
+        "</div>" +
+        '<div class="reward">🎉 도전 완료! ' + reward +
+          "<span>선생님께 보여드리고 받아 가세요</span></div>" +
+      "</div>");
+  }
 
   h += '<div class="nav">' +
     (prev ? '<button data-go="' + prev.n + '"><span>← 이전 차시</span>' + prev.title + "</button>"
@@ -1596,6 +1794,21 @@ document.addEventListener("click", e => {
         el.className = "pill lv1"; el.textContent = "✓ 클리어"; badge.appendChild(el);
       } else if (!stageDone(n) && has) old.remove();
     }
+    return;
+  }
+
+  const cq = e.target.closest(".cq");
+  if (cq){
+    const n = Number(cq.dataset.n), key = "c" + cq.dataset.c;
+    prog[n] = prog[n] || {};
+    prog[n][key] = !prog[n][key];
+    saveProg();
+    cq.setAttribute("aria-pressed", String(!!prog[n][key]));
+    const box = cq.closest(".chal");
+    const all = box.querySelectorAll(".cq");
+    const got = box.querySelectorAll('.cq[aria-pressed="true"]').length;
+    box.querySelector(".cd").textContent = got;
+    box.classList.toggle("clear", got === all.length);
     return;
   }
 

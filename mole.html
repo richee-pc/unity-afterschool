@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>두더지 잡기</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 30px; }
+  h1 { font-size: 30px; margin: 0 0 6px; }
+  #info { font-size: 22px; margin-bottom: 16px; }
+  #score, #time { font-weight: bold; color: #2563eb; }
+  .grid { display: grid; grid-template-columns: repeat(3, 110px);
+          gap: 12px; justify-content: center; }
+  .hole { width: 110px; height: 110px; background: #cbd5e1; border-radius: 20px;
+          font-size: 60px; line-height: 110px; cursor: pointer; user-select: none; }
+  .hole:active { background: #94a3b8; }
+  button { font-size: 20px; padding: 14px 36px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+  <h1>🐹 두더지 잡기</h1>
+  <div id="info">점수 <span id="score">0</span> · 남은 시간 <span id="time">20</span>초</div>
+
+  <div class="grid">
+    <div class="hole" id="h0"></div>
+    <div class="hole" id="h1"></div>
+    <div class="hole" id="h2"></div>
+    <div class="hole" id="h3"></div>
+    <div class="hole" id="h4"></div>
+    <div class="hole" id="h5"></div>
+    <div class="hole" id="h6"></div>
+    <div class="hole" id="h7"></div>
+    <div class="hole" id="h8"></div>
+  </div>
+
+  <button id="start">시작!</button>
+
+<script>
+  let score = 0;
+  let time  = 20;
+  let now   = -1;      // 지금 두더지가 있는 구멍 번호
+  let moleTimer, clockTimer;
+
+  const scoreText = document.getElementById("score");
+  const timeText  = document.getElementById("time");
+
+  // 두더지를 아무 구멍에나 띄우기
+  function showMole() {
+    if (now >= 0) {
+      document.getElementById("h" + now).innerText = "";
+    }
+    now = Math.floor(Math.random() * 9);   // 0~8 중 하나
+    document.getElementById("h" + now).innerText = "🐹";
+  }
+
+  // 1초마다 시간 줄이기
+  function countDown() {
+    time = time - 1;
+    timeText.innerText = time;
+    if (time <= 0) {
+      clearInterval(moleTimer);
+      clearInterval(clockTimer);
+      if (now >= 0) document.getElementById("h" + now).innerText = "";
+      alert("끝! 점수는 " + score + "점");
+    }
+  }
+
+  // 구멍 9개에 전부 클릭 기능 달기
+  for (let i = 0; i < 9; i = i + 1) {
+    document.getElementById("h" + i).onclick = function () {
+      if (i === now) {             // 두더지가 있는 구멍을 눌렀으면
+        score = score + 1;
+        scoreText.innerText = score;
+        document.getElementById("h" + i).innerText = "";
+        now = -1;
+      }
+    };
+  }
+
+  // 시작 버튼
+  document.getElementById("start").onclick = function () {
+    score = 0; time = 20;
+    scoreText.innerText = 0;
+    timeText.innerText = 20;
+    clearInterval(moleTimer);
+    clearInterval(clockTimer);
+    moleTimer  = setInterval(showMole, 800);   // 0.8초마다 두더지 이동
+    clockTimer = setInterval(countDown, 1000); // 1초마다 시간 감소
+  };
+</script>
+
+</body>
+</html>
