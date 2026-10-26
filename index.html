@@ -1091,6 +1091,123 @@ const STAGES = [
 <\/script>
 
 </body>
+</html>`],
+  ["move.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>캐릭터 조작 — 도전 완성본</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score, #time { font-weight: bold; color: #2563eb; }
+  #stage { position: relative; width: 500px; height: 400px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; width: 40px; height: 40px; background: #2563eb;
+            border-radius: 10px; }
+  #item { position: absolute; width: 36px; height: 36px; font-size: 32px;
+          line-height: 36px; }
+  #msg { font-size: 26px; color: #16a34a; height: 40px; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+  <h1>🟦 캐릭터 조작</h1>
+  <div id="info">
+    방향키 또는 WASD · 점수 <span id="score">0</span> ·
+    남은 시간 <span id="time">30</span>초
+  </div>
+
+  <div id="stage">
+    <div id="player"></div>
+    <div id="item">⭐</div>
+  </div>
+
+  <div id="msg"></div>
+
+<script>
+  let x = 230;
+  let y = 180;
+  let score = 0;
+  let time = 30;          // [도전4] 제한시간
+  let playing = true;     // [도전4] 게임이 돌아가는 중인가
+  let clockTimer;         // [도전4] 1초 타이머
+
+  const player    = document.getElementById("player");
+  const item      = document.getElementById("item");
+  const scoreText = document.getElementById("score");
+  const timeText  = document.getElementById("time");
+  const msg       = document.getElementById("msg");
+
+  function draw() {
+    player.style.left = x + "px";
+    player.style.top  = y + "px";
+  }
+
+  function moveItem() {
+    item.style.left = Math.floor(Math.random() * 460) + "px";
+    item.style.top  = Math.floor(Math.random() * 360) + "px";
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (playing === false) return;          // [도전4] 끝났으면 못 움직임
+
+    // [도전1] 방향키 + WASD 둘 다 받기
+    if (e.key === "ArrowRight" || e.key === "d") x = x + 20;
+    if (e.key === "ArrowLeft"  || e.key === "a") x = x - 20;
+    if (e.key === "ArrowDown"  || e.key === "s") y = y + 20;
+    if (e.key === "ArrowUp"    || e.key === "w") y = y - 20;
+
+    if (x < 0)   x = 0;
+    if (x > 460) x = 460;
+    if (y < 0)   y = 0;
+    if (y > 360) y = 360;
+
+    draw();
+    checkItem();
+  });
+
+  function checkItem() {
+    const ix = parseInt(item.style.left);
+    const iy = parseInt(item.style.top);
+
+    if (Math.abs(x - ix) < 40 && Math.abs(y - iy) < 40) {
+      score = score + 1;
+      scoreText.innerText = score;
+      moveItem();
+
+      // [도전2] 먹을 때마다 배경색이 바뀐다
+      document.body.style.background = "hsl(" + (score * 40) + ", 70%, 90%)";
+
+      // [도전3] 10점이면 클리어!
+      if (score >= 10) {
+        msg.innerText = "🎉 클리어! " + (30 - time) + "초 걸렸어요";
+      }
+    }
+  }
+
+  // [도전4] 1초마다 시간 줄이기 (2차시에서 배운 setInterval!)
+  clockTimer = setInterval(function () {
+    time = time - 1;
+    timeText.innerText = time;
+
+    if (time <= 5) {
+      timeText.style.color = "red";
+    }
+    if (time <= 0) {
+      clearInterval(clockTimer);
+      playing = false;
+      msg.innerText = "시간 끝! " + score + "점";
+    }
+  }, 1000);
+
+  draw();
+  moveItem();
+<\/script>
+
+</body>
 </html>`]],
  tables:[{
    cap:"키 이름 (e.key 에 들어오는 값)",
@@ -1104,7 +1221,34 @@ const STAGES = [
   ["warn","캐릭터가 안 보여요","CSS에서 <code>#stage</code> 에 <code>position: relative</code>, <code>#player</code> 에 <code>position: absolute</code> 가 있어야 합니다. <b>이 두 줄이 짝</b>이에요. 하나라도 빠지면 엉뚱한 곳으로 갑니다."],
   ["tip","유니티에서 봤던 그것","<code>keydown</code> 은 <b>Input.GetKeyDown</b>, <code>style.left</code> 는 <b>transform.position</b>, 거리 비교는 <b>Collider</b> 와 같은 일을 합니다."]
  ],
- bonus:["<b>WASD 키</b>로도 움직이게 추가하기","별을 2개로 늘리기","점수가 10점이 되면 \"클리어!\" 메시지 띄우기","별을 먹을 때마다 배경색이 바뀌게"]
+ challenge:{
+  reward:"쉬는시간 + 간식 🍪",
+  items:[
+   ["⌨️ <b>도전 1 · WASD 로도 움직이기</b>",
+    "방향키 말고 <b>W A S D</b> 로도 조종할 수 있게 하세요. 게임은 보통 둘 다 됩니다.<br>" +
+    "힌트 — 기존 줄에 <code>||</code> (또는) 를 붙이면 끝.<br>" +
+    "<code>if (e.key === \"ArrowRight\" || e.key === \"d\") x = x + 20;</code>"],
+
+   ["🌈 <b>도전 2 · 먹을 때마다 배경색 바뀌기</b>",
+    "⭐ 를 먹을 때마다 <b>배경색이 조금씩 달라지게</b> 만드세요.<br>" +
+    "힌트 — <code>checkItem</code> 안, 점수를 올린 바로 뒤에 한 줄.<br>" +
+    "<code>document.body.style.background = \"hsl(\" + (score * 40) + \", 70%, 90%)\";</code>"],
+
+   ["🎉 <b>도전 3 · 10점이면 클리어!</b>",
+    "점수가 <b>10점</b>이 되면 화면에 클리어 메시지를 띄우세요.<br>" +
+    "힌트 ① HTML 구역에 <code>&lt;div id=\"msg\"&gt;&lt;/div&gt;</code> 추가하고 CSS로 크게<br>" +
+    "힌트 ② JS 위쪽에 <code>const msg = document.getElementById(\"msg\");</code><br>" +
+    "힌트 ③ 점수 올린 뒤 <code>if (score &gt;= 10) { msg.innerText = \"🎉 클리어!\"; }</code>"],
+
+   ["⏱️ <b>도전 4 · 제한시간 30초</b>",
+    "<b>지난 시간에 배운 <code>setInterval</code></b> 을 가져와서 30초 제한시간을 붙이세요. " +
+    "시간이 끝나면 더 못 움직이게!<br>" +
+    "힌트 ① <code>let time = 30;</code> 과 <code>let playing = true;</code> 를 맨 위에<br>" +
+    "힌트 ② <code>setInterval(function () { time = time - 1; ... }, 1000);</code><br>" +
+    "힌트 ③ 0이 되면 <code>playing = false;</code>, 키 입력 맨 앞에 " +
+    "<code>if (playing === false) return;</code>"]
+  ]
+ }
 },
 {
  n:4, date:"10차시 · 11/09", lv:3, lvName:"완성작",
@@ -1252,6 +1396,171 @@ const STAGES = [
 <\/script>
 
 </body>
+</html>`],
+  ["dodge.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>피하기 게임 — 도전 완성본</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score, #best { font-weight: bold; color: #2563eb; }
+  #life { font-weight: bold; color: #dc2626; }
+  #stage { position: relative; width: 500px; height: 420px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; bottom: 10px; width: 44px; height: 44px;
+            background: #2563eb; border-radius: 12px; }
+  .rock { position: absolute; width: 40px; height: 40px; font-size: 34px;
+          line-height: 40px; }
+  #over { position: absolute; inset: 0; display: none; place-items: center;
+          background: rgba(255,255,255,.92); font-size: 30px; font-weight: bold;
+          color: #dc2626; flex-direction: column; }
+  button { font-size: 20px; padding: 13px 34px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+  <h1>💥 피하기 게임</h1>
+  <div id="info">
+    ← → 로 피하세요 · 점수 <span id="score">0</span> ·
+    목숨 <span id="life">❤️❤️❤️</span> ·
+    최고 <span id="best">0</span>점
+  </div>
+
+  <div id="stage">
+    <div id="player"></div>
+    <div id="over">
+      <div id="overText">게임 오버!</div>
+      <button id="again">다시하기</button>
+    </div>
+  </div>
+
+<script>
+  let x = 228;
+  let score = 0;
+  let playing = true;
+  let rocks = [];
+  let life = 3;          // [도전1] 목숨 3개
+  let speed = 5;         // [도전2] 점점 빨라지는 속도
+  let best = 0;          // [도전4] 최고 기록
+  let gameTimer, makeTimer, speedTimer;
+
+  const stage     = document.getElementById("stage");
+  const player    = document.getElementById("player");
+  const scoreText = document.getElementById("score");
+  const lifeText  = document.getElementById("life");
+  const bestText  = document.getElementById("best");
+  const over      = document.getElementById("over");
+
+  player.style.left = x + "px";
+
+  document.addEventListener("keydown", function (e) {
+    if (!playing) return;
+    if (e.key === "ArrowLeft")  x = x - 25;
+    if (e.key === "ArrowRight") x = x + 25;
+    if (x < 0)   x = 0;
+    if (x > 456) x = 456;
+    player.style.left = x + "px";
+  });
+
+  function makeRock() {
+    const rock = document.createElement("div");
+    rock.className = "rock";
+
+    // [도전3] 5번에 1번은 좋은 아이템 ⭐
+    const isStar = Math.random() < 0.2;
+    rock.innerText = isStar ? "⭐" : "🪨";
+    rock.dataset.star = isStar ? "1" : "0";
+
+    rock.style.left = Math.floor(Math.random() * 460) + "px";
+    rock.style.top  = "-40px";
+    stage.appendChild(rock);
+    rocks.push(rock);
+  }
+
+  function update() {
+    for (let i = 0; i < rocks.length; i = i + 1) {
+      const rock = rocks[i];
+      const top = parseInt(rock.style.top) + speed;   // [도전2] speed 사용
+      rock.style.top = top + "px";
+
+      const rx = parseInt(rock.style.left);
+      if (top > 366 && top < 420 && Math.abs(x - rx) < 42) {
+
+        if (rock.dataset.star === "1") {
+          // [도전3] 별은 먹으면 +5점
+          score = score + 5;
+          scoreText.innerText = score;
+        } else {
+          // [도전1] 돌에 맞으면 목숨 하나 감소
+          life = life - 1;
+          lifeText.innerText = "❤️".repeat(life);
+          if (life <= 0) { gameOver(); return; }
+        }
+        rock.remove();
+        rocks.splice(i, 1);
+        i = i - 1;
+        continue;
+      }
+
+      if (top > 420) {
+        rock.remove();
+        rocks.splice(i, 1);
+        i = i - 1;
+        if (rock.dataset.star === "0") {
+          score = score + 1;
+          scoreText.innerText = score;
+        }
+      }
+    }
+  }
+
+  function gameOver() {
+    playing = false;
+    clearInterval(gameTimer);
+    clearInterval(makeTimer);
+    clearInterval(speedTimer);
+
+    // [도전4] 최고 기록 갱신
+    if (score > best) {
+      best = score;
+      bestText.innerText = best;
+    }
+    document.getElementById("overText").innerText = "게임 오버! " + score + "점";
+    over.style.display = "flex";
+  }
+
+  function start() {
+    clearInterval(gameTimer);
+    clearInterval(makeTimer);
+    clearInterval(speedTimer);
+    for (let i = 0; i < rocks.length; i = i + 1) rocks[i].remove();
+    rocks = [];
+    x = 228; score = 0; playing = true;
+    life = 3; speed = 5;
+    lifeText.innerText = "❤️❤️❤️";
+    player.style.left = x + "px";
+    scoreText.innerText = 0;
+    over.style.display = "none";
+
+    gameTimer = setInterval(update, 30);
+    makeTimer = setInterval(makeRock, 700);
+
+    // [도전2] 5초마다 조금씩 빨라진다
+    speedTimer = setInterval(function () {
+      speed = speed + 1;
+    }, 5000);
+  }
+
+  document.getElementById("again").onclick = start;
+  start();
+<\/script>
+
+</body>
 </html>`]],
  tables:[{
    cap:"숫자를 바꿔 난이도 조절하기",
@@ -1266,7 +1575,34 @@ const STAGES = [
   ["warn","돌이 안 떨어져요","<code>#stage</code> 에 <code>position: relative</code>, <code>.rock</code> 에 <code>position: absolute</code> 가 있는지 확인하세요."],
   ["tip","오늘이 1차 완성작입니다","지난 3주 동안 배운 <b>변수 · 조건 · 반복 · 랜덤 · 타이머 · 키입력 · 충돌</b> 이 전부 이 파일 하나에 들어 있습니다. 다음 주부터는 <b>이 재료로 우리 팀 앱</b>을 만듭니다."]
  ],
- bonus:["<b>목숨 3개</b>를 만들어 세 번 맞아야 끝나게","시간이 지날수록 돌이 빨라지게","좌우뿐 아니라 <b>위아래</b>로도 움직이게","좋은 아이템(⭐)을 섞어서 먹으면 점수 +5"]
+ challenge:{
+  reward:"쉬는시간 + 간식 🍪",
+  items:[
+   ["❤️ <b>도전 1 · 목숨 3개</b>",
+    "한 번 맞으면 바로 끝나지 말고 <b>세 번</b> 맞아야 게임오버가 되게 하세요.<br>" +
+    "힌트 ① 맨 위에 <code>let life = 3;</code> 와 화면에 보여줄 <code>&lt;span id=\"life\"&gt;❤️❤️❤️&lt;/span&gt;</code><br>" +
+    "힌트 ② 부딪혔을 때 <code>life = life - 1;</code> 하고 맞은 돌은 <code>remove()</code> 로 치우기<br>" +
+    "힌트 ③ <code>if (life &lt;= 0) { gameOver(); return; }</code><br>" +
+    "꿀팁 — <code>\"❤️\".repeat(life)</code> 하면 하트가 개수만큼 나옵니다"],
+
+   ["🔥 <b>도전 2 · 점점 빨라지게</b>",
+    "시간이 지날수록 돌이 <b>빨리 떨어지게</b> 만드세요. 오래 버틸수록 손에 땀이 납니다.<br>" +
+    "힌트 ① <code>let speed = 5;</code> 를 만들고, 떨어지는 줄의 <code>+ 5</code> 를 <code>+ speed</code> 로<br>" +
+    "힌트 ② <code>setInterval(function () { speed = speed + 1; }, 5000);</code><br>" +
+    "주의 — <b>다시하기 할 때 <code>speed = 5</code> 로 되돌려야</b> 합니다!"],
+
+   ["⭐ <b>도전 3 · 좋은 아이템 섞기</b>",
+    "가끔 ⭐ 가 떨어지고, <b>맞으면 오히려 +5점</b>이 되게 하세요. (지난 시간 폭탄의 반대!)<br>" +
+    "힌트 ① <code>makeRock</code> 안에서 <code>const isStar = Math.random() &lt; 0.2;</code><br>" +
+    "힌트 ② 글자를 <code>isStar ? \"⭐\" : \"🪨\"</code> 로, 그리고 <code>rock.dataset.star = isStar ? \"1\" : \"0\";</code><br>" +
+    "힌트 ③ 부딪혔을 때 <code>if (rock.dataset.star === \"1\") score = score + 5;</code> 아니면 목숨 감소"],
+
+   ["🏆 <b>도전 4 · 최고 기록</b>",
+    "게임이 끝날 때마다 <b>지금까지의 최고 점수</b>를 남기세요. 2차시에서 했던 것과 똑같습니다.<br>" +
+    "힌트 — <code>let best = 0;</code> 만들고 <code>gameOver</code> 안에서 " +
+    "<code>if (score &gt; best) { best = score; bestText.innerText = best; }</code>"]
+  ]
+ }
 },
 {
  n:5, date:"11차시 · 11/16", lv:1, lvName:"팀 기획",
@@ -1364,7 +1700,27 @@ const STAGES = [
   ["tip","오늘은 코드를 안 씁니다","기획이 탄탄하면 제작이 빨라집니다. <b>종이와 펜</b>만 있으면 돼요. 컴퓨터는 마지막 10분에 뼈대 코드 받을 때만 씁니다."],
   ["warn","주제 고를 때 피해야 할 것","<ul><li><b>인터넷에서 정보를 가져와야 하는 것</b> (실시간 날씨, 진짜 급식표) — 우리 수준에서 어렵고 학교 와이파이에서 느립니다</li><li><b>로그인·회원가입이 필요한 것</b></li><li><b>저장이 꼭 필요한 것</b> (새로고침하면 사라집니다)</li></ul>버튼을 누르면 <b>그 자리에서 결과가 나오는</b> 주제가 가장 좋습니다."]
  ],
- bonus:["우리 앱 <b>이름</b>과 <b>아이콘 이모지</b> 정하기","비슷한 앱이 이미 있는지 찾아보고 우리는 뭐가 다를지 적어보기","화면 그림을 <b>2가지 버전</b>으로 그려보고 팀에서 투표"]
+ challenge:{
+  reward:"쉬는시간 + 간식 🍪",
+  items:[
+   ["📝 <b>도전 1 · 기획서 1장 완성</b>",
+    "종이 한 장에 네 가지가 다 들어가야 합니다 — <b>① 어떤 불편함을 푸는지 ② 화면 그림 ③ 쓸 기능 ④ 역할 분담</b>. " +
+    "넷 중 하나라도 비어 있으면 아직 끝난 게 아니에요."],
+
+   ["🏷️ <b>도전 2 · 앱 이름과 아이콘 정하기</b>",
+    "팀 전원이 동의하는 <b>앱 이름</b>과 <b>대표 이모지 1개</b>를 정하세요. " +
+    "이름은 짧고 바로 이해되는 게 좋습니다. (예 — 🍚 오늘 뭐 먹지)"],
+
+   ["🎤 <b>도전 3 · 한 줄 소개 쓰기</b>",
+    "빈칸을 채워 한 문장으로 만드세요.<br>" +
+    "<b>\"우리 앱은 ○○할 때 ○○해주는 앱이다.\"</b><br>" +
+    "이 한 줄이 안 써지면 주제가 아직 흐릿하다는 뜻이에요. 다시 좁혀 보세요."],
+
+   ["💾 <b>도전 4 · 뼈대 코드를 우리 것으로</b>",
+    "위 <code>team.html</code> 을 받아 저장하고, <b>목록(<code>list</code>)만</b> 우리 주제 내용으로 바꿔서 " +
+    "버튼이 우리 내용을 뽑는지 확인하세요. <b>여기까지 되면 이미 절반은 완성</b>입니다."]
+  ]
+ }
 },
 {
  n:6, date:"12차시 · 11/23", lv:2, lvName:"제작",
@@ -1393,7 +1749,26 @@ const STAGES = [
   ["warn","가장 흔한 사고 — 저장 안 하고 닫기","학교 컴퓨터는 껐다 켜면 초기화되는 경우가 있습니다. <b>끝나기 5분 전에 반드시</b> 팀원 각자의 저장소에 백업하세요."],
   ["tip","한 명만 코딩하지 않게","코딩 담당이 혼자 치고 나머지가 구경만 하면 안 됩니다. <b>10분마다 자리를 바꿔</b> 번갈아 치게 하세요. 성취기준의 '협력적 설계·구현'이 바로 이 부분입니다."]
  ],
- bonus:["우리 앱에 <b>소리</b> 넣어보기","결과가 나올 때 <b>애니메이션</b> 넣기 (CSS <code>transition</code>)","휴대폰에서도 보기 좋게 만들기"]
+ challenge:{
+  reward:"쉬는시간 + 간식 🍪",
+  items:[
+   ["✅ <b>도전 1 · 핵심 버튼 1개 완성</b>",
+    "우리 앱에서 <b>가장 중요한 버튼 하나</b>가 끝까지 제대로 작동해야 합니다. " +
+    "기능 다섯 개가 반쯤 되는 것보다 <b>하나가 완벽한 게</b> 훨씬 좋아요."],
+
+   ["🎨 <b>도전 2 · 우리 팀 색으로 꾸미기</b>",
+    "기본 파란색을 벗어나 <b>우리 팀 색</b>으로 바꾸세요. 배경 · 버튼 · 글자 크기 최소 3군데.<br>" +
+    "힌트 — 1차시의 🎨 CSS 표를 그대로 쓰면 됩니다. <code>skyblue</code> · <code>tomato</code> 같은 색 이름도 OK"],
+
+   ["🔁 <b>도전 3 · 번갈아 코딩하기</b>",
+    "<b>10분마다 자리를 바꿔</b> 팀원 전원이 한 번씩은 직접 키보드를 잡으세요. " +
+    "한 명만 치고 나머지가 구경하면 그건 팀 프로젝트가 아닙니다."],
+
+   ["💾 <b>도전 4 · 전원 백업</b>",
+    "끝나기 전에 <b>팀원 각자</b>가 파일을 하나씩 가지고 가세요 (USB · 메일 · 드라이브 아무거나). " +
+    "학교 컴퓨터는 껐다 켜면 사라질 수 있습니다. <b>이거 안 하면 다음 주에 처음부터예요.</b>"]
+  ]
+ }
 },
 {
  n:7, date:"보충 · 날짜 미정", lv:2, lvName:"제작",
@@ -1427,7 +1802,25 @@ const STAGES = [
  notes:[
   ["tip","이 차시가 없다면","보충 수업이 없으면 <b>6차시(제작①)와 이 차시를 합쳐</b> 진행하고, 교차 테스트는 마지막 발표회 직전 10분에 하시면 됩니다."]
  ],
- bonus:["다른 팀 앱에서 <b>좋았던 점 1가지</b>를 우리 앱에 반영해보기","우리 앱을 <b>진짜로 반 친구들에게</b> 써보게 하고 반응 적어오기"]
+ challenge:{
+  reward:"쉬는시간 + 간식 🍪",
+  items:[
+   ["🐛 <b>도전 1 · 지난 시간 메모 해결</b>",
+    "지난 시간에 적어둔 '안 되는 것'부터 손보세요. <b>새 기능을 더하기 전에</b> 이것부터입니다."],
+
+   ["🔄 <b>도전 2 · 옆 팀과 교차 테스트</b>",
+    "옆 팀과 자리를 바꿔 <b>서로의 앱을 5분씩</b> 써 보세요. " +
+    "만든 사람은 될 것 같은 길로만 눌러봅니다. <b>남이 눌러야 진짜 문제가 나와요.</b>"],
+
+   ["🔧 <b>도전 3 · 피드백 2개 반영</b>",
+    "받은 의견을 <b>언제 / 무엇이 / 어떻게</b> 형식으로 적고, 그중 <b>고칠 수 있는 2개</b>만 고르세요.<br>" +
+    "예 — \"버튼을 빠르게 두 번 누르면 숫자가 두 번 올라간다\" (O) / \"그냥 좀 이상해요\" (X)"],
+
+   ["🎤 <b>도전 4 · 30초 발표 대본</b>",
+    "위 표를 보고 <b>①팀·앱이름 ②어떤 불편함 ③시연 ④어려웠던 점</b> 네 줄을 적으세요. " +
+    "누가 말할지까지 정하면 끝. <b>다음 시간은 발표만 합니다.</b>"]
+  ]
+ }
 },
 {
  n:8, date:"13차시 · 11/30", lv:3, lvName:"발표",
@@ -1451,7 +1844,23 @@ const STAGES = [
   ["tip","발표가 부담스러운 학생에게","말하기 힘들어하는 학생은 <b>시연만</b> 맡겨도 됩니다. 버튼을 누르며 보여주는 것도 충분한 참여예요."],
   ["tip","수고하셨습니다","유니티로 시작해서 웹으로 바뀌었지만 <b>배운 생각의 방법은 그대로</b>였습니다. 입력 → 처리 → 출력, 변수, 조건, 반복, 충돌 — 어떤 도구를 쓰든 똑같이 쓰입니다."]
  ],
- bonus:["방학 때 게임 하나 더 만들어보기","만든 앱을 실제로 반에서 써보기","다음에 배울 것 찾아보기"]
+ challenge:{
+  reward:"수료 🎓 + 간식 🍪",
+  items:[
+   ["🎤 <b>도전 1 · 발표 완료</b>",
+    "팀별 30초~1분. <b>문제 소개 → 시연 → 배운 점</b> 순서로. 말하기 어려우면 시연만 맡아도 됩니다."],
+
+   ["🎮 <b>도전 2 · 다른 팀 앱 3개 이상 해보기</b>",
+    "돌아다니며 친구들 작품을 직접 써 보세요. <b>좋았던 점 한 가지씩</b> 말해 주면 더 좋습니다."],
+
+   ["🗳️ <b>도전 3 · 투표 참여</b>",
+    "<b>가장 쓸모있는 · 가장 재미있는 · 가장 예쁜</b> 세 부문에 한 표씩. 우리 팀은 못 찍습니다!"],
+
+   ["💾 <b>도전 4 · 최종 백업 + 소감 한 줄</b>",
+    "만든 파일을 집에서도 열 수 있게 챙기고, 한 학기 소감을 한 줄 남기세요. " +
+    "<b>학기 초에 쓴 한 줄 기획서</b>와 비교해 보면 재미있을 거예요."]
+  ]
+ }
 }
 ];
 
