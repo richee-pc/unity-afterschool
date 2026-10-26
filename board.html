@@ -234,6 +234,22 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
 @media (max-width:520px){ .card2{padding:4px 14px} .step{grid-template-columns:28px 1fr; gap:11px}
   .step .sn{width:28px;height:28px;font-size:.85rem} }
 
+/* 🔒 접혀 있는 정답 블록 */
+.ans{border:2px dashed var(--line-2); border-radius:13px; background:var(--surface-2); overflow:hidden}
+.ans:hover{border-color:var(--gold)}
+.ans summary{cursor:pointer; padding:14px 17px; display:flex; align-items:center; gap:10px;
+  flex-wrap:wrap; list-style:none; color:var(--ink-2); font-size:.94rem}
+.ans summary::-webkit-details-marker{display:none}
+.ans summary::before{content:"🔒"; font-size:1.05rem; line-height:1}
+.ans[open] summary::before{content:"🔑"}
+.ans summary b{color:var(--ink); font-weight:600}
+.ans summary em{font-style:normal; font-size:.81rem; color:var(--ink-3)}
+.ans summary::after{content:"열기 ▾"; margin-left:auto; font-size:.78rem; color:var(--ink-3);
+  font-family:"IBM Plex Mono",monospace; white-space:nowrap}
+.ans[open] summary::after{content:"닫기 ▴"}
+.ans[open] summary{border-bottom:1px dashed var(--line-2); margin-bottom:13px}
+.ans-body{padding:0 13px 13px}
+
 /* 🔥 오늘의 도전 */
 .chal{border:2.5px solid var(--gold); border-radius:16px; overflow:hidden;
   background:var(--gold-soft); box-shadow:0 10px 26px -16px var(--gold)}
@@ -802,8 +818,9 @@ const STAGES = [
 <\/script>
 
 </body>
-</html>`],
-  ["mole.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
+</html>`]],
+ answer:[
+    ["mole.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -927,6 +944,7 @@ const STAGES = [
 
 </body>
 </html>`]],
+
  tables:[{
    cap:"랜덤 숫자 만드는 법",
    head:["코드","나오는 값"],
@@ -1075,8 +1093,9 @@ const STAGES = [
 <\/script>
 
 </body>
-</html>`],
-  ["move.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
+</html>`]],
+ answer:[
+    ["move.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -1193,6 +1212,7 @@ const STAGES = [
 
 </body>
 </html>`]],
+
  tables:[{
    cap:"키 이름 (e.key 에 들어오는 값)",
    head:["키","코드에 쓰는 이름"],
@@ -1380,8 +1400,9 @@ const STAGES = [
 <\/script>
 
 </body>
-</html>`],
-  ["dodge.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
+</html>`]],
+ answer:[
+    ["dodge.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -1546,6 +1567,7 @@ const STAGES = [
 
 </body>
 </html>`]],
+
  tables:[{
    cap:"숫자를 바꿔 난이도 조절하기",
    head:["바꿀 곳","올리면","내리면"],
@@ -1990,8 +2012,17 @@ function noteHTML(n){
   return '<div class="note ' + n[0] + '"><b>' + (n[0] === "warn" ? "⚠️ " : "💡 ") + n[1] + "</b>" + n[2] + "</div>";
 }
 function sec(title, hint, inner){
-  return '<section class="sec"><div class="sec-h"><h2>' + title + "</h2>" +
-         (hint ? "<em>" + hint + "</em>" : "") + "</div>" + inner + "</section>";
+  const head = title
+    ? '<div class="sec-h"><h2>' + title + "</h2>" + (hint ? "<em>" + hint + "</em>" : "") + "</div>"
+    : "";
+  return '<section class="sec">' + head + inner + "</section>";
+}
+
+/* 처음엔 접혀 있는 '정답' 블록 */
+function foldHTML(title, hint, inner){
+  return '<details class="ans"><summary><b>' + title + "</b>" +
+         (hint ? "<em>" + hint + "</em>" : "") + "</summary>" +
+         '<div class="ans-body">' + inner + "</div></details>";
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2090,7 +2121,10 @@ function stageHTML(s){
           '<span class="qt">' + q + "</span></button></li>").join("") + "</ul>");
 
   if (s.code && s.code.length)
-    h += sec("💻 오늘의 코드", "복사해서 붙여넣고 Ctrl+S", s.code.map(c => slabHTML(c[0], c[1])).join(""));
+    h += sec("💻 오늘의 코드", "복사해서 붙여넣고 Ctrl+S",
+          s.code.map(c => c[0].indexOf("정답") >= 0
+            ? foldHTML("정답 보기", "스스로 해본 다음에 열어 주세요", slabHTML(c[0], c[1]))
+            : slabHTML(c[0], c[1])).join(""));
 
   if (s.tables) s.tables.forEach(t => { h += '<section class="sec">' + tableHTML(t) + "</section>"; });
 
@@ -2125,6 +2159,11 @@ function stageHTML(s){
         '<div class="reward">🎉 도전 완료! ' + reward +
           "<span>선생님께 보여드리고 받아 가세요</span></div>" +
       "</div>");
+
+    if (s.answer && s.answer.length)
+      h += sec("", "", foldHTML("도전 정답 보기",
+            "4개 다 해본 다음에 열어 주세요",
+            s.answer.map(c => slabHTML(c[0], c[1])).join("")));
   }
 
   h += '<div class="nav">' +
