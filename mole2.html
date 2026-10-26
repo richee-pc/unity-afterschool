@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>두더지 잡기 — 도전 빈칸</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 30px; }
+  h1 { font-size: 30px; margin: 0 0 6px; }
+  #info { font-size: 22px; margin-bottom: 16px; }
+  #score, #time, #best { font-weight: bold; color: #2563eb; }
+  .grid { display: grid; grid-template-columns: repeat(3, 110px);
+          gap: 12px; justify-content: center; }
+  .hole { width: 110px; height: 110px; background: #cbd5e1; border-radius: 20px;
+          font-size: 60px; line-height: 110px; cursor: pointer; user-select: none; }
+  .hole:active { background: #94a3b8; }
+  #msg { font-size: 26px; color: #16a34a; height: 40px; margin-top: 14px; }
+  button { font-size: 20px; padding: 14px 36px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+  <h1>🐹 두더지 잡기</h1>
+  <div id="info">
+    점수 <span id="score">0</span> ·
+    남은 시간 <span id="time">20</span>초 ·
+    최고 <span id="best">0</span>점
+  </div>
+
+  <div class="grid">
+    <div class="hole" id="h0"></div>
+    <div class="hole" id="h1"></div>
+    <div class="hole" id="h2"></div>
+    <div class="hole" id="h3"></div>
+    <div class="hole" id="h4"></div>
+    <div class="hole" id="h5"></div>
+    <div class="hole" id="h6"></div>
+    <div class="hole" id="h7"></div>
+    <div class="hole" id="h8"></div>
+  </div>
+
+  <div id="msg"></div>
+  <button id="start">시작!</button>
+
+<script>
+  let score = 0;
+  let time  = 20;
+  let now   = -1;
+  let isBomb = false;
+  let best  = 0;
+  let moleTimer, clockTimer;
+
+  const scoreText = document.getElementById("score");
+  const timeText  = document.getElementById("time");
+  const bestText  = document.getElementById("best");
+  const msg       = document.getElementById("msg");
+
+  function showMole() {
+    if (now >= 0) {
+      document.getElementById("h" + now).innerText = "";
+    }
+    now = Math.floor(Math.random() * 9);
+
+    // ━━━━━━━━━━ 빈칸 ① ━━━━━━━━━━
+    // 아래 0 을 0.25 로 바꾸면 4번에 1번꼴로 폭탄이 나옵니다
+    isBomb = Math.random() < 0.25;
+
+    // ━━━━━━━━━━ 빈칸 ② ━━━━━━━━━━
+    // 아래 앞쪽 "🐹" 를 "💣" 로 바꾸세요 (폭탄일 때 보일 그림)
+    document.getElementById("h" + now).innerText = isBomb ? "💣" : "🐹";
+  }
+
+  function countDown() {
+    time = time - 1;
+    timeText.innerText = time;
+
+    // ━━━━━━━━━━ 빈칸 ③ ━━━━━━━━━━
+    // 아래 0 을 5 로 바꾸면 5초 남았을 때부터 빨개집니다
+    if (time <= 5) {
+      timeText.style.color = "red";
+    }
+
+    if (time <= 0) {
+      clearInterval(moleTimer);
+      clearInterval(clockTimer);
+      if (now >= 0) document.getElementById("h" + now).innerText = "";
+
+      // ━━━━━━━━━━ 빈칸 ④ ━━━━━━━━━━
+      // 아래 9999 를 best 로 바꾸면 최고 점수가 기록됩니다
+      if (score > best) {
+        best = score;
+        bestText.innerText = best;
+      }
+
+      // ━━━━━━━━━━ 빈칸 ⑤ ━━━━━━━━━━
+      // 아래 "" 안에 보여줄 말을 쓰세요.  예) "끝! " + score + "점 🎉"
+      msg.innerText = "끝! " + score + "점 🎉";
+
+      // ━━━━━━━━━━ 빈칸 ⑥ ━━━━━━━━━━
+      // 아래 alert 줄을 통째로 지우세요 (이제 화면에 보여주니까요)
+ 
+    }
+  }
+
+  for (let i = 0; i < 9; i = i + 1) {
+    document.getElementById("h" + i).onclick = function () {
+      if (i === now) {
+
+        if (isBomb) {
+          // ━━━━━━━━━━ 빈칸 ⑦ ━━━━━━━━━━
+          // 아래 0 을 2 로 바꾸면 폭탄을 누를 때 2점이 깎입니다
+          score = score - 2;
+        } else {
+          score = score + 1;
+        }
+
+        scoreText.innerText = score;
+        document.getElementById("h" + i).innerText = "";
+        now = -1;
+      }
+    };
+  }
+
+  document.getElementById("start").onclick = function () {
+    clearInterval(moleTimer);
+    clearInterval(clockTimer);
+    score = 0; time = 20; now = -1;
+    scoreText.innerText = 0;
+    timeText.innerText = 20;
+    timeText.style.color = "#2563eb";
+    msg.innerText = "";
+    for (let i = 0; i < 9; i = i + 1) document.getElementById("h" + i).innerText = "";
+    moleTimer  = setInterval(showMole, 800);
+    clockTimer = setInterval(countDown, 1000);
+  };
+</script>
+
+</body>
+</html>

@@ -1257,9 +1257,134 @@ const STAGES = [
 <\/script>
 
 </body>
+</html>`],
+  ["📝 move2.html  ─ 🔥 도전 빈칸 코드 (이걸 복사하세요!)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>캐릭터 조작 — 도전 빈칸</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score, #time { font-weight: bold; color: #2563eb; }
+  #stage { position: relative; width: 500px; height: 400px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; width: 40px; height: 40px; background: #2563eb;
+            border-radius: 10px; }
+  #item { position: absolute; width: 36px; height: 36px; font-size: 32px;
+          line-height: 36px; }
+  #msg { font-size: 26px; color: #16a34a; height: 40px; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+  <h1>🟦 캐릭터 조작</h1>
+  <div id="info">
+    점수 <span id="score">0</span> ·
+    남은 시간 <span id="time">30</span>초
+  </div>
+
+  <div id="stage">
+    <div id="player"></div>
+    <div id="item">⭐</div>
+  </div>
+
+  <div id="msg"></div>
+
+<script>
+  let x = 230;
+  let y = 180;
+  let score = 0;
+  let time = 30;
+  let playing = true;
+  let clockTimer;
+
+  const player    = document.getElementById("player");
+  const item      = document.getElementById("item");
+  const scoreText = document.getElementById("score");
+  const timeText  = document.getElementById("time");
+  const msg       = document.getElementById("msg");
+
+  function draw() {
+    player.style.left = x + "px";
+    player.style.top  = y + "px";
+  }
+
+  function moveItem() {
+    item.style.left = Math.floor(Math.random() * 460) + "px";
+    item.style.top  = Math.floor(Math.random() * 360) + "px";
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (playing === false) return;
+
+    // ━━━━━━━━━━ 빈칸 ① ━━━━━━━━━━
+    // 아래 네 줄의 빈 따옴표 "" 안에 d, a, s, w 를 각각 넣으세요
+    if (e.key === "ArrowRight" || e.key === "") x = x + 20;
+    if (e.key === "ArrowLeft"  || e.key === "") x = x - 20;
+    if (e.key === "ArrowDown"  || e.key === "") y = y + 20;
+    if (e.key === "ArrowUp"    || e.key === "") y = y - 20;
+
+    if (x < 0)   x = 0;
+    if (x > 460) x = 460;
+    if (y < 0)   y = 0;
+    if (y > 360) y = 360;
+
+    draw();
+    checkItem();
+  });
+
+  function checkItem() {
+    const ix = parseInt(item.style.left);
+    const iy = parseInt(item.style.top);
+
+    if (Math.abs(x - ix) < 40 && Math.abs(y - iy) < 40) {
+      score = score + 1;
+      scoreText.innerText = score;
+      moveItem();
+
+      // ━━━━━━━━━━ 빈칸 ② ━━━━━━━━━━
+      // 아래 0% 를 70% 로 바꾸면 먹을 때마다 배경색이 달라집니다
+      document.body.style.background = "hsl(" + (score * 40) + ", 0%, 95%)";
+
+      // ━━━━━━━━━━ 빈칸 ③ ━━━━━━━━━━
+      // 아래 9999 를 10 으로 바꾸면 10점에서 클리어 메시지가 뜹니다
+      if (score >= 9999) {
+        msg.innerText = "🎉 클리어!";
+      }
+    }
+  }
+
+  clockTimer = setInterval(function () {
+
+    // ━━━━━━━━━━ 빈칸 ④ ━━━━━━━━━━
+    // 아래 0 을 1 로 바꾸면 시간이 1초씩 줄어듭니다
+    time = time - 0;
+
+    timeText.innerText = time;
+    if (time <= 5) {
+      timeText.style.color = "red";
+    }
+    if (time <= 0) {
+      clearInterval(clockTimer);
+      msg.innerText = "시간 끝! " + score + "점";
+
+      // ━━━━━━━━━━ 빈칸 ⑤ ━━━━━━━━━━
+      // 아래 true 를 false 로 바꾸면 시간이 끝났을 때 못 움직입니다
+      playing = true;
+    }
+  }, 1000);
+
+  draw();
+  moveItem();
+<\/script>
+
+</body>
 </html>`]],
  answer:[
-    ["move.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
+  ["move.html  ─ 🔥 도전 정답 (끝까지 해보고 보세요!)", `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -1391,30 +1516,29 @@ const STAGES = [
  ],
  challenge:{
   reward:"쉬는시간 + 간식 🍪",
+  howto:"위 <b>빈칸 코드</b>를 복사해서 <code>move2.html</code> 로 저장하세요. " +
+        "<b>그대로도 게임은 돌아갑니다.</b> 빈칸을 하나씩 채울 때마다 기능이 하나씩 켜져요. " +
+        "하나 고칠 때마다 <b>저장(Ctrl+S) → 새로고침(F5)</b>!",
   items:[
-   ["⌨️ <b>도전 1 · WASD 로도 움직이기</b>",
-    "방향키 말고 <b>W A S D</b> 로도 조종할 수 있게 하세요. 게임은 보통 둘 다 됩니다.<br>" +
-    "힌트 — 기존 줄에 <code>||</code> (또는) 를 붙이면 끝.<br>" +
-    "<code>if (e.key === \"ArrowRight\" || e.key === \"d\") x = x + 20;</code>"],
+   ["⌨️ <b>도전 1 · WASD 로도 움직이기</b> <span class=\"bl\">빈칸 ①</span>",
+    "방향키 말고 <b>W A S D</b> 로도 조종되게 하세요. 게임은 보통 둘 다 됩니다.<br>" +
+    "<b>①</b> 네 줄의 <b>빈 따옴표 <code>\"\"</code> 안</b>에 각각 넣으세요<br>" +
+    "<code>ArrowRight</code> 줄 → <b>d</b> &nbsp;·&nbsp; <code>ArrowLeft</code> 줄 → <b>a</b> &nbsp;·&nbsp; " +
+    "<code>ArrowDown</code> 줄 → <b>s</b> &nbsp;·&nbsp; <code>ArrowUp</code> 줄 → <b>w</b>"],
 
-   ["🌈 <b>도전 2 · 먹을 때마다 배경색 바뀌기</b>",
-    "⭐ 를 먹을 때마다 <b>배경색이 조금씩 달라지게</b> 만드세요.<br>" +
-    "힌트 — <code>checkItem</code> 안, 점수를 올린 바로 뒤에 한 줄.<br>" +
-    "<code>document.body.style.background = \"hsl(\" + (score * 40) + \", 70%, 90%)\";</code>"],
+   ["🌈 <b>도전 2 · 먹을 때마다 배경색 바뀌기</b> <span class=\"bl\">빈칸 ②</span>",
+    "⭐ 를 먹을 때마다 배경색이 조금씩 달라지게 하세요.<br>" +
+    "<b>②</b> <code>\", 0%, 95%)\"</code> 의 <b>0% 를 70% 로</b><br>" +
+    "0% 는 '색이 하나도 없음(회색)' 이라는 뜻이에요. 70% 로 올리면 색이 살아납니다."],
 
-   ["🎉 <b>도전 3 · 10점이면 클리어!</b>",
-    "점수가 <b>10점</b>이 되면 화면에 클리어 메시지를 띄우세요.<br>" +
-    "힌트 ① HTML 구역에 <code>&lt;div id=\"msg\"&gt;&lt;/div&gt;</code> 추가하고 CSS로 크게<br>" +
-    "힌트 ② JS 위쪽에 <code>const msg = document.getElementById(\"msg\");</code><br>" +
-    "힌트 ③ 점수 올린 뒤 <code>if (score &gt;= 10) { msg.innerText = \"🎉 클리어!\"; }</code>"],
+   ["🎉 <b>도전 3 · 10점이면 클리어!</b> <span class=\"bl\">빈칸 ③</span>",
+    "점수가 10점이 되면 클리어 메시지가 뜨게 하세요.<br>" +
+    "<b>③</b> <code>if (score &gt;= 9999)</code> 의 <b>9999 를 10 으로</b>"],
 
-   ["⏱️ <b>도전 4 · 제한시간 30초</b>",
-    "<b>지난 시간에 배운 <code>setInterval</code></b> 을 가져와서 30초 제한시간을 붙이세요. " +
-    "시간이 끝나면 더 못 움직이게!<br>" +
-    "힌트 ① <code>let time = 30;</code> 과 <code>let playing = true;</code> 를 맨 위에<br>" +
-    "힌트 ② <code>setInterval(function () { time = time - 1; ... }, 1000);</code><br>" +
-    "힌트 ③ 0이 되면 <code>playing = false;</code>, 키 입력 맨 앞에 " +
-    "<code>if (playing === false) return;</code>"]
+   ["⏱️ <b>도전 4 · 제한시간 30초</b> <span class=\"bl\">빈칸 ④ ⑤</span>",
+    "<b>지난 시간에 배운 <code>setInterval</code></b> 이 이미 들어 있습니다. 두 군데만 켜 주세요.<br>" +
+    "<b>④</b> <code>time = time - 0;</code> 의 <b>0 을 1 로</b> → 1초씩 줄어듭니다<br>" +
+    "<b>⑤</b> <code>playing = true;</code> 의 <b>true 를 false 로</b> → 시간이 끝나면 못 움직입니다"]
   ]
  }
 },
@@ -1564,9 +1688,184 @@ const STAGES = [
 <\/script>
 
 </body>
+</html>`],
+  ["📝 dodge2.html  ─ 🔥 도전 빈칸 코드 (이걸 복사하세요!)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>피하기 게임 — 도전 빈칸</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score, #best { font-weight: bold; color: #2563eb; }
+  #life { font-weight: bold; color: #dc2626; }
+  #stage { position: relative; width: 500px; height: 420px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; bottom: 10px; width: 44px; height: 44px;
+            background: #2563eb; border-radius: 12px; }
+  .rock { position: absolute; width: 40px; height: 40px; font-size: 34px;
+          line-height: 40px; }
+  #over { position: absolute; inset: 0; display: none; place-items: center;
+          background: rgba(255,255,255,.92); font-size: 30px; font-weight: bold;
+          color: #dc2626; flex-direction: column; }
+  button { font-size: 20px; padding: 13px 34px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+  <h1>💥 피하기 게임</h1>
+  <div id="info">
+    ← → 로 피하세요 · 점수 <span id="score">0</span> ·
+    목숨 <span id="life">❤️</span> ·
+    최고 <span id="best">0</span>점
+  </div>
+
+  <div id="stage">
+    <div id="player"></div>
+    <div id="over">
+      <div id="overText">게임 오버!</div>
+      <button id="again">다시하기</button>
+    </div>
+  </div>
+
+<script>
+  let x = 228;
+  let score = 0;
+  let playing = true;
+  let rocks = [];
+  let life = 1;
+  let speed = 5;
+  let best = 0;
+  let gameTimer, makeTimer, speedTimer;
+
+  const stage     = document.getElementById("stage");
+  const player    = document.getElementById("player");
+  const scoreText = document.getElementById("score");
+  const lifeText  = document.getElementById("life");
+  const bestText  = document.getElementById("best");
+  const over      = document.getElementById("over");
+
+  player.style.left = x + "px";
+
+  document.addEventListener("keydown", function (e) {
+    if (!playing) return;
+    if (e.key === "ArrowLeft")  x = x - 25;
+    if (e.key === "ArrowRight") x = x + 25;
+    if (x < 0)   x = 0;
+    if (x > 456) x = 456;
+    player.style.left = x + "px";
+  });
+
+  function makeRock() {
+    const rock = document.createElement("div");
+    rock.className = "rock";
+
+    // ━━━━━━━━━━ 빈칸 ③ ━━━━━━━━━━
+    // 아래 0 을 0.2 로 바꾸면 5번에 1번은 ⭐ 가 떨어집니다
+    const isStar = Math.random() < 0;
+
+    rock.innerText = isStar ? "⭐" : "🪨";
+    rock.dataset.star = isStar ? "1" : "0";
+
+    rock.style.left = Math.floor(Math.random() * 460) + "px";
+    rock.style.top  = "-40px";
+    stage.appendChild(rock);
+    rocks.push(rock);
+  }
+
+  function update() {
+    for (let i = 0; i < rocks.length; i = i + 1) {
+      const rock = rocks[i];
+      const top = parseInt(rock.style.top) + speed;
+      rock.style.top = top + "px";
+
+      const rx = parseInt(rock.style.left);
+      if (top > 366 && top < 420 && Math.abs(x - rx) < 42) {
+
+        if (rock.dataset.star === "1") {
+          score = score + 5;             // ⭐ 는 먹으면 +5점
+          scoreText.innerText = score;
+        } else {
+          life = life - 1;               // 🪨 는 목숨 하나 감소
+          if (life <= 0) { lifeText.innerText = ""; gameOver(); return; }
+          lifeText.innerText = "❤️".repeat(life);
+        }
+        rock.remove();
+        rocks.splice(i, 1);
+        i = i - 1;
+        continue;
+      }
+
+      if (top > 420) {
+        rock.remove();
+        rocks.splice(i, 1);
+        i = i - 1;
+        if (rock.dataset.star === "0") {
+          score = score + 1;
+          scoreText.innerText = score;
+        }
+      }
+    }
+  }
+
+  function gameOver() {
+    playing = false;
+    clearInterval(gameTimer);
+    clearInterval(makeTimer);
+    clearInterval(speedTimer);
+
+    // ━━━━━━━━━━ 빈칸 ④ ━━━━━━━━━━
+    // 아래 9999 를 best 로 바꾸면 최고 점수가 기록됩니다
+    if (score > 9999) {
+      best = score;
+      bestText.innerText = best;
+    }
+
+    document.getElementById("overText").innerText = "게임 오버! " + score + "점";
+    over.style.display = "flex";
+  }
+
+  function start() {
+    clearInterval(gameTimer);
+    clearInterval(makeTimer);
+    clearInterval(speedTimer);
+    for (let i = 0; i < rocks.length; i = i + 1) rocks[i].remove();
+    rocks = [];
+    x = 228; score = 0; playing = true;
+    speed = 5;
+
+    // ━━━━━━━━━━ 빈칸 ① ━━━━━━━━━━
+    // 아래 1 을 3 으로 바꾸면 세 번 맞아야 끝납니다
+    life = 1;
+
+    lifeText.innerText = "❤️".repeat(life);
+    player.style.left = x + "px";
+    scoreText.innerText = 0;
+    over.style.display = "none";
+
+    gameTimer = setInterval(update, 30);
+    makeTimer = setInterval(makeRock, 700);
+
+    speedTimer = setInterval(function () {
+
+      // ━━━━━━━━━━ 빈칸 ② ━━━━━━━━━━
+      // 아래 0 을 1 로 바꾸면 5초마다 조금씩 빨라집니다
+      speed = speed + 0;
+
+    }, 5000);
+  }
+
+  document.getElementById("again").onclick = start;
+  start();
+<\/script>
+
+</body>
 </html>`]],
  answer:[
-    ["dodge.html  ─ 🔥 도전 4개 정답 (끝까지 해보고 보세요!)", `<!doctype html>
+  ["dodge.html  ─ 🔥 도전 정답 (끝까지 해보고 보세요!)", `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -1667,8 +1966,8 @@ const STAGES = [
         } else {
           // [도전1] 돌에 맞으면 목숨 하나 감소
           life = life - 1;
+          if (life <= 0) { lifeText.innerText = ""; gameOver(); return; }
           lifeText.innerText = "❤️".repeat(life);
-          if (life <= 0) { gameOver(); return; }
         }
         rock.remove();
         rocks.splice(i, 1);
@@ -1747,30 +2046,28 @@ const STAGES = [
  ],
  challenge:{
   reward:"쉬는시간 + 간식 🍪",
+  howto:"위 <b>빈칸 코드</b>를 복사해서 <code>dodge2.html</code> 로 저장하세요. " +
+        "<b>그대로도 게임은 돌아갑니다.</b> 빈칸 4개를 채우면 완전히 다른 게임이 됩니다. " +
+        "하나 고칠 때마다 <b>저장(Ctrl+S) → 새로고침(F5)</b>!",
   items:[
-   ["❤️ <b>도전 1 · 목숨 3개</b>",
+   ["❤️ <b>도전 1 · 목숨 3개</b> <span class=\"bl\">빈칸 ①</span>",
     "한 번 맞으면 바로 끝나지 말고 <b>세 번</b> 맞아야 게임오버가 되게 하세요.<br>" +
-    "힌트 ① 맨 위에 <code>let life = 3;</code> 와 화면에 보여줄 <code>&lt;span id=\"life\"&gt;❤️❤️❤️&lt;/span&gt;</code><br>" +
-    "힌트 ② 부딪혔을 때 <code>life = life - 1;</code> 하고 맞은 돌은 <code>remove()</code> 로 치우기<br>" +
-    "힌트 ③ <code>if (life &lt;= 0) { gameOver(); return; }</code><br>" +
-    "꿀팁 — <code>\"❤️\".repeat(life)</code> 하면 하트가 개수만큼 나옵니다"],
+    "<b>①</b> <code>start</code> 안의 <code>life = 1;</code> 에서 <b>1 을 3 으로</b><br>" +
+    "하트 개수는 <code>\"❤️\".repeat(life)</code> 가 알아서 그려 줍니다."],
 
-   ["🔥 <b>도전 2 · 점점 빨라지게</b>",
-    "시간이 지날수록 돌이 <b>빨리 떨어지게</b> 만드세요. 오래 버틸수록 손에 땀이 납니다.<br>" +
-    "힌트 ① <code>let speed = 5;</code> 를 만들고, 떨어지는 줄의 <code>+ 5</code> 를 <code>+ speed</code> 로<br>" +
-    "힌트 ② <code>setInterval(function () { speed = speed + 1; }, 5000);</code><br>" +
-    "주의 — <b>다시하기 할 때 <code>speed = 5</code> 로 되돌려야</b> 합니다!"],
+   ["🔥 <b>도전 2 · 점점 빨라지게</b> <span class=\"bl\">빈칸 ②</span>",
+    "시간이 지날수록 돌이 빨리 떨어지게 하세요. 오래 버틸수록 손에 땀이 납니다.<br>" +
+    "<b>②</b> <code>speed = speed + 0;</code> 의 <b>0 을 1 로</b><br>" +
+    "이 줄은 <b>5초마다</b> 실행되도록 이미 들어 있어요."],
 
-   ["⭐ <b>도전 3 · 좋은 아이템 섞기</b>",
+   ["⭐ <b>도전 3 · 좋은 아이템 섞기</b> <span class=\"bl\">빈칸 ③</span>",
     "가끔 ⭐ 가 떨어지고, <b>맞으면 오히려 +5점</b>이 되게 하세요. (지난 시간 폭탄의 반대!)<br>" +
-    "힌트 ① <code>makeRock</code> 안에서 <code>const isStar = Math.random() &lt; 0.2;</code><br>" +
-    "힌트 ② 글자를 <code>isStar ? \"⭐\" : \"🪨\"</code> 로, 그리고 <code>rock.dataset.star = isStar ? \"1\" : \"0\";</code><br>" +
-    "힌트 ③ 부딪혔을 때 <code>if (rock.dataset.star === \"1\") score = score + 5;</code> 아니면 목숨 감소"],
+    "<b>③</b> <code>Math.random() &lt; 0</code> 의 <b>0 을 0.2 로</b> → 5번에 1번은 별<br>" +
+    "별일 때 +5점 주는 코드는 이미 들어 있습니다."],
 
-   ["🏆 <b>도전 4 · 최고 기록</b>",
-    "게임이 끝날 때마다 <b>지금까지의 최고 점수</b>를 남기세요. 2차시에서 했던 것과 똑같습니다.<br>" +
-    "힌트 — <code>let best = 0;</code> 만들고 <code>gameOver</code> 안에서 " +
-    "<code>if (score &gt; best) { best = score; bestText.innerText = best; }</code>"]
+   ["🏆 <b>도전 4 · 최고 기록</b> <span class=\"bl\">빈칸 ④</span>",
+    "게임이 끝날 때마다 최고 점수가 남게 하세요. 2차시에서 했던 것과 똑같습니다.<br>" +
+    "<b>④</b> <code>if (score &gt; 9999)</code> 의 <b>9999 를 best 로</b> (따옴표 없이)"]
   ]
  }
 },
