@@ -318,6 +318,36 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
   white-space:nowrap; font-family:inherit; transition:.14s}
 .jchip:hover{border-color:var(--z); color:var(--z); background:var(--z-soft)}
 
+/* 📝 우리 팀 기획 카드 */
+.plan{border:2.5px solid var(--y); border-radius:16px; overflow:hidden; background:var(--surface)}
+.plan-head{padding:14px 18px; background:var(--y); color:#10160B}
+.plan-head b{font-size:1.04rem; display:block}
+.plan-head em{font-style:normal; font-size:.83rem; opacity:.82}
+.plan-body{padding:16px 17px 18px; display:flex; flex-direction:column; gap:13px}
+.pf{display:flex; flex-direction:column; gap:6px}
+.pf > label{font-size:.86rem; font-weight:600; color:var(--ink)}
+.pf > label span{font-weight:400; font-size:.78rem; color:var(--ink-3); margin-left:5px}
+.pf input{width:100%; font-family:inherit; font-size:.95rem; padding:11px 13px;
+  border:1.5px solid var(--line-2); border-radius:11px; background:var(--surface-2); color:var(--ink)}
+.pf input:focus{outline:none; border-color:var(--y)}
+.pf .row2{display:flex; gap:9px}
+.pf .row2 #pEmoji{width:84px; text-align:center; font-size:1.3rem; flex:none}
+.pf .row2 #pName{flex:1}
+.pf .hint{font-size:.78rem; color:var(--ink-3)}
+.pf .hint b{color:var(--ink-2)}
+.namebtn{align-self:flex-start; border:1.5px solid var(--z); background:var(--z-soft); color:var(--z);
+  border-radius:11px; padding:9px 15px; font-size:.84rem; font-weight:600; cursor:pointer;
+  font-family:inherit}
+.namebtn:hover{background:var(--z); color:#fff}
+.plan-saved{font-size:.78rem; color:var(--y); font-weight:600; min-height:18px}
+
+/* 📦 생성기 결과물 안내 */
+.gwhat{margin:0 0 11px; padding:12px 15px; border-radius:11px; background:var(--y-soft);
+  border:1px solid var(--y); font-size:.84rem; line-height:1.72; color:var(--ink-2)}
+.gwhat b{color:var(--ink); display:block; margin-bottom:3px}
+.gwhat ul{margin:5px 0 0; padding-left:18px}
+.gwhat li{margin:2px 0}
+
 /* 🪄 프롬프트 생성기 */
 .gen{border:2.5px solid var(--z); border-radius:16px; overflow:hidden; background:var(--surface)}
 .gen-head{padding:15px 19px; background:var(--z); color:#fff}
@@ -4620,6 +4650,83 @@ function buildJump(){
   box.innerHTML = out.length ? '<span class="jl">바로가기</span>' + out.join("") : "";
 }
 
+/* ══════════ 📝 우리 팀 기획 카드 ══════════ */
+const PLAN_KEY = "team-plan-v1";
+
+function planLoad(){
+  try { return JSON.parse(localStorage.getItem(PLAN_KEY)) || {}; }
+  catch (e) { return {}; }
+}
+function planSave(){
+  const d = {};
+  ["pTeam", "pOne", "pName", "pEmoji"].forEach(function(id){
+    const el = document.getElementById(id);
+    if (el) d[id] = el.value;
+  });
+  try { localStorage.setItem(PLAN_KEY, JSON.stringify(d)); } catch (e) {}
+  const m = document.getElementById("planSaved");
+  if (m){
+    m.textContent = "✓ 저장됨 — 이 컴퓨터에 남습니다";
+    clearTimeout(window.__pt);
+    window.__pt = setTimeout(function(){ m.textContent = ""; }, 1800);
+  }
+  genBuild();
+}
+
+function planHTML(){
+  const d = planLoad();
+  const v = function(k){ return esc(d[k] || ""); };
+  return '<div class="plan">' +
+    '<div class="plan-head"><b>📝 우리 팀 기획 카드</b>' +
+      "<em>여기에 적어 두면 아래 프롬프트 생성기에 자동으로 들어갑니다</em></div>" +
+    '<div class="plan-body">' +
+
+      '<div class="pf"><label>팀 이름 · 팀원 <span>(예: 3팀 김○○ 이○○)</span></label>' +
+        '<input class="ptext" id="pTeam" value="' + v("pTeam") + '" placeholder="3팀 김○○ 이○○ 박○○"></div>' +
+
+      '<div class="pf"><label>✍️ 한 줄 소개 <span>(가장 중요합니다)</span></label>' +
+        '<input class="ptext" id="pOne" value="' + v("pOne") + '" ' +
+        'placeholder="우리 앱은 ____ 할 때 ____ 해주는 앱이다"></div>' +
+        '<p class="hint">이 한 줄이 안 써지면 주제가 아직 흐릿하다는 뜻이에요. ' +
+        '<b>더 좁혀 보세요.</b></p>' +
+
+      '<div class="pf"><label>앱 이름 · 대표 이모지</label>' +
+        '<div class="row2">' +
+          '<input class="ptext" id="pEmoji" value="' + v("pEmoji") + '" placeholder="🍚" maxlength="4">' +
+          '<input class="ptext" id="pName" value="' + v("pName") + '" placeholder="오늘 뭐 먹지"></div></div>' +
+
+      '<button class="namebtn" id="nameBtn">🤖 이름·이모지 지어 달라고 물어보기</button>' +
+      '<div class="plan-saved" id="planSaved"></div>' +
+    "</div></div>";
+}
+
+/* 한 줄 소개를 넣어 이름 짓기 질문을 만든다 */
+function namePrompt(){
+  const one = (document.getElementById("pOne") || {}).value || "";
+  if (!one){
+    alert("먼저 ✍️ 한 줄 소개를 적어 주세요!\n그래야 어울리는 이름을 지어 줍니다.");
+    const el = document.getElementById("pOne");
+    if (el) el.focus();
+    return null;
+  }
+  const L = [];
+  L.push("나는 한국 고등학생이고, 방과후 수업에서 우리 반이 쓸 웹앱을 만들고 있습니다.");
+  L.push("");
+  L.push("우리 앱 : " + one);
+  L.push("");
+  L.push("이 앱에 어울리는 이름과 대표 이모지를 10개 지어 주세요.");
+  L.push("");
+  L.push("조건:");
+  L.push("- 한국 고등학생이 보고 바로 무슨 앱인지 알 수 있을 것");
+  L.push("- 8글자 안쪽의 짧은 한국어 (영어 이름은 2개까지만)");
+  L.push("- 이모지는 이름과 어울리는 것 하나씩");
+  L.push("- 줄임말이나 말장난을 쓴 것도 2~3개 섞어 주세요");
+  L.push("- 표로 정리해 주세요 : 번호 | 이모지 | 이름 | 왜 이 이름인지 한 줄");
+  L.push("");
+  L.push("마지막에 그중 어떤 것이 가장 좋은지 한 줄로 추천해 주세요.");
+  return L.join("\n");
+}
+
 /* ══════════ 🪄 프롬프트 생성기 ══════════ */
 const GEN = {
   mode: [["idea", "💡 아이디어 받기", "조건에 맞는 앱 아이디어 3개와 필요한 기능"],
@@ -4672,6 +4779,7 @@ function genHTML(){
     "</div>" +
 
     '<div class="gen-out">' +
+      '<div class="gwhat" id="gWhat"></div>' +
       '<div class="go-top"><b>📋 만들어진 질문</b>' +
         '<button class="gcopy" id="gCopy">복사</button></div>' +
       '<pre id="gOut" class="go-pre"></pre>' +
@@ -4687,6 +4795,36 @@ function genRead(key){
            .map(function(b){ return b.dataset.v; });
 }
 
+/* 이 질문을 넣으면 무엇이 돌아오는지 미리 알려 준다 */
+const GWHAT = {
+  idea: ["💡 아이디어 3개가 글로 옵니다 — <b>코드는 오지 않습니다</b>",
+         ["앱 아이디어 3개 (제목 + 한 줄 설명)",
+          "각각 화면에 무엇이 보이는지",
+          "필요한 기능 3개 이하",
+          "3주 안에 만들 수 있는지 난이도"],
+         "받으면 → 우리 반에 진짜 필요한 것 하나를 골라 <b>기획 카드</b>에 우리 말로 적으세요"],
+  base: ["🧱 <b>바로 저장해서 돌려볼 수 있는 .html 코드 하나</b>가 옵니다",
+         ["파일 하나로 된 완성 코드 (기능은 가장 중요한 1개만)",
+          "모든 줄에 한국어 주석",
+          "각 부분이 무슨 일을 하는지 3~4줄 요약",
+          "우리가 고쳐야 할 곳 정확히 3군데",
+          "다음에 넣으면 좋을 기능 제안"],
+         "받으면 → 메모장에 붙여 <b>우리앱.html</b> 로 저장하고 더블클릭해서 확인하세요"],
+  plus: ["➕ <b>고칠 부분만</b> 옵니다 — 전체 코드를 다시 주지 않습니다",
+         ["추가할 코드 조각과 그 설명",
+          "기존 코드의 어느 줄 아래에 넣는지",
+          "제대로 됐는지 확인하는 방법",
+          "(기능을 여러 개 골랐다면) 쉬운 것부터 하나씩"],
+         "받으면 → <b>백업 먼저</b> 하고, 한 군데 붙이고 저장 → F5 로 확인하세요"]
+};
+function gwhatHTML(mode){
+  const w = GWHAT[mode];
+  if (!w) return "";
+  return "<b>📦 이 질문을 넣으면 이런 게 나옵니다</b>" + w[0] +
+         "<ul>" + w[1].map(function(x){ return "<li>" + x + "</li>"; }).join("") + "</ul>" +
+         "<div style=\"margin-top:6px\">" + w[2] + "</div>";
+}
+
 function genBuild(){
   const out = document.getElementById("gOut");
   if (!out) return;
@@ -4699,8 +4837,15 @@ function genBuild(){
   const mood  = genRead("mood")[0];
   const color = genRead("color")[0];
   const base  = genRead("base")[0];
-  const one   = (document.getElementById("gOne") || {}).value || "";
+  // 기획 카드에 적어 둔 한 줄 소개를 먼저 쓰고, 없으면 생성기 칸의 값을 씁니다
+  const planOne = (document.getElementById("pOne") || {}).value || "";
+  const one   = planOne || (document.getElementById("gOne") || {}).value || "";
+  const appNm = (document.getElementById("pName") || {}).value || "";
+  const appEm = (document.getElementById("pEmoji") || {}).value || "";
   const free  = (document.getElementById("gFree") || {}).value || "";
+
+  const whatEl = document.getElementById("gWhat");
+  if (whatEl) whatEl.innerHTML = gwhatHTML(mode);
 
   if (!mode){
     out.textContent = "① 무엇을 부탁할지부터 골라 주세요.";
@@ -4713,6 +4858,7 @@ function genBuild(){
   L.push("");
 
   L.push("[ 만들려는 것 ]");
+  if (appNm || appEm) L.push("- 앱 이름 : " + (appEm + " " + appNm).trim());
   if (one)   L.push("- 한 줄 설명 : " + one);
   if (field) L.push("- 분야 : " + field);
   if (kind)  L.push("- 앱 모양 : " + kind);
@@ -4929,8 +5075,10 @@ function stageHTML(s){
           '<span class="bx">✓</span><span class="qn">' + String(i + 1).padStart(2, "0") + "</span>" +
           '<span class="qt">' + q + "</span></div></li>").join("") + "</ul>", "t-quest");
 
-  if (s.gen)
+  if (s.gen){
+    h += sec("📝 우리 팀 기획 카드", "적어 두면 아래 생성기에 자동으로 들어갑니다", planHTML(), "t-quest");
     h += sec("🪄 프롬프트 생성기", "고르기만 하면 질문이 완성됩니다", genHTML(), "t-gen");
+  }
 
   if (s.code && s.code.length)
     h += sec("💻 오늘의 코드", "아래 버튼을 누르면 그 코드가 열립니다", codeHTML(s.code), "t-code");
@@ -5044,7 +5192,7 @@ document.addEventListener("click", e => {
     if (qg.dataset.find !== undefined){
       gotoCode(Number(qg.dataset.goto), qg.dataset.find);
     } else {
-      const sc = document.querySelector('[data-j="' + qg.dataset.sec + '"]');
+      const sc = document.querySelector('.body section[data-j="' + qg.dataset.sec + '"]');
       if (sc){
         const y = sc.getBoundingClientRect().top + window.scrollY - 92;
         window.scrollTo({ top: y, behavior: "smooth" });
@@ -5102,10 +5250,25 @@ document.addEventListener("click", e => {
 
   const jmp = e.target.closest(".jchip");
   if (jmp){
-    const sc = document.querySelector('[data-j="' + jmp.dataset.j + '"]');
+    const sc = document.querySelector('.body section[data-j="' + jmp.dataset.j + '"]');
     if (sc){
       const y = sc.getBoundingClientRect().top + window.scrollY - 92;
       window.scrollTo({ top: y, behavior: "smooth" });
+    }
+    return;
+  }
+
+  if (e.target.closest("#nameBtn")){
+    const txt = namePrompt();
+    if (txt){
+      const btn = document.getElementById("nameBtn");
+      const ok = function(){
+        btn.textContent = "✓ 복사됨! ChatGPT·제미나이에 붙여넣으세요";
+        setTimeout(function(){
+          btn.textContent = "🤖 이름·이모지 지어 달라고 물어보기";
+        }, 2600);
+      };
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, ok); else ok();
     }
     return;
   }
@@ -5194,6 +5357,7 @@ document.addEventListener("keydown", function(e){
 
 document.addEventListener("input", function(e){
   if (e.target.classList && e.target.classList.contains("gtext")) genBuild();
+  if (e.target.classList && e.target.classList.contains("ptext")) planSave();
 });
 
 window.addEventListener("hashchange", () => {
