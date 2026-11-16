@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>피하기 게임 — 도전 빈칸</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score, #best { font-weight: bold; color: #2563eb; }
+  #life { font-weight: bold; color: #dc2626; }
+  #stage { position: relative; width: 500px; height: 420px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; bottom: 10px; width: 44px; height: 44px;
+            background: #2563eb; border-radius: 12px; }
+  .rock { position: absolute; width: 40px; height: 40px; font-size: 34px;
+          line-height: 40px; }
+  #over { position: absolute; inset: 0; display: none; place-items: center;
+          background: rgba(255,255,255,.92); font-size: 30px; font-weight: bold;
+          color: #dc2626; flex-direction: column; }
+  button { font-size: 20px; padding: 13px 34px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+  <h1>💥 피하기 게임</h1>
+  <div id="info">
+    ← → 로 피하세요 · 점수 <span id="score">0</span> ·
+    목숨 <span id="life">❤️</span> ·
+    최고 <span id="best">0</span>점
+  </div>
+
+  <div id="stage">
+    <div id="player"></div>
+    <div id="over">
+      <div id="overText">게임 오버!</div>
+      <button id="again">다시하기</button>
+    </div>
+  </div>
+
+<script>
+  let x = 228;
+  let score = 0;
+  let playing = true;
+  let rocks = [];
+  let life = 1;
+  let speed = 5;
+  let best = 0;
+  let gameTimer, makeTimer, speedTimer;
+
+  const stage     = document.getElementById("stage");
+  const player    = document.getElementById("player");
+  const scoreText = document.getElementById("score");
+  const lifeText  = document.getElementById("life");
+  const bestText  = document.getElementById("best");
+  const over      = document.getElementById("over");
+
+  player.style.left = x + "px";
+
+  document.addEventListener("keydown", function (e) {
+    if (!playing) return;
+    if (e.key === "ArrowLeft")  x = x - 25;
+    if (e.key === "ArrowRight") x = x + 25;
+    if (x < 0)   x = 0;
+    if (x > 456) x = 456;
+    player.style.left = x + "px";
+  });
+
+  function makeRock() {
+    const rock = document.createElement("div");
+    rock.className = "rock";
+
+    // ━━━━━━━━━━ 빈칸 ③ ━━━━━━━━━━
+    // 아래 0 을 0.2 로 바꾸면 5번에 1번은 ⭐ 가 떨어집니다
+    const isStar = Math.random() < 0.2;
+
+    rock.innerText = isStar ? "⭐" : "🪨";
+    rock.dataset.star = isStar ? "1" : "0";
+
+    rock.style.left = Math.floor(Math.random() * 460) + "px";
+    rock.style.top  = "-40px";
+    stage.appendChild(rock);
+    rocks.push(rock);
+  }
+
+  function update() {
+    for (let i = 0; i < rocks.length; i = i + 1) {
+      const rock = rocks[i];
+      const top = parseInt(rock.style.top) + speed;
+      rock.style.top = top + "px";
+
+      const rx = parseInt(rock.style.left);
+      if (top > 366 && top < 420 && Math.abs(x - rx) < 42) {
+
+        if (rock.dataset.star === "1") {
+          score = score + 5;             // ⭐ 는 먹으면 +5점
+          scoreText.innerText = score;
+        } else {
+          life = life - 1;               // 🪨 는 목숨 하나 감소
+          if (life <= 0) { lifeText.innerText = ""; gameOver(); return; }
+          lifeText.innerText = "❤️".repeat(life);
+        }
+        rock.remove();
+        rocks.splice(i, 1);
+        i = i - 1;
+        continue;
+      }
+
+      if (top > 420) {
+        rock.remove();
+        rocks.splice(i, 1);
+        i = i - 1;
+        if (rock.dataset.star === "0") {
+          score = score + 1;
+          scoreText.innerText = score;
+        }
+      }
+    }
+  }
+
+  function gameOver() {
+    playing = false;
+    clearInterval(gameTimer);
+    clearInterval(makeTimer);
+    clearInterval(speedTimer);
+
+    // ━━━━━━━━━━ 빈칸 ④ ━━━━━━━━━━
+    // 아래 9999 를 best 로 바꾸면 최고 점수가 기록됩니다
+    if (score > best) {
+      best = score;
+      bestText.innerText = best;
+    }
+
+    document.getElementById("overText").innerText = "게임 오버! " + score + "점";
+    over.style.display = "flex";
+  }
+
+  function start() {
+    clearInterval(gameTimer);
+    clearInterval(makeTimer);
+    clearInterval(speedTimer);
+    for (let i = 0; i < rocks.length; i = i + 1) rocks[i].remove();
+    rocks = [];
+    x = 228; score = 0; playing = true;
+    speed = 5;
+
+    // ━━━━━━━━━━ 빈칸 ① ━━━━━━━━━━
+    // 아래 1 을 3 으로 바꾸면 세 번 맞아야 끝납니다
+    life = 3;
+
+    lifeText.innerText = "❤️".repeat(life);
+    player.style.left = x + "px";
+    scoreText.innerText = 0;
+    over.style.display = "none";
+
+    gameTimer = setInterval(update, 30);
+    makeTimer = setInterval(makeRock, 700);
+
+    speedTimer = setInterval(function () {
+
+      // ━━━━━━━━━━ 빈칸 ② ━━━━━━━━━━
+      // 아래 0 을 1 로 바꾸면 5초마다 조금씩 빨라집니다
+      speed = speed + 1;
+
+    }, 5000);
+  }
+
+  document.getElementById("again").onclick = start;
+  start();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>캐릭터 조작 + 아이템 먹기</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score { font-weight: bold; color: #2563eb; }
+  #stage { position: relative; width: 500px; height: 400px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; width: 40px; height: 40px; background: #2563eb;
+            border-radius: 10px; }
+  #item { position: absolute; width: 36px; height: 36px; font-size: 32px;
+          line-height: 36px; }
+</style>
+</head>
+<body>
+
+  <h1>🟦 캐릭터 조작</h1>
+  <div id="info">방향키로 움직여서 ⭐ 를 먹어요 · 점수 <span id="score">0</span></div>
+
+  <div id="stage">
+    <div id="player"></div>
+    <div id="item">⭐</div>
+  </div>
+
+<script>
+  // 캐릭터 위치
+  let x = 230;
+  let y = 180;
+  let score = 0;
+
+  const player    = document.getElementById("player");
+  const item      = document.getElementById("item");
+  const scoreText = document.getElementById("score");
+
+  // 화면에 실제로 그리기
+  function draw() {
+    player.style.left = x + "px";
+    player.style.top  = y + "px";
+  }
+
+  // 아이템을 아무 데나 옮기기
+  function moveItem() {
+    item.style.left = Math.floor(Math.random() * 460) + "px";
+    item.style.top  = Math.floor(Math.random() * 360) + "px";
+  }
+
+  // 키보드를 눌렀을 때
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") x = x + 50;
+    if (e.key === "ArrowLeft")  x = x - 50;
+    if (e.key === "ArrowDown")  y = y + 50;
+    if (e.key === "ArrowUp")    y = y - 50;
+
+    // 벽 밖으로 못 나가게
+    if (x < 0)   x = 0;
+    if (x > 460) x = 460;
+    if (y < 0)   y = 0;
+    if (y > 360) y = 360;
+
+    draw();
+    checkItem();
+  });
+
+  // 캐릭터와 아이템이 가까우면 먹은 것으로
+  function checkItem() {
+    const ix = parseInt(item.style.left);
+    const iy = parseInt(item.style.top);
+
+    if (Math.abs(x - ix) < 40 && Math.abs(y - iy) < 40) {
+      score = score + 1;
+      scoreText.innerText = score;
+      moveItem();
+    }
+  }
+
+  draw();
+  moveItem();
+</script>
+
+</body>
+</html>

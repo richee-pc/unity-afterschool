@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>피하기 게임</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score { font-weight: bold; color: #2563eb; }
+  #stage { position: relative; width: 500px; height: 420px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; bottom: 10px; width: 44px; height: 44px;
+            background: #2563eb; border-radius: 12px; }
+  .rock { position: absolute; width: 40px; height: 40px; font-size: 34px;
+          line-height: 40px; }
+  #over { position: absolute; inset: 0; display: none; place-items: center;
+          background: rgba(255,255,255,.92); font-size: 30px; font-weight: bold;
+          color: #dc2626; flex-direction: column; }
+  button { font-size: 20px; padding: 13px 34px; border: 0; border-radius: 14px;
+           background: #2563eb; color: white; cursor: pointer; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+  <h1>💥 피하기 게임</h1>
+  <div id="info">← → 로 피하세요 · 점수 <span id="score">0</span></div>
+
+  <div id="stage">
+    <div id="player"></div>
+    <div id="over">
+      <div id="overText">게임 오버!</div>
+      <button id="again">다시하기</button>
+    </div>
+  </div>
+
+<script>
+  let x = 228;          // 캐릭터 가로 위치
+  let score = 0;
+  let playing = true;
+  let rocks = [];       // 떨어지는 돌 목록
+  let gameTimer, makeTimer;
+
+  const stage     = document.getElementById("stage");
+  const player    = document.getElementById("player");
+  const scoreText = document.getElementById("score");
+  const over      = document.getElementById("over");
+
+  player.style.left = x + "px";
+
+  // ← → 키로 움직이기
+  document.addEventListener("keydown", function (e) {
+    if (!playing) return;
+    if (e.key === "ArrowLeft")  x = x - 15;
+    if (e.key === "ArrowRight") x = x + 15;
+    if (x < 0)   x = 0;
+    if (x > 456) x = 456;
+    player.style.left = x + "px";
+  });
+
+  // 돌 하나 새로 만들기
+  function makeRock() {
+    const rock = document.createElement("div");
+    rock.className = "rock";
+    rock.innerText = "🤢";
+    rock.style.left = Math.floor(Math.random() * 460) + "px";
+    rock.style.top  = "-40px";
+    stage.appendChild(rock);
+    rocks.push(rock);
+  }
+
+  // 0.03초마다 모든 돌을 아래로
+  function update() {
+    for (let i = 0; i < rocks.length; i = i + 1) {
+      const rock = rocks[i];
+      const top = parseInt(rock.style.top) + 9;
+      rock.style.top = top + "px";
+
+      // 캐릭터와 부딪혔나? (사각형 겹침 검사)
+      const rx = parseInt(rock.style.left);
+      if (top > 366 && top < 420 && Math.abs(x - rx) < 42) {
+        gameOver();
+        return;
+      }
+
+      // 바닥까지 내려가면 치우고 점수 +1
+      if (top > 420) {
+        rock.remove();
+        rocks.splice(i, 1);
+        i = i - 1;
+        score = score + 1;
+        scoreText.innerText = score;
+      }
+    }
+  }
+
+  function gameOver() {
+    playing = false;
+    clearInterval(gameTimer);
+    clearInterval(makeTimer);
+    document.getElementById("overText").innerText = "게임 오버! " + score + "점";
+    over.style.display = "flex";
+  }
+
+  function start() {
+    clearInterval(gameTimer);    // 혹시 돌아가던 타이머가 있으면 먼저 끄기
+    clearInterval(makeTimer);
+    for (let i = 0; i < rocks.length; i = i + 1) rocks[i].remove();
+    rocks = [];
+    x = 228; score = 0; playing = true;
+    player.style.left = x + "px";
+    scoreText.innerText = 0;
+    over.style.display = "none";
+    gameTimer = setInterval(update, 30);
+    makeTimer = setInterval(makeRock, 1200);
+  }
+
+  document.getElementById("again").onclick = start;
+  start();
+</script>
+
+</body>
+</html>

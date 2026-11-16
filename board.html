@@ -2056,218 +2056,1007 @@ const STAGES = [
  }
 },
 {
- n:5, date:"11차시 · 11/16", lv:1, lvName:"팀 기획",
- title:"우리 팀이 풀 문제 정하기",
- sub:"오늘부터 팀 프로젝트입니다. 코드는 안 씁니다 — 무엇을 만들지 정하는 날이에요.",
+ n:5, date:"11차시 · 11/16", lv:2, lvName:"팀 기획",
+ title:"팀 프로젝트 ① — 무엇을 만들지 정한다",
+ sub:"오늘부터 3주짜리 팀 프로젝트입니다. 지금까지는 제가 준 코드를 고쳤다면, 이제부터는 여러분이 만듭니다.",
  learn:[
+  ["3주 동안 이렇게 갑니다","<b>오늘</b> 주제·템플릿·기능 정하기 → <b>다음 주</b> 레벨 1·2 만들기 → <b>그 다음 주</b> 레벨 3 + 교차 테스트 → <b>마지막</b> 발표회. <b>오늘 정한 것이 3주를 좌우합니다.</b>"],
   ["좋은 주제는 '불편함'에서 나옵니다","거창할 필요 없어요. <b>\"우리 반에서 매번 귀찮은 일\"</b> 이 가장 좋은 주제입니다. 급식 메뉴 고르기, 자리 정하기, 청소 당번 뽑기 — 전부 훌륭한 소재예요."],
-  ["이미 배운 재료로만 만듭니다","지난 4주 동안 배운 <b>버튼 · 점수 · 랜덤 · 타이머 · 키입력 · 충돌</b>, 이 6개가 전부입니다. <b>새로 배울 필요 없이</b> 이것만 조합하면 돼요."],
-  ["역할을 나누면 빨라집니다","<b>기획</b>(무엇을 만들지 정하고 발표) · <b>디자인</b>(HTML/CSS로 화면) · <b>코딩</b>(JS 기능) · <b>테스트</b>(버그 찾고 친구들에게 시켜보기). 4명이면 하나씩, 3명이면 테스트를 나눠 맡으세요."],
-  ["화면을 먼저 그려보세요","코드를 짜기 전에 <b>종이에 화면을 그려봐야</b> 합니다. 버튼이 몇 개인지, 어디에 글자가 나오는지. 이걸 안 하면 만들다가 길을 잃어요."],
-  ["작게 시작하는 게 이깁니다","<b>기능 1개만 제대로</b> 되는 앱이, 기능 5개가 다 안 되는 앱보다 훨씬 좋습니다. 욕심내지 말고 <b>핵심 버튼 하나</b>부터 완성하세요."]
+  ["빈 파일에서 시작하지 않습니다","아래에 <b>템플릿 4종</b>이 있습니다. 전부 <b>지금 바로 돌아가는 완성품</b>이에요. 하나를 골라서 <b>우리 것으로 고쳐 나가는</b> 방식입니다. 프로 개발자도 이렇게 일해요."],
+  ["이번엔 새로운 걸 3개 배웁니다","지난 4주가 '고치기'였다면 이번엔 진짜 앱의 재료를 씁니다. <b>① 입력창에서 글자 받기</b>(<code>input.value</code>) <b>② 목록에 넣고 빼기</b>(<code>push</code>·<code>splice</code>) <b>③ 껐다 켜도 안 사라지게</b>(<code>localStorage</code>). 전부 템플릿과 레시피에 들어 있습니다."],
+  ["레벨 1·2·3 으로 나눠서 만듭니다","한 번에 다 만들려 하면 망합니다. <b>레벨 1(우리 내용으로 바꾸기) → 레벨 2(기능 레시피 2개 이상 붙이기) → 레벨 3(디자인·완성도)</b> 순서로. <b>레벨 1이 안 되면 레벨 2로 못 갑니다.</b>"],
+  ["역할은 '돌아가며' 나눕니다","<b>기획</b>(정하고 발표) · <b>디자인</b>(화면·색) · <b>코딩</b>(기능) · <b>테스트</b>(버그 찾기). 다만 <b>코딩은 한 명이 독점하지 않습니다</b> — 10분마다 키보드를 넘기세요."],
+  ["화면을 먼저 그려 보세요","코드를 짜기 전에 <b>종이에 화면을 그려야</b> 합니다. 버튼이 몇 개인지, 결과가 어디 나오는지. 이걸 안 하면 만들다 길을 잃어요."]
  ],
  quests:[
-  "<b>3~4명</b>으로 팀 만들기",
-  "각자 <b>\"우리 학교·우리 반에서 불편한 것\"</b> 3가지씩 포스트잇에 적기",
-  "팀에서 모아 보고 <b>하나</b> 고르기 (아래 후보 표를 참고해도 됩니다)",
-  "종이에 <b>화면 그림</b> 그리기 — 버튼은 어디에, 결과는 어디에 나올지",
-  "아래 <b>기능 체크표</b>에서 우리가 쓸 기능에 동그라미",
-  "<b>역할 분담</b> 정하기 (기획 / 디자인 / 코딩 / 테스트)",
-  "<b>한 줄 소개</b> 완성하기 — \"우리 앱은 ○○할 때 ○○해주는 앱이다\"",
-  "아래 <b>뼈대 코드</b>를 받아 저장해 두기 (다음 시간에 여기서 시작)",
-  "뼈대 코드의 <b>목록(list)만</b> 우리 주제로 바꿔 보기 → 벌써 절반은 된 겁니다!"
+  "<b>3~4명</b>으로 팀을 만들고 <b>팀 이름</b> 정하기",
+  "각자 <b>\"우리 학교·우리 반에서 불편한 것\"</b> 3가지씩 적어서 모으기",
+  "팀에서 <b>주제 하나</b> 고르기 (아래 주제 후보 표 참고 가능)",
+  "<b>한 줄 소개</b> 완성 — \"우리 앱은 ○○할 때 ○○해주는 앱이다\"",
+  "<b>앱 이름</b>과 <b>대표 이모지</b> 정하기",
+  "종이에 <b>화면 그림</b> 그리기 — 버튼 위치, 결과가 나올 자리",
+  "★ 아래 <b>템플릿 4종</b>을 하나씩 열어 보고 <b>우리에게 맞는 것 고르기</b>",
+  "★ 고른 템플릿을 저장하고 <b>①제목 ②목록/문제/항목</b> 을 우리 것으로 바꿔 보기 → <b>레벨 1 시작!</b>",
+  "★ 아래 <b>기능 레시피</b>를 훑어보고, 레벨 2에서 붙일 <b>2개 이상</b> 골라 적어 두기"
  ],
- code:[["team.html  (팀 프로젝트 뼈대 — 여기서 시작하세요)", `<!doctype html>
+ code:[
+  ["① 뽑기형  ─ pick.html  (추천 · 당번 · 룰렛)", `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>우리 팀 앱</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>뽑기 앱</title>
 <style>
-  /* ↓↓↓ 색과 글꼴은 마음대로 바꾸세요 ↓↓↓ */
-  body { font-family: sans-serif; text-align: center; background: #eef2f7;
-         padding: 30px; color: #15181c; }
-  h1 { font-size: 32px; margin-bottom: 4px; }
-  #desc { color: #64748b; margin-bottom: 24px; }
-  #box { background: white; width: 420px; margin: 0 auto; padding: 30px;
-         border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
-  #result { font-size: 44px; font-weight: bold; color: #2563eb;
-            min-height: 60px; margin: 18px 0; }
-  button { font-size: 20px; padding: 14px 34px; border: 0; border-radius: 14px;
-           background: #2563eb; color: white; cursor: pointer; }
-  button:active { transform: scale(0.96); }
+  :root {
+    --main: #2563eb;          /* ③ 우리 팀 색 */
+    --bg:   #eef2f7;
+  }
+  body { font-family: sans-serif; background: var(--bg); margin: 0;
+         padding: 24px 16px 60px; display: flex; justify-content: center; }
+  .app { width: 100%; max-width: 440px; }
+  h1 { font-size: 28px; text-align: center; margin: 0 0 4px; }
+  .sub { text-align: center; color: #64748b; font-size: 15px; margin: 0 0 20px; }
+
+  .box { background: white; border-radius: 16px; padding: 18px; margin-bottom: 14px;
+         box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+
+  .addbar { display: flex; gap: 8px; }
+  .addbar input { flex: 1; font-size: 16px; padding: 12px; border: 2px solid #e2e8f0;
+                  border-radius: 10px; font-family: inherit; }
+  .addbar input:focus { outline: none; border-color: var(--main); }
+  .addbar button { font-size: 16px; padding: 12px 18px; border: 0; border-radius: 10px;
+                   background: var(--main); color: white; cursor: pointer; }
+
+  ul { list-style: none; margin: 14px 0 0; padding: 0; }
+  li { display: flex; align-items: center; gap: 10px; padding: 10px 4px;
+       border-bottom: 1px solid #f1f5f9; font-size: 16px; }
+  li span { flex: 1; }
+  li button { border: 0; background: #fee2e2; color: #dc2626; cursor: pointer;
+              border-radius: 8px; padding: 6px 11px; font-size: 14px; }
+  .empty { color: #94a3b8; text-align: center; padding: 18px 0; font-size: 15px; }
+
+  #pickBtn { width: 100%; font-size: 21px; font-weight: bold; padding: 18px;
+             border: 0; border-radius: 14px; background: var(--main); color: white;
+             cursor: pointer; }
+  #pickBtn:active { transform: scale(.98); }
+
+  #result { text-align: center; font-size: 34px; font-weight: bold; min-height: 52px;
+            color: var(--main); margin-top: 6px; }
+  #count { text-align: center; color: #94a3b8; font-size: 14px; }
 </style>
 </head>
 <body>
 
-  <!-- ① 제목을 우리 앱 이름으로 바꾸세요 -->
-  <h1>🍚 오늘 뭐 먹지?</h1>
-  <p id="desc">버튼을 누르면 메뉴를 뽑아 드립니다</p>
+<div class="app">
 
-  <div id="box">
-    <div id="result">?</div>
-    <button id="btn">뽑기!</button>
+  <!-- ━━━ ① 제목을 우리 앱으로 바꾸세요 ━━━ -->
+  <h1>🍚 오늘 뭐 먹지</h1>
+  <p class="sub">버튼을 누르면 하나를 뽑아 줍니다</p>
+
+  <div class="box">
+    <div class="addbar">
+      <input id="newItem" placeholder="항목을 입력하세요">
+      <button id="addBtn">추가</button>
+    </div>
+    <ul id="list"></ul>
+    <p id="count"></p>
   </div>
 
+  <div class="box">
+    <button id="pickBtn">🎲 뽑기!</button>
+    <div id="result"></div>
+  </div>
+
+</div>
+
 <script>
-  // ② 목록을 우리 주제에 맞게 바꾸세요
-  const list = ["떡볶이", "김밥", "라면", "돈까스", "제육덮밥", "짜장면"];
+  // ━━━ ② 우리 주제에 맞는 목록으로 바꾸세요 ━━━
+  let items = ["김치찌개", "돈까스", "떡볶이", "제육덮밥", "라면"];
 
-  const result = document.getElementById("result");
-  const btn    = document.getElementById("btn");
+  const listEl   = document.getElementById("list");
+  const countEl  = document.getElementById("count");
+  const inputEl  = document.getElementById("newItem");
+  const resultEl = document.getElementById("result");
 
-  // ③ 버튼을 누르면 목록에서 아무거나 하나 뽑기
-  btn.onclick = function () {
-    const i = Math.floor(Math.random() * list.length);
-    result.innerText = list[i];
+  // 목록을 화면에 그리는 함수 — 목록이 바뀔 때마다 부릅니다
+  function draw() {
+    listEl.innerHTML = "";
+
+    if (items.length === 0) {
+      listEl.innerHTML = "<p class='empty'>항목을 추가해 주세요</p>";
+    }
+
+    for (let i = 0; i < items.length; i = i + 1) {
+      const li = document.createElement("li");
+
+      const text = document.createElement("span");
+      text.innerText = items[i];
+
+      const del = document.createElement("button");
+      del.innerText = "삭제";
+      del.onclick = function () {
+        items.splice(i, 1);     // i번째를 1개 지운다
+        draw();
+      };
+
+      li.appendChild(text);
+      li.appendChild(del);
+      listEl.appendChild(li);
+    }
+
+    countEl.innerText = "모두 " + items.length + "개";
+  }
+
+  // 추가 버튼
+  document.getElementById("addBtn").onclick = function () {
+    const value = inputEl.value;      // 입력창에 쓴 글자를 가져온다
+
+    if (value === "") {
+      alert("먼저 내용을 입력하세요!");
+      return;
+    }
+
+    items.push(value);                // 목록 맨 뒤에 넣는다
+    inputEl.value = "";               // 입력창 비우기
+    draw();
   };
+
+  // 입력창에서 Enter 를 눌러도 추가되게
+  inputEl.onkeydown = function (e) {
+    if (e.key === "Enter") document.getElementById("addBtn").onclick();
+  };
+
+  // 뽑기 버튼
+  document.getElementById("pickBtn").onclick = function () {
+    if (items.length === 0) {
+      resultEl.innerText = "목록이 비었어요";
+      return;
+    }
+
+    const n = Math.floor(Math.random() * items.length);
+    resultEl.innerText = items[n];
+  };
+
+  draw();
 <\/script>
 
 </body>
-</html>`]],
+</html>`],
+  ["② 퀴즈형  ─ quiz.html  (퀴즈 · 테스트 · 상식)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>퀴즈 앱</title>
+<style>
+  :root {
+    --main: #7c3aed;          /* ③ 우리 팀 색 */
+    --bg:   #f5f3ff;
+  }
+  body { font-family: sans-serif; background: var(--bg); margin: 0;
+         padding: 24px 16px 60px; display: flex; justify-content: center; }
+  .app { width: 100%; max-width: 460px; }
+  h1 { font-size: 27px; text-align: center; margin: 0 0 18px; }
+
+  .box { background: white; border-radius: 16px; padding: 22px;
+         box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+
+  .bar { height: 9px; background: #ede9fe; border-radius: 99px; overflow: hidden;
+         margin-bottom: 16px; }
+  .bar div { height: 100%; width: 0; background: var(--main); transition: width .25s; }
+
+  .no { color: #a78bfa; font-size: 14px; font-weight: bold; }
+  #question { font-size: 20px; font-weight: bold; margin: 8px 0 20px; line-height: 1.5; }
+
+  .choices { display: flex; flex-direction: column; gap: 9px; }
+  .choices button { font-size: 16px; padding: 15px; border: 2px solid #e9e5ff;
+                    border-radius: 12px; background: white; cursor: pointer;
+                    text-align: left; font-family: inherit; }
+  .choices button:hover { border-color: var(--main); }
+  .choices button.right { background: #dcfce7; border-color: #16a34a; }
+  .choices button.wrong { background: #fee2e2; border-color: #dc2626; }
+
+  #mark { text-align: center; font-size: 19px; font-weight: bold; min-height: 30px;
+          margin-top: 16px; }
+
+  /* 결과 화면 — 처음에는 숨어 있습니다 */
+  #endScreen { display: none; text-align: center; }
+  #endScreen .em { font-size: 64px; }
+  #endScreen h2 { font-size: 24px; margin: 6px 0; }
+  #endScreen p { color: #64748b; margin: 0 0 20px; }
+  #again { font-size: 17px; padding: 14px 32px; border: 0; border-radius: 12px;
+           background: var(--main); color: white; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ━━━ ① 제목을 우리 앱으로 바꾸세요 ━━━ -->
+  <h1>🧠 우리 반 퀴즈</h1>
+
+  <div class="box">
+
+    <div id="playScreen">
+      <div class="bar"><div id="barFill"></div></div>
+      <div class="no" id="no"></div>
+      <div id="question"></div>
+      <div class="choices" id="choices"></div>
+      <div id="mark"></div>
+    </div>
+
+    <div id="endScreen">
+      <div class="em" id="endEmoji">🎉</div>
+      <h2 id="endTitle"></h2>
+      <p id="endScore"></p>
+      <button id="again">다시 풀기</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ━━━ ② 문제를 우리 것으로 바꾸세요 ━━━
+  //     answer 는 정답이 몇 번째인지 (맨 앞이 0)
+  const quiz = [
+    { q: "우리 학교 교훈의 첫 글자는?",
+      choices: ["성", "정", "창", "근"], answer: 1 },
+
+    { q: "종이컵은 어디에 버려야 할까요?",
+      choices: ["일반쓰레기", "플라스틱", "종이류", "캔류"], answer: 2 },
+
+    { q: "1교시 시작은 몇 시일까요?",
+      choices: ["8시 30분", "8시 50분", "9시 00분", "9시 10분"], answer: 1 }
+  ];
+
+  let index = 0;     // 지금 몇 번째 문제인가
+  let score = 0;     // 맞힌 개수
+  let locked = false;  // 답을 고른 뒤 또 못 누르게
+
+  const noEl       = document.getElementById("no");
+  const questionEl = document.getElementById("question");
+  const choicesEl  = document.getElementById("choices");
+  const markEl     = document.getElementById("mark");
+  const barFill    = document.getElementById("barFill");
+
+  function showQuestion() {
+    locked = false;
+    markEl.innerText = "";
+
+    const item = quiz[index];
+    noEl.innerText = "문제 " + (index + 1) + " / " + quiz.length;
+    questionEl.innerText = item.q;
+    barFill.style.width = (index / quiz.length * 100) + "%";
+
+    choicesEl.innerHTML = "";
+    for (let i = 0; i < item.choices.length; i = i + 1) {
+      const btn = document.createElement("button");
+      btn.innerText = item.choices[i];
+      btn.onclick = function () { choose(i, btn); };
+      choicesEl.appendChild(btn);
+    }
+  }
+
+  function choose(picked, btn) {
+    if (locked) return;
+    locked = true;
+
+    if (picked === quiz[index].answer) {
+      score = score + 1;
+      btn.className = "right";
+      markEl.innerText = "⭕ 정답!";
+    } else {
+      btn.className = "wrong";
+      markEl.innerText = "❌ 땡! 정답은 " + quiz[index].choices[quiz[index].answer];
+    }
+
+    // 1.2초 뒤에 다음 문제로
+    setTimeout(next, 1200);
+  }
+
+  function next() {
+    index = index + 1;
+
+    if (index < quiz.length) {
+      showQuestion();
+    } else {
+      showEnd();
+    }
+  }
+
+  function showEnd() {
+    // 화면 바꾸기 — 하나는 숨기고 하나는 보이게
+    document.getElementById("playScreen").style.display = "none";
+    document.getElementById("endScreen").style.display = "block";
+
+    document.getElementById("endScore").innerText =
+      quiz.length + "문제 중 " + score + "개 정답";
+
+    // ━━━ ③ 등급 기준을 우리 마음대로 바꾸세요 ━━━
+    if (score === quiz.length) {
+      document.getElementById("endEmoji").innerText = "🏆";
+      document.getElementById("endTitle").innerText = "만점! 대단해요";
+    } else if (score >= quiz.length / 2) {
+      document.getElementById("endEmoji").innerText = "😎";
+      document.getElementById("endTitle").innerText = "잘했어요!";
+    } else {
+      document.getElementById("endEmoji").innerText = "😅";
+      document.getElementById("endTitle").innerText = "다시 도전!";
+    }
+  }
+
+  document.getElementById("again").onclick = function () {
+    index = 0;
+    score = 0;
+    document.getElementById("playScreen").style.display = "block";
+    document.getElementById("endScreen").style.display = "none";
+    showQuestion();
+  };
+
+  showQuestion();
+<\/script>
+
+</body>
+</html>`],
+  ["③ 집계형  ─ vote.html  (투표 · 설문 · 랭킹)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>투표 앱</title>
+<style>
+  :root {
+    --main: #0d9488;          /* ③ 우리 팀 색 */
+    --bg:   #f0fdfa;
+  }
+  body { font-family: sans-serif; background: var(--bg); margin: 0;
+         padding: 24px 16px 60px; display: flex; justify-content: center; }
+  .app { width: 100%; max-width: 450px; }
+  h1 { font-size: 27px; text-align: center; margin: 0 0 4px; }
+  .sub { text-align: center; color: #64748b; font-size: 15px; margin: 0 0 20px; }
+
+  .box { background: white; border-radius: 16px; padding: 20px; margin-bottom: 14px;
+         box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+
+  .row { margin-bottom: 15px; }
+  .row:last-child { margin-bottom: 0; }
+
+  .top { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; }
+  .top .ic { font-size: 22px; }
+  .top .nm { flex: 1; font-weight: bold; font-size: 16px; }
+  .top .num { font-family: monospace; color: var(--main); font-weight: bold; font-size: 16px; }
+
+  .track { height: 26px; background: #e2e8f0; border-radius: 8px; overflow: hidden;
+           cursor: pointer; }
+  .fill { height: 100%; width: 0; background: var(--main); border-radius: 8px;
+          transition: width .3s; }
+
+  .voteBtn { width: 100%; margin-top: 8px; font-size: 16px; padding: 12px; border: 0;
+             border-radius: 10px; background: var(--main); color: white; cursor: pointer; }
+  .voteBtn:active { transform: scale(.98); }
+
+  #total { text-align: center; font-size: 15px; color: #64748b; }
+  #winner { text-align: center; font-size: 19px; font-weight: bold; color: var(--main);
+            min-height: 28px; }
+  #reset { width: 100%; font-size: 15px; padding: 12px; border: 0; border-radius: 10px;
+           background: #e2e8f0; color: #475569; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ━━━ ① 제목을 우리 앱으로 바꾸세요 ━━━ -->
+  <h1>🗳️ 우리 반 투표</h1>
+  <p class="sub">버튼을 누르면 한 표가 올라갑니다</p>
+
+  <div class="box" id="board"></div>
+
+  <div class="box">
+    <p id="total"></p>
+    <p id="winner"></p>
+    <button id="reset">처음부터 다시</button>
+  </div>
+
+</div>
+
+<script>
+  // ━━━ ② 투표 항목을 우리 것으로 바꾸세요 ━━━
+  //     votes 는 시작 표 수입니다 (보통 0)
+  let items = [
+    { icon: "🍕", name: "피자",   votes: 0 },
+    { icon: "🍗", name: "치킨",   votes: 0 },
+    { icon: "🍔", name: "햄버거", votes: 0 },
+    { icon: "🍜", name: "라면",   votes: 0 }
+  ];
+
+  const board    = document.getElementById("board");
+  const totalEl  = document.getElementById("total");
+  const winnerEl = document.getElementById("winner");
+
+  function draw() {
+    // 가장 많은 표가 몇 표인지 찾기 (막대 길이 기준)
+    let max = 0;
+    let sum = 0;
+    for (let i = 0; i < items.length; i = i + 1) {
+      sum = sum + items[i].votes;
+      if (items[i].votes > max) max = items[i].votes;
+    }
+
+    board.innerHTML = "";
+
+    for (let i = 0; i < items.length; i = i + 1) {
+      const it = items[i];
+
+      const row = document.createElement("div");
+      row.className = "row";
+
+      // 막대 길이 = 내 표 / 1등 표 × 100%
+      let percent = 0;
+      if (max > 0) percent = it.votes / max * 100;
+
+      row.innerHTML =
+        '<div class="top">' +
+          '<span class="ic">' + it.icon + "</span>" +
+          '<span class="nm">' + it.name + "</span>" +
+          '<span class="num">' + it.votes + "표</span>" +
+        "</div>" +
+        '<div class="track"><div class="fill" style="width:' + percent + '%"></div></div>';
+
+      const btn = document.createElement("button");
+      btn.className = "voteBtn";
+      btn.innerText = "투표하기";
+      btn.onclick = function () {
+        items[i].votes = items[i].votes + 1;
+        draw();
+      };
+
+      row.appendChild(btn);
+      board.appendChild(row);
+    }
+
+    totalEl.innerText = "지금까지 " + sum + "표";
+
+    // 1등 표시 — 아직 아무도 안 눌렀으면 비워 둡니다
+    if (sum === 0) {
+      winnerEl.innerText = "";
+    } else {
+      let best = items[0];
+      for (let i = 0; i < items.length; i = i + 1) {
+        if (items[i].votes > best.votes) best = items[i];
+      }
+      winnerEl.innerText = "🏆 1등 : " + best.icon + " " + best.name;
+    }
+  }
+
+  document.getElementById("reset").onclick = function () {
+    for (let i = 0; i < items.length; i = i + 1) {
+      items[i].votes = 0;
+    }
+    draw();
+  };
+
+  draw();
+<\/script>
+
+</body>
+</html>`],
+  ["④ 타이머형 ─ timer.html (집중 · 루틴 · 운동)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>타이머 앱</title>
+<style>
+  :root {
+    --main: #ea580c;          /* ③ 우리 팀 색 */
+    --rest: #0891b2;          /*    쉬는 시간 색 */
+    --bg:   #fff7ed;
+  }
+  body { font-family: sans-serif; background: var(--bg); margin: 0;
+         padding: 24px 16px 60px; display: flex; justify-content: center;
+         transition: background .4s; }
+  body.resting { background: #ecfeff; }
+
+  .app { width: 100%; max-width: 420px; text-align: center; }
+  h1 { font-size: 27px; margin: 0 0 20px; }
+
+  .box { background: white; border-radius: 20px; padding: 28px 22px;
+         box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+
+  #phase { font-size: 17px; font-weight: bold; color: var(--main); letter-spacing: .04em; }
+  body.resting #phase { color: var(--rest); }
+
+  #clock { font-family: monospace; font-size: 68px; font-weight: bold; line-height: 1.1;
+           margin: 6px 0 4px; color: #1e293b; }
+
+  .ring { height: 8px; background: #fed7aa; border-radius: 99px; overflow: hidden;
+          margin: 14px 0 20px; }
+  .ring div { height: 100%; width: 100%; background: var(--main); transition: width 1s linear; }
+  body.resting .ring { background: #cffafe; }
+  body.resting .ring div { background: var(--rest); }
+
+  .btns { display: flex; gap: 9px; }
+  .btns button { flex: 1; font-size: 17px; padding: 15px 0; border: 0; border-radius: 12px;
+                 cursor: pointer; font-family: inherit; }
+  #startBtn { background: var(--main); color: white; }
+  body.resting #startBtn { background: var(--rest); }
+  #resetBtn { background: #e2e8f0; color: #475569; }
+
+  #done { margin-top: 18px; font-size: 15px; color: #78716c; }
+  #stamps { font-size: 24px; letter-spacing: 4px; min-height: 32px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ━━━ ① 제목을 우리 앱으로 바꾸세요 ━━━ -->
+  <h1>🍅 집중 타이머</h1>
+
+  <div class="box">
+    <div id="phase">집중 시간</div>
+    <div id="clock">25:00</div>
+    <div class="ring"><div id="ringFill"></div></div>
+
+    <div class="btns">
+      <button id="startBtn">시작</button>
+      <button id="resetBtn">리셋</button>
+    </div>
+
+    <div id="done">오늘 끝낸 집중</div>
+    <div id="stamps"></div>
+  </div>
+
+</div>
+
+<script>
+  // ━━━ ② 시간을 우리가 원하는 대로 바꾸세요 (단위: 초) ━━━
+  const FOCUS = 25 * 60;    // 집중 25분
+  const REST  =  5 * 60;    // 휴식 5분
+
+  let left    = FOCUS;      // 남은 초
+  let resting = false;      // 지금 쉬는 시간인가
+  let running = false;      // 지금 돌아가는 중인가
+  let rounds  = 0;          // 집중을 몇 번 끝냈나
+  let timer;
+
+  const clockEl  = document.getElementById("clock");
+  const phaseEl  = document.getElementById("phase");
+  const ringFill = document.getElementById("ringFill");
+  const startBtn = document.getElementById("startBtn");
+  const stampsEl = document.getElementById("stamps");
+
+  // 125초 → "02:05" 처럼 보기 좋게 만드는 함수
+  function two(n) {
+    if (n < 10) return "0" + n;
+    return "" + n;
+  }
+  function format(sec) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return two(m) + ":" + two(s);
+  }
+
+  function draw() {
+    clockEl.innerText = format(left);
+
+    const whole = resting ? REST : FOCUS;
+    ringFill.style.width = (left / whole * 100) + "%";
+
+    if (resting) {
+      phaseEl.innerText = "쉬는 시간";
+      document.body.className = "resting";
+    } else {
+      phaseEl.innerText = "집중 시간";
+      document.body.className = "";
+    }
+
+    startBtn.innerText = running ? "잠깐 멈춤" : "시작";
+
+    // ━━━ ③ 도장 모양을 바꿔도 좋아요 ━━━
+    stampsEl.innerText = "🍅".repeat(rounds);
+  }
+
+  function tick() {
+    left = left - 1;
+
+    if (left <= 0) {
+      // 한 단계가 끝났습니다 — 집중↔휴식 바꾸기
+      if (resting === false) {
+        rounds = rounds + 1;
+        resting = true;
+        left = REST;
+        alert("집중 끝! 쉬는 시간이에요 ☕");
+      } else {
+        resting = false;
+        left = FOCUS;
+        alert("쉬는 시간 끝! 다시 집중해 볼까요 💪");
+      }
+    }
+
+    draw();
+  }
+
+  startBtn.onclick = function () {
+    if (running) {
+      clearInterval(timer);
+      running = false;
+    } else {
+      timer = setInterval(tick, 1000);
+      running = true;
+    }
+    draw();
+  };
+
+  document.getElementById("resetBtn").onclick = function () {
+    clearInterval(timer);
+    running = false;
+    resting = false;
+    left = FOCUS;
+    draw();
+  };
+
+  draw();
+<\/script>
+
+</body>
+</html>`]
+ ],
  tables:[
+  {cap:"🎯 레벨 기준 — 우리 팀은 어디까지?",
+   head:["레벨","해야 하는 것","언제까지"],
+   rows:[["<b>LV 1</b><br>작동","제목·내용을 우리 것으로 바꿔서 <b>버튼이 우리 내용으로 작동</b>","12차시 전반"],
+         ["<b>LV 2</b><br>기능","기능 레시피 <b>2개 이상</b>을 붙여서 작동 (저장·소리·화면전환 등)","12차시 후반"],
+         ["<b>LV 3</b><br>완성","우리 팀 색으로 디자인 + 휴대폰에서도 보기 좋게 + 버그 없음","보충차시"],
+         ["<b>LV 4</b><br>욕심","레시피 4개 이상, 또는 템플릿에 없는 기능을 직접 추가","도전하는 팀만"]]},
+  {cap:"어떤 템플릿을 고를까?",
+   head:["우리 주제가 이런 거라면","고를 템플릿","예시"],
+   rows:[["여러 개 중 하나를 <b>뽑아 준다</b>","<b>① 뽑기형</b>","오늘 뭐 먹지 · 자리 뽑기 · 청소당번 · 룰렛"],
+         ["<b>문제를 내고 점수</b>를 매긴다","<b>② 퀴즈형</b>","우리 반 퀴즈 · 분리수거 퀴즈 · 성격 테스트"],
+         ["여러 항목의 <b>수를 센다</b>","<b>③ 집계형</b>","반 투표 · 설문 · 급식 평점 · 랭킹"],
+         ["<b>시간을 재거나</b> 순서대로 진행한다","<b>④ 타이머형</b>","집중 타이머 · 운동 루틴 · 발표 시간 재기"]]},
   {cap:"주제 후보 — 그대로 골라도 됩니다",
-   head:["주제","하는 일","쓰는 기능"],
-   rows:[["🍚 오늘 뭐 먹지","급식·분식 메뉴 랜덤 추천","랜덤"],
-         ["🎯 자리 뽑기","자리·청소당번 랜덤 배정","랜덤 + 목록"],
-         ["⏰ 수행평가 D-day","남은 날짜 세어 보여주기","날짜 계산"],
-         ["🍅 공부 집중 타이머","25분 집중 + 5분 휴식","타이머"],
-         ["🧠 우리 반 퀴즈","문제 내고 점수 매기기","점수 + 조건"],
-         ["♻️ 분리수거 퀴즈","쓰레기 분류 맞히기 게임","점수 + 랜덤"],
-         ["🗳️ 우리 반 투표","버튼 누르면 표가 쌓임","숫자 세기"],
-         ["🎲 쉬는시간 룰렛","10분 동안 뭐 할지 뽑기","랜덤"]]},
-  {cap:"기능 체크표 — 우리가 쓸 것에 동그라미",
-   head:["기능","배운 차시","코드"],
-   rows:[["버튼 누르면 반응","1차시","<code>onclick</code>"],
-         ["숫자 세기 / 점수","1차시","<code>let score = 0</code>"],
-         ["조건에 따라 다르게","1차시","<code>if</code>"],
-         ["랜덤으로 뽑기","2차시","<code>Math.random()</code>"],
-         ["시간 흐르게 / 타이머","2차시","<code>setInterval</code>"],
-         ["키보드로 조작","3차시","<code>keydown</code>"],
-         ["부딪힘 판정","4차시","좌표 비교"]]}
+   head:["주제","하는 일","템플릿"],
+   rows:[["🍚 오늘 뭐 먹지","급식·분식 메뉴 추천","①"],
+         ["🎯 자리 뽑기","자리·청소당번 배정 (중복 없이)","① + R6"],
+         ["🗳️ 우리 반 투표","안건을 올리고 표 세기","③"],
+         ["🧠 우리 반 퀴즈","문제 내고 점수 매기기","②"],
+         ["♻️ 분리수거 퀴즈","쓰레기 분류 맞히기","②"],
+         ["🍅 공부 집중 타이머","25분 집중 + 5분 휴식","④"],
+         ["⏰ 수행평가 D-day","남은 날짜 세기","아무거나 + R4"],
+         ["🏃 운동 루틴 타이머","동작마다 시간 재기","④"],
+         ["📊 급식 평점","메뉴마다 별점 매기고 순위","③"],
+         ["🎤 발표 순서 정하기","순서 뽑고 시간 재기","① + ④"]]},
+  {cap:"✅ 오늘 끝내고 가야 할 것 (기획서)",
+   head:["칸","우리 팀 답"],
+   rows:[["팀 이름 / 팀원",""],
+         ["어떤 불편함을 푸나",""],
+         ["앱 이름 / 이모지",""],
+         ["한 줄 소개","우리 앱은 ____ 할 때 ____ 해주는 앱이다"],
+         ["고른 템플릿","① 뽑기 / ② 퀴즈 / ③ 집계 / ④ 타이머"],
+         ["레벨 2에 붙일 레시피 2개","R__ , R__"],
+         ["역할 (기획·디자인·코딩·테스트)",""]]}
  ],
  notes:[
-  ["tip","오늘은 코드를 안 씁니다","기획이 탄탄하면 제작이 빨라집니다. <b>종이와 펜</b>만 있으면 돼요. 컴퓨터는 마지막 10분에 뼈대 코드 받을 때만 씁니다."],
-  ["warn","주제 고를 때 피해야 할 것","<ul><li><b>인터넷에서 정보를 가져와야 하는 것</b> (실시간 날씨, 진짜 급식표) — 우리 수준에서 어렵고 학교 와이파이에서 느립니다</li><li><b>로그인·회원가입이 필요한 것</b></li><li><b>저장이 꼭 필요한 것</b> (새로고침하면 사라집니다)</li></ul>버튼을 누르면 <b>그 자리에서 결과가 나오는</b> 주제가 가장 좋습니다."]
+  ["tip","템플릿은 '정답'이 아니라 '출발점'입니다","4개 다 열어서 직접 눌러 보세요. 마음에 드는 걸 고르되, <b>통째로 바꿔도 됩니다.</b> 두 개를 섞어도 좋아요 (예: 타이머 + 뽑기)."],
+  ["warn","주제 고를 때 피해야 할 것","<ul><li><b>인터넷에서 정보를 가져와야 하는 것</b> (실시간 날씨, 진짜 급식표) — 학교 와이파이에서 느립니다</li><li><b>로그인·회원가입이 필요한 것</b></li><li><b>사람마다 다른 결과를 공유해야 하는 것</b> (내 폰에 저장은 되지만, 친구 폰으로는 안 넘어갑니다)</li></ul>"],
+  ["warn","오늘 컴퓨터는 마지막 20분만","앞 30분은 <b>종이와 펜</b>입니다. 기획이 흐릿한 채로 코드부터 만지면 3주를 날립니다. <b>기획서 표가 다 채워져야</b> 컴퓨터를 켜세요."]
  ],
  challenge:{
   reward:"쉬는시간 + 간식 🍪",
+  howto:"오늘 도전은 <b>팀 단위</b>입니다. 네 칸이 다 채워지고 <b>템플릿이 우리 내용으로 돌아가면</b> 완료!",
   items:[
-   ["📝 <b>도전 1 · 기획서 1장 완성</b>",
-    "종이 한 장에 네 가지가 다 들어가야 합니다 — <b>① 어떤 불편함을 푸는지 ② 화면 그림 ③ 쓸 기능 ④ 역할 분담</b>. " +
-    "넷 중 하나라도 비어 있으면 아직 끝난 게 아니에요."],
-
-   ["🏷️ <b>도전 2 · 앱 이름과 아이콘 정하기</b>",
-    "팀 전원이 동의하는 <b>앱 이름</b>과 <b>대표 이모지 1개</b>를 정하세요. " +
-    "이름은 짧고 바로 이해되는 게 좋습니다. (예 — 🍚 오늘 뭐 먹지)"],
-
-   ["🎤 <b>도전 3 · 한 줄 소개 쓰기</b>",
-    "빈칸을 채워 한 문장으로 만드세요.<br>" +
-    "<b>\"우리 앱은 ○○할 때 ○○해주는 앱이다.\"</b><br>" +
-    "이 한 줄이 안 써지면 주제가 아직 흐릿하다는 뜻이에요. 다시 좁혀 보세요."],
-
-   ["💾 <b>도전 4 · 뼈대 코드를 우리 것으로</b>",
-    "위 <code>team.html</code> 을 받아 저장하고, <b>목록(<code>list</code>)만</b> 우리 주제 내용으로 바꿔서 " +
-    "버튼이 우리 내용을 뽑는지 확인하세요. <b>여기까지 되면 이미 절반은 완성</b>입니다."]
+   ["📝 <b>도전 1 · 기획서 표 전부 채우기</b>",
+    "위 <b>기획서 표</b>의 7칸이 모두 채워져야 합니다. <b>한 줄 소개가 안 써지면</b> 주제가 아직 흐릿하다는 뜻이에요 — 더 좁히세요."],
+   ["🧩 <b>도전 2 · 템플릿 고르고 저장하기</b>",
+    "4종을 <b>전부 열어 보고</b> 하나를 고르세요. <code>복사</code> 버튼 → 메모장 → 우리 앱 이름으로 저장 → 더블클릭해서 <b>돌아가는 것 확인</b>까지."],
+   ["🎨 <b>도전 3 · 레벨 1 시작 — ①②를 우리 것으로</b>",
+    "템플릿 안의 <b>① 제목</b>과 <b>② 목록(또는 문제·항목·시간)</b>을 우리 주제 내용으로 바꾸세요. 저장 → F5 → <b>우리 내용이 나오면 레벨 1 절반 성공!</b>"],
+   ["🔧 <b>도전 4 · 레시피 2개 고르기</b>",
+    "아래 <b>기능 레시피 10종</b>을 훑어보고, 다음 주에 붙일 <b>2개를 골라</b> 기획서에 적으세요. <b>R1(저장)</b> 은 거의 모든 앱에 어울립니다."]
   ]
  }
 },
 {
  n:6, date:"12차시 · 11/23", lv:2, lvName:"제작",
- title:"제작 ① — 화면 만들고 기능 하나 붙이기",
- sub:"오늘 목표는 '완성'이 아니라 '버튼 하나가 제대로 되는 것'입니다.",
+ title:"팀 프로젝트 ② — 레벨 1·2 만들기",
+ sub:"오늘 목표는 레벨 1 완성, 그리고 기능 레시피 2개 붙이기입니다.",
  learn:[
-  ["오늘의 목표는 딱 하나","<b>핵심 버튼 1개가 제대로 작동하는 것.</b> 그것만 되면 오늘은 성공입니다. 꾸미기와 추가 기능은 다음 시간에 해도 늦지 않아요."],
-  ["뼈대에서 시작하세요","빈 파일에서 시작하지 마세요. 지난 시간에 받은 <b>뼈대 코드(team.html)</b> 를 열고 <b>①제목 ②목록 ③동작</b> 세 군데만 우리 것으로 바꾸면 절반은 끝납니다."],
-  ["조금 바꾸고 바로 확인","코드를 <b>한 군데 고칠 때마다</b> 저장(Ctrl+S) → 새로고침(F5)으로 확인하세요. 열 군데 고치고 한 번에 확인하면 <b>어디서 틀렸는지 못 찾습니다.</b>"],
-  ["막히면 지난 코드를 베끼세요","타이머가 필요하면 2차시 <code>mole.html</code>, 점수가 필요하면 1차시 <code>click.html</code> 에서 <b>그 부분만 복사</b>해 오면 됩니다. 이게 진짜 프로그래밍하는 방법이에요."],
-  ["F12 콘솔이 알려줍니다","화면이 안 움직이면 <code>F12</code> → <b>Console</b> 탭을 보세요. 빨간 글씨가 <b>몇 번째 줄이 문제인지</b> 알려줍니다."]
+  ["오늘의 성공 기준","<b>전반 25분 — 레벨 1 완성</b>(우리 내용으로 완전히 작동). <b>후반 30분 — 레벨 2</b>(레시피 2개 붙이기). 레벨 1이 안 끝났으면 <b>레벨 2로 넘어가지 마세요.</b>"],
+  ["레시피 붙이는 순서","① 레시피의 <b>'어디에 넣나'</b> 를 먼저 읽는다 → ② 코드를 복사한다 → ③ 그 자리에 붙인다 → ④ <b>저장 → F5 → 확인</b>. <b>한 번에 하나씩만</b> 붙이세요. 두 개를 한꺼번에 붙이면 뭐가 문제인지 못 찾습니다."],
+  ["붙이기 전에 백업","레시피를 붙이기 전에 <b>지금 파일을 복사해 두세요</b> (<code>우리앱_백업1.html</code>). 망가지면 되돌릴 수 있습니다. 프로 개발자가 매일 하는 일이에요."],
+  ["변수 이름을 맞춰야 합니다","레시피 코드에 있는 <code>items</code> · <code>resultEl</code> 같은 이름이 <b>내 파일의 이름과 다르면</b> 안 돌아갑니다. 내 파일에서 뭐라고 불렀는지 확인하고 <b>그 이름으로 바꿔</b> 쓰세요."],
+  ["F12 콘솔이 범인을 알려줍니다","안 되면 <code>F12</code> → <b>Console</b>. 빨간 글씨가 <b>몇 번째 줄</b>인지 알려줍니다. <code>is not defined</code> 는 <b>이름을 잘못 썼다</b>는 뜻이에요."],
+  ["10분마다 키보드를 넘기세요","한 명만 치고 나머지가 구경하면 팀 프로젝트가 아닙니다. 보는 사람은 <b>오타를 잡아 주는 역할</b>이에요 — 생각보다 중요합니다."]
  ],
  quests:[
-  "팀에서 <b>한 대의 컴퓨터</b>를 '메인'으로 정하기 (완성본은 여기에 모읍니다)",
-  "<code>team.html</code> 을 열고 파일 이름을 우리 앱 이름으로 바꾸기",
-  "<b>①</b> 제목(<code>&lt;h1&gt;</code>)과 설명을 우리 앱으로 수정",
-  "<b>②</b> 목록(<code>list</code>)을 우리 주제 내용으로 교체",
-  "저장 → 새로고침 → <b>버튼이 우리 내용으로 작동하나요?</b>",
-  "CSS에서 <b>색·글꼴·크기</b>를 우리 팀 스타일로 꾸미기",
-  "필요한 기능을 지난 차시 코드에서 <b>복사해 붙이기</b>",
-  "오늘 한 것을 팀원 전체 USB·메일·드라이브에 <b>백업</b>하기",
-  "안 되는 것 1~2개를 <b>메모</b>해 두기 (다음 시간에 먼저 해결)"
+  "팀에서 <b>메인 컴퓨터 한 대</b> 정하기 (완성본은 여기에 모읍니다)",
+  "지난 시간 파일 열기 — 없으면 11차시에서 템플릿 다시 받기",
+  "<b>[LV1]</b> ① 제목 · ② 내용(목록/문제/항목/시간) 을 우리 것으로 완전히 교체",
+  "<b>[LV1]</b> 저장 → F5 → <b>처음부터 끝까지 한 번 써 보기</b> (버튼 전부 눌러 보기)",
+  "<b>[LV1]</b> ★ <b>여기까지 되면 레벨 1 완료</b> — 선생님께 확인받기",
+  "<b>[LV2]</b> 파일을 <code>우리앱_백업1.html</code> 로 복사해 두기",
+  "<b>[LV2]</b> 고른 <b>레시피 1개</b> 붙이고 → 저장 → F5 → 작동 확인",
+  "<b>[LV2]</b> 백업 다시 뜨고, <b>레시피 2개째</b> 붙이고 → 확인",
+  "끝나기 5분 전 <b>팀원 전원 백업</b> + 안 되는 것 메모해 두기"
  ],
- code:[],
+ code:[
+  ["R1 · 쉬움  ─ 💾 새로고침해도 안 사라지게 (저장)", `/* ━━━━━━━━━━━━ 💾 새로고침해도 안 사라지게 (저장)  (쉬움) ━━━━━━━━━━━━
+   무엇을 해주나 : 지금은 새로고침하면 다 날아갑니다. 이걸 넣으면 껐다 켜도 그대로 남아요. 투표 수, 목록, 최고 점수 전부 가능합니다.
+   어디에 넣나   : JS 맨 아래. 목록 자리에 우리 변수 이름을, 우리앱 자리에 우리 앱 이름을 쓰세요.
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+// 저장하기 — 내용이 바뀔 때마다 부르세요 (draw 안이 편합니다)
+function save() {
+  localStorage.setItem("우리앱", JSON.stringify(items));
+}
+
+// 불러오기 — 맨 아래에서 딱 한 번
+const saved = localStorage.getItem("우리앱");
+if (saved !== null) {
+  items = JSON.parse(saved);
+  draw();
+}`],
+  ["R2 · 쉬움  ─ 🔊 효과음 넣기", `/* ━━━━━━━━━━━━ 🔊 효과음 넣기  (쉬움) ━━━━━━━━━━━━
+   무엇을 해주나 : 버튼을 누를 때 소리가 나면 완성도가 확 올라갑니다. 파일 없이 코드로 삐- 소리를 만듭니다.
+   어디에 넣나   : JS 맨 위에 함수를 넣고, 소리를 내고 싶은 곳에서 beep() 를 부르세요.
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+function beep(hz, ms) {
+  const ac = new AudioContext();
+  const osc = ac.createOscillator();
+  const vol = ac.createGain();
+  osc.frequency.value = hz;        // 숫자가 클수록 높은 소리
+  vol.gain.value = 0.08;           // 볼륨
+  osc.connect(vol); vol.connect(ac.destination);
+  osc.start();
+  setTimeout(function () { osc.stop(); ac.close(); }, ms);
+}
+
+// 쓸 때 :  beep(880, 120);   ← 짧고 높은 소리
+//          beep(300, 300);   ← 길고 낮은 소리`],
+  ["R3 · 쉬움  ─ 🌙 다크 모드 버튼", `/* ━━━━━━━━━━━━ 🌙 다크 모드 버튼  (쉬움) ━━━━━━━━━━━━
+   무엇을 해주나 : 밤에 쓰기 편한 어두운 화면으로 바꾸는 버튼입니다. 심사위원이 좋아합니다.
+   어디에 넣나   : HTML 에 버튼을 하나 넣고, CSS 와 JS 를 각각 붙이세요.
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+<!-- HTML : 아무 데나 -->
+<button id="darkBtn">🌙</button>
+
+/* CSS : 맨 아래 */
+body.dark { background: #1f2225; color: #eceff2; }
+body.dark .box { background: #2a2e32; }
+
+// JS : 맨 아래
+document.getElementById("darkBtn").onclick = function () {
+  document.body.classList.toggle("dark");
+};`],
+  ["R4 · 보통  ─ 📅 오늘 날짜 / D-day 세기", `/* ━━━━━━━━━━━━ 📅 오늘 날짜 / D-day 세기  (보통) ━━━━━━━━━━━━
+   무엇을 해주나 : 며칠 남았는지 계산해서 보여줍니다. 수행평가·시험·방학 카운트다운에 쓰세요.
+   어디에 넣나   : JS 맨 아래. 날짜는 연, 월-1, 일 순서입니다 (월은 1을 빼야 해요!).
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+// 2026년 12월 24일까지 며칠 남았나
+const target = new Date(2026, 11, 24);   // 11 = 12월
+const today  = new Date();
+
+const ms   = target - today;                       // 밀리초 차이
+const days = Math.ceil(ms / (1000 * 60 * 60 * 24));
+
+document.getElementById("dday").innerText = "D-" + days;`],
+  ["R5 · 보통  ─ 🎞️ 결과가 뿅 나타나는 효과", `/* ━━━━━━━━━━━━ 🎞️ 결과가 뿅 나타나는 효과  (보통) ━━━━━━━━━━━━
+   무엇을 해주나 : 결과가 그냥 바뀌는 대신 커지면서 나타나게 합니다. 한 줄로 분위기가 달라져요.
+   어디에 넣나   : CSS 를 넣고, 결과를 바꾸는 줄 바로 뒤에 JS 두 줄을 넣으세요.
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* CSS */
+@keyframes pop { from { transform: scale(.6); opacity: 0; }
+                 to   { transform: scale(1);  opacity: 1; } }
+.pop { animation: pop .35s ease; }
+
+// JS : 결과를 바꾼 바로 다음 줄에
+resultEl.classList.remove("pop");
+void resultEl.offsetWidth;        // 애니메이션을 다시 트는 주문
+resultEl.classList.add("pop");`],
+  ["R6 · 보통  ─ 🚫 같은 것 두 번 안 나오게", `/* ━━━━━━━━━━━━ 🚫 같은 것 두 번 안 나오게  (보통) ━━━━━━━━━━━━
+   무엇을 해주나 : 뽑기에서 이미 나온 건 빼고 뽑습니다. 자리 뽑기·당번 정하기에 꼭 필요해요.
+   어디에 넣나   : JS 에 뽑은 것을 담을 상자를 만들고, 뽑기 버튼 안을 통째로 바꾸세요.
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+let used = [];        // 이미 뽑힌 것들
+
+document.getElementById("pickBtn").onclick = function () {
+  // 아직 안 뽑힌 것만 모으기
+  const left = [];
+  for (let i = 0; i < items.length; i = i + 1) {
+    if (used.indexOf(items[i]) < 0) left.push(items[i]);
+  }
+
+  if (left.length === 0) {
+    resultEl.innerText = "다 뽑았어요!";
+    used = [];                  // 처음부터 다시
+    return;
+  }
+
+  const n = Math.floor(Math.random() * left.length);
+  resultEl.innerText = left[n];
+  used.push(left[n]);
+};`],
+  ["R7 · 보통  ─ 🖼️ 화면을 여러 개로 (시작 → 본문 → 결과)", `/* ━━━━━━━━━━━━ 🖼️ 화면을 여러 개로 (시작 → 본문 → 결과)  (보통) ━━━━━━━━━━━━
+   무엇을 해주나 : 앱에 시작 화면을 붙이면 진짜 앱처럼 보입니다. 퀴즈·게임에 특히 좋아요.
+   어디에 넣나   : HTML 을 화면 단위로 묶고, JS 함수 하나로 전환합니다.
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+<!-- HTML : 화면마다 div 로 감싸기 -->
+<div id="s-start">
+  <h2>준비됐나요?</h2>
+  <button onclick="go('s-main')">시작하기</button>
+</div>
+<div id="s-main" style="display:none"> ... 본문 ... </div>
+<div id="s-end"  style="display:none"> ... 결과 ... </div>
+
+// JS
+function go(name) {
+  document.getElementById("s-start").style.display = "none";
+  document.getElementById("s-main").style.display  = "none";
+  document.getElementById("s-end").style.display   = "none";
+  document.getElementById(name).style.display = "block";
+}`],
+  ["R8 · 보통  ─ 📊 숫자를 막대그래프로", `/* ━━━━━━━━━━━━ 📊 숫자를 막대그래프로  (보통) ━━━━━━━━━━━━
+   무엇을 해주나 : 숫자만 보여주는 대신 막대로 보여줍니다. 투표·점수·통계에 쓰세요.
+   어디에 넣나   : CSS 를 넣고, 숫자를 그릴 때 막대 너비를 같이 바꿉니다.
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* CSS */
+.track { height: 22px; background: #e2e8f0; border-radius: 7px; overflow: hidden; }
+.fill  { height: 100%; background: #2563eb; width: 0; transition: width .3s; }
+
+<!-- HTML -->
+<div class="track"><div class="fill" id="bar1"></div></div>
+
+// JS : 내 값 ÷ 가장 큰 값 × 100
+document.getElementById("bar1").style.width = (내값 / 최대값 * 100) + "%";`],
+  ["R9 · 어려움  ─ 📱 휴대폰에서도 예쁘게", `/* ━━━━━━━━━━━━ 📱 휴대폰에서도 예쁘게  (어려움) ━━━━━━━━━━━━
+   무엇을 해주나 : 발표 때 폰으로 보여줄 수 있게 합니다. 글자가 잘리거나 버튼이 삐져나오지 않아요.
+   어디에 넣나   : <head> 안에 한 줄, CSS 맨 아래에 한 덩어리.
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+<!-- head 안에 (이미 있으면 안 넣어도 됩니다) -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+/* CSS 맨 아래 — 화면이 좁을 때만 적용됩니다 */
+@media (max-width: 480px) {
+  body   { padding: 14px; }
+  h1     { font-size: 22px; }
+  button { font-size: 16px; padding: 14px; }
+  .box   { padding: 15px; }
+}`],
+  ["R10 · 어려움  ─ 🏆 최고 기록 명예의 전당", `/* ━━━━━━━━━━━━ 🏆 최고 기록 명예의 전당  (어려움) ━━━━━━━━━━━━
+   무엇을 해주나 : 상위 3개 기록을 순서대로 남깁니다. 게임형 앱의 마무리로 좋아요.
+   어디에 넣나   : JS 맨 아래. 저장(R1)과 같이 쓰면 껐다 켜도 남습니다.
+   ━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+let best = [];     // 점수들을 모아 두는 상자
+
+function addScore(point) {
+  best.push(point);
+  best.sort(function (a, b) { return b - a; });   // 큰 순서로 줄 세우기
+  best = best.slice(0, 3);                        // 앞에서 3개만 남기기
+
+  let html = "";
+  const medal = ["🥇", "🥈", "🥉"];
+  for (let i = 0; i < best.length; i = i + 1) {
+    html = html + "<p>" + medal[i] + " " + best[i] + "점</p>";
+  }
+  document.getElementById("hall").innerHTML = html;
+
+  localStorage.setItem("기록", JSON.stringify(best));   // R1 과 함께
+}`]
+ ],
+ tables:[
+  {cap:"🧩 기능 레시피 한눈에 — 위 코드 블록에서 골라 쓰세요",
+   head:["번호","난이도","기능","이런 앱에 좋아요"],
+   rows:[["R1","쉬움","💾 껐다 켜도 안 사라지게","<b>거의 모든 앱</b> — 투표·목록·기록"],
+         ["R2","쉬움","🔊 효과음","버튼이 있는 모든 앱"],
+         ["R3","쉬움","🌙 다크 모드","모든 앱 (심사위원이 좋아함)"],
+         ["R4","보통","📅 D-day 세기","날짜가 필요한 앱"],
+         ["R5","보통","🎞️ 결과가 뿅 나타나기","뽑기·퀴즈"],
+         ["R6","보통","🚫 같은 것 두 번 안 뽑기","자리 뽑기·당번·발표 순서"],
+         ["R7","보통","🖼️ 시작 → 본문 → 결과 화면","퀴즈·게임"],
+         ["R8","보통","📊 숫자를 막대그래프로","투표·설문·랭킹"],
+         ["R9","어려움","📱 휴대폰에서도 예쁘게","발표 때 폰으로 보여줄 앱"],
+         ["R10","어려움","🏆 최고 기록 명예의 전당","점수가 나오는 앱"]]},
+  {cap:"🆘 레시피 붙였는데 안 될 때",
+   head:["콘솔에 뜨는 말","뜻","고치는 법"],
+   rows:[["<code>... is not defined</code>","그런 이름이 없다","내 파일에서 쓰는 <b>진짜 변수 이름</b>으로 바꾸기"],
+         ["<code>Cannot read ... of null</code>","그 id 를 못 찾았다","HTML 에 <code>id</code> 를 안 넣었거나 철자가 다름"],
+         ["<code>Unexpected token</code>","문법이 깨졌다","중괄호 <code>{ }</code> 짝, 세미콜론 확인"],
+         ["아무 말도 없는데 안 됨","코드가 실행이 안 됨","<code>&lt;script&gt;</code> <b>안쪽</b>에 붙였는지 확인"]]}
+ ],
  notes:[
-  ["warn","가장 흔한 사고 — 저장 안 하고 닫기","학교 컴퓨터는 껐다 켜면 초기화되는 경우가 있습니다. <b>끝나기 5분 전에 반드시</b> 팀원 각자의 저장소에 백업하세요."],
-  ["tip","한 명만 코딩하지 않게","코딩 담당이 혼자 치고 나머지가 구경만 하면 안 됩니다. <b>10분마다 자리를 바꿔</b> 번갈아 치게 하세요. 성취기준의 '협력적 설계·구현'이 바로 이 부분입니다."]
+  ["warn","가장 흔한 사고 — 백업 안 하고 끝내기","학교 컴퓨터는 껐다 켜면 초기화될 수 있습니다. <b>끝나기 5분 전에 반드시</b> 팀원 각자가 파일을 하나씩 가져가세요. 이거 안 하면 다음 주에 처음부터입니다."],
+  ["warn","레시피를 한꺼번에 여러 개 붙이지 마세요","하나 붙이고 → 저장 → F5 → 확인. 이 순서를 지켜야 <b>어디서 깨졌는지</b> 알 수 있습니다. 두세 개를 한 번에 붙이면 전부 뜯어내야 해요."],
+  ["tip","변수 이름 맞추는 요령","레시피의 <code>items</code> 가 내 파일에서는 <code>quiz</code> 일 수도, <code>menu</code> 일 수도 있습니다. <b>내 파일을 먼저 보고</b> 레시피 쪽 이름을 고치세요 — 반대로 하면 다른 데가 다 깨집니다."]
  ],
  challenge:{
   reward:"쉬는시간 + 간식 🍪",
+  howto:"오늘 도전은 <b>팀 단위</b>입니다. <b>레벨 2까지</b> 올라가면 완료!",
   items:[
-   ["✅ <b>도전 1 · 핵심 버튼 1개 완성</b>",
-    "우리 앱에서 <b>가장 중요한 버튼 하나</b>가 끝까지 제대로 작동해야 합니다. " +
-    "기능 다섯 개가 반쯤 되는 것보다 <b>하나가 완벽한 게</b> 훨씬 좋아요."],
-
-   ["🎨 <b>도전 2 · 우리 팀 색으로 꾸미기</b>",
-    "기본 파란색을 벗어나 <b>우리 팀 색</b>으로 바꾸세요. 배경 · 버튼 · 글자 크기 최소 3군데.<br>" +
-    "힌트 — 1차시의 🎨 CSS 표를 그대로 쓰면 됩니다. <code>skyblue</code> · <code>tomato</code> 같은 색 이름도 OK"],
-
-   ["🔁 <b>도전 3 · 번갈아 코딩하기</b>",
-    "<b>10분마다 자리를 바꿔</b> 팀원 전원이 한 번씩은 직접 키보드를 잡으세요. " +
-    "한 명만 치고 나머지가 구경하면 그건 팀 프로젝트가 아닙니다."],
-
-   ["💾 <b>도전 4 · 전원 백업</b>",
-    "끝나기 전에 <b>팀원 각자</b>가 파일을 하나씩 가지고 가세요 (USB · 메일 · 드라이브 아무거나). " +
-    "학교 컴퓨터는 껐다 켜면 사라질 수 있습니다. <b>이거 안 하면 다음 주에 처음부터예요.</b>"]
+   ["✅ <b>도전 1 · 레벨 1 완성</b>",
+    "제목부터 내용까지 <b>완전히 우리 것</b>이고, 버튼을 전부 눌러도 이상한 게 없어야 합니다. 남의 내용(김치찌개·피자 등)이 <b>하나라도 남아 있으면</b> 아직입니다."],
+   ["🔧 <b>도전 2 · 레시피 1개 붙이기</b>",
+    "고른 레시피를 붙여서 <b>실제로 작동</b>하게 하세요. <b>R1(저장)</b> 을 골랐다면 — F5 눌러도 내용이 그대로 남아 있으면 성공입니다."],
+   ["🔩 <b>도전 3 · 레시피 2개째 붙이기</b>",
+    "두 번째 레시피까지 붙이면 <b>레벨 2 완료</b>입니다. 첫 번째가 안 되면 두 번째로 넘어가지 말고 <b>먼저 고치세요.</b>"],
+   ["💾 <b>도전 4 · 팀원 전원 백업</b>",
+    "끝나기 전에 <b>팀원 각자</b>가 파일을 하나씩 가져가세요 (USB · 메일 · 드라이브). <b>이거 안 하면 다음 주에 처음부터입니다.</b>"]
   ]
  }
 },
 {
- n:7, date:"보충 · 날짜 미정", lv:2, lvName:"제작",
- title:"제작 ② — 완성하고 서로 테스트",
- sub:"기능을 마무리하고, 다른 팀에게 직접 써보게 합니다.",
+ n:7, date:"보충 · 날짜 미정", lv:3, lvName:"완성",
+ title:"팀 프로젝트 ③ — 레벨 3 완성과 교차 테스트",
+ sub:"기능은 끝났습니다. 오늘은 '남이 써도 되는 앱'으로 만듭니다.",
  learn:[
-  ["남이 써봐야 버그가 보입니다","만든 사람은 <b>될 것 같은 길로만</b> 눌러봅니다. 다른 팀에게 주고 <b>아무렇게나 눌러보게</b> 하면 생각 못 한 문제가 쏟아져요. 이게 진짜 테스트입니다."],
-  ["버그는 '언제·무엇이'로 적기","\"안 돼요\"는 고칠 수 없습니다. <b>\"버튼을 두 번 빠르게 누르면 숫자가 두 번 올라간다\"</b> 처럼 <b>언제 / 무엇이 / 어떻게</b> 를 적어야 고칠 수 있어요."],
-  ["발표 준비도 오늘","마지막 시간은 발표만 합니다. <b>누가 무슨 말을 할지</b> 오늘 정해 두세요. 30초면 충분합니다."]
+  ["만든 사람은 버그를 못 찾습니다","여러분은 <b>될 것 같은 길로만</b> 누릅니다. 남은 엉뚱하게 눌러요 — 빈칸으로 제출하고, 버튼을 연타하고, 뒤로 가기를 누릅니다. <b>그래서 교차 테스트가 필요합니다.</b>"],
+  ["디자인은 '색 3개'면 충분","배경 · 강조색 · 글자색. 이 3개만 정하면 통일감이 생깁니다. 템플릿 맨 위 <code>:root</code> 안의 <code>--main</code> 과 <code>--bg</code> 를 바꾸면 <b>전체가 한 번에</b> 바뀝니다."],
+  ["피드백은 '언제·무엇이·어떻게'","<b>\"그냥 좀 이상해요\"</b> 는 못 고칩니다. <b>\"빈칸으로 추가를 누르면 빈 항목이 생겨요\"</b> 가 고칠 수 있는 피드백이에요."],
+  ["고칠 것은 2개만 고르세요","받은 의견을 전부 고치려다 끝을 못 봅니다. <b>가장 치명적인 2개</b>만 고르고 나머지는 발표 때 \"알지만 시간이 없었다\" 고 말하면 됩니다. <b>그것도 훌륭한 발표입니다.</b>"],
+  ["발표는 30초면 충분","<b>①팀·앱 이름 → ②어떤 불편함 → ③시연 → ④어려웠던 점</b>. 네 줄이면 끝나요. 시연이 제일 중요하니 <b>미리 한 번 돌려 보세요.</b>"]
  ],
  quests:[
-  "지난 시간에 메모한 <b>안 되는 것부터</b> 해결하기",
-  "기능 마무리 — 욕심내지 말고 <b>되는 것을 확실하게</b>",
-  "🔄 <b>교차 테스트</b> — 옆 팀과 자리를 바꿔 서로의 앱을 <b>5분씩</b> 써보기",
-  "받은 피드백을 <b>언제·무엇이·어떻게</b> 형식으로 적기",
-  "그중 <b>고칠 수 있는 것 2개</b>만 골라 수정 (전부 고치려 하지 마세요)",
-  "앱 이름과 설명 문구 최종 확인",
-  "<b>발표 역할</b> 정하기 — 누가 소개하고 누가 시연할지",
-  "<b>30초 발표 대본</b> 적기 (아래 틀 참고)",
-  "최종본 <b>백업</b>"
+  "지난 시간 메모한 <b>안 되는 것</b>부터 해결하기",
+  "<b>[LV3]</b> <code>:root</code> 의 <b>--main · --bg</b> 를 우리 팀 색으로 바꾸기",
+  "<b>[LV3]</b> 레시피 <b>R9(휴대폰)</b> 붙여서 창을 좁게 줄여도 안 깨지는지 확인",
+  "<b>[LV3]</b> 앱 안에 <b>우리 팀 이름</b> 넣기 (맨 아래 작게)",
+  "★ <b>옆 팀과 자리 바꿔 5분씩 교차 테스트</b>",
+  "받은 의견을 <b>언제·무엇이·어떻게</b> 로 적기",
+  "그중 <b>2개</b> 골라서 고치기",
+  "<b>30초 발표 대본</b> 쓰고 누가 말할지 정하기",
+  "최종본 <b>팀원 전원 백업</b> + 선생님께 제출"
  ],
  code:[],
- tables:[{
-   cap:"30초 발표 대본 틀",
-   head:["순서","말할 것","예시"],
-   rows:[["①","우리 팀과 앱 이름","\"저희는 3팀, 오늘 뭐 먹지를 만들었습니다\""],
-         ["②","어떤 불편함을 풀었나","\"점심마다 메뉴 고르느라 10분씩 걸렸습니다\""],
-         ["③","시연 (직접 눌러보기)","\"버튼을 누르면 이렇게 추천해 줍니다\""],
-         ["④","어려웠던 점 · 배운 것","\"랜덤이 같은 게 계속 나와서 고생했습니다\""]]
- }],
+ tables:[
+  {cap:"🔍 교차 테스트 체크리스트 — 옆 팀 앱을 이렇게 괴롭혀 보세요",
+   head:["해볼 것","보통 여기서 터집니다"],
+   rows:[["<b>아무것도 안 넣고</b> 버튼 누르기","빈 항목이 생기거나 빈 결과가 나옴"],
+         ["버튼을 <b>아주 빠르게 연타</b>","숫자가 두 번 올라가거나 화면이 겹침"],
+         ["항목을 <b>전부 지우고</b> 버튼 누르기","에러가 나거나 아무 반응 없음"],
+         ["<b>아주 긴 글자</b> 넣어 보기","글자가 삐져나와 화면이 깨짐"],
+         ["<b>F5 새로고침</b>","저장이 안 되어 있으면 전부 사라짐"],
+         ["<b>창을 아주 좁게</b> 줄이기","버튼이 삐져나오거나 글자가 잘림"],
+         ["끝까지 간 뒤 <b>다시 시작</b>","초기화가 덜 되어 이상한 값이 남음"]]},
+  {cap:"📝 피드백 적는 칸",
+   head:["언제 (무엇을 했더니)","무엇이 (어떻게 되었나)","고칠까?"],
+   rows:[["예) 빈칸으로 추가를 눌렀더니","빈 항목이 목록에 생겼다","⭕ 고침"],
+         ["","",""],
+         ["","",""],
+         ["","",""]]},
+  {cap:"🎤 30초 발표 대본 틀",
+   head:["순서","말할 것"],
+   rows:[["① 소개 (5초)","\"저희는 ○팀이고, ○○ 앱을 만들었습니다\""],
+         ["② 문제 (10초)","\"저희 반은 ○○할 때마다 ○○가 불편했습니다\""],
+         ["③ 시연 (10초)","실제로 눌러서 보여주기 — <b>미리 연습하세요</b>"],
+         ["④ 마무리 (5초)","\"만들면서 ○○가 제일 어려웠습니다\""]]}
+ ],
  notes:[
-  ["tip","이 차시가 없다면","보충 수업이 없으면 <b>6차시(제작①)와 이 차시를 합쳐</b> 진행하고, 교차 테스트는 마지막 발표회 직전 10분에 하시면 됩니다."]
+  ["tip","색 3개만 바꿔도 완전히 달라 보입니다","템플릿 맨 위 <code>:root { --main: ...; --bg: ...; }</code> 두 줄만 바꾸면 <b>앱 전체 색이 한 번에</b> 바뀝니다. 팀 색을 정하고 이것부터 해보세요."],
+  ["warn","교차 테스트는 꼭 하세요","발표회 때 <b>남이 눌러서 터지는 것</b>만큼 아까운 게 없습니다. 오늘 10분이 발표회를 살립니다."],
+  ["tip","못 고친 건 발표에서 말하면 됩니다","\"이건 알지만 시간이 부족했습니다\" 는 <b>감점이 아니라 가점</b>이에요. 자기 앱의 한계를 아는 게 진짜 실력입니다."]
  ],
  challenge:{
   reward:"쉬는시간 + 간식 🍪",
+  howto:"오늘 도전은 <b>팀 단위</b>입니다. 발표 준비까지 끝나면 완료!",
   items:[
-   ["🐛 <b>도전 1 · 지난 시간 메모 해결</b>",
-    "지난 시간에 적어둔 '안 되는 것'부터 손보세요. <b>새 기능을 더하기 전에</b> 이것부터입니다."],
-
+   ["🎨 <b>도전 1 · 레벨 3 — 우리 팀 디자인</b>",
+    "<code>--main</code> 과 <code>--bg</code> 를 우리 팀 색으로 바꾸고, 창을 좁게 줄여도 안 깨지게 만드세요(R9). <b>기본 템플릿 색이 그대로면</b> 아직입니다."],
    ["🔄 <b>도전 2 · 옆 팀과 교차 테스트</b>",
-    "옆 팀과 자리를 바꿔 <b>서로의 앱을 5분씩</b> 써 보세요. " +
-    "만든 사람은 될 것 같은 길로만 눌러봅니다. <b>남이 눌러야 진짜 문제가 나와요.</b>"],
-
+    "자리를 바꿔 <b>5분씩</b> 서로의 앱을 써 보세요. 위 <b>체크리스트 7가지</b>를 다 해보면 완료. <b>만든 팀은 옆에서 보기만</b> 하세요 — 알려주면 안 됩니다!"],
    ["🔧 <b>도전 3 · 피드백 2개 반영</b>",
-    "받은 의견을 <b>언제 / 무엇이 / 어떻게</b> 형식으로 적고, 그중 <b>고칠 수 있는 2개</b>만 고르세요.<br>" +
-    "예 — \"버튼을 빠르게 두 번 누르면 숫자가 두 번 올라간다\" (O) / \"그냥 좀 이상해요\" (X)"],
-
-   ["🎤 <b>도전 4 · 30초 발표 대본</b>",
-    "위 표를 보고 <b>①팀·앱이름 ②어떤 불편함 ③시연 ④어려웠던 점</b> 네 줄을 적으세요. " +
-    "누가 말할지까지 정하면 끝. <b>다음 시간은 발표만 합니다.</b>"]
+    "받은 의견을 <b>언제·무엇이·어떻게</b> 로 적고, 그중 <b>고칠 수 있는 2개</b>를 골라 실제로 고치세요."],
+   ["🎤 <b>도전 4 · 발표 대본 + 리허설</b>",
+    "네 줄 대본을 쓰고 누가 말할지 정한 뒤, <b>한 번은 실제로 소리 내어</b> 연습하세요. 시연이 제대로 되는지도 확인!"]
   ]
  }
 },

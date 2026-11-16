@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>캐릭터 조작 — 도전 빈칸</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #eef2f7; padding: 20px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  #info { font-size: 20px; margin-bottom: 12px; }
+  #score, #time { font-weight: bold; color: #2563eb; }
+  #stage { position: relative; width: 500px; height: 400px; margin: 0 auto;
+           background: white; border: 3px solid #cbd5e1; border-radius: 16px;
+           overflow: hidden; }
+  #player { position: absolute; width: 40px; height: 40px; background: #2563eb;
+            border-radius: 10px; }
+  #item { position: absolute; width: 36px; height: 36px; font-size: 32px;
+          line-height: 36px; }
+  #msg { font-size: 26px; color: #16a34a; height: 40px; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+  <h1>🟦 캐릭터 조작</h1>
+  <div id="info">
+    점수 <span id="score">0</span> ·
+    남은 시간 <span id="time">30</span>초
+  </div>
+
+  <div id="stage">
+    <div id="player"></div>
+    <div id="item">⭐</div>
+  </div>
+
+  <div id="msg"></div>
+
+<script>
+  let x = 230;
+  let y = 180;
+  let score = 0;
+  let time = 30;
+  let playing = true;
+  let clockTimer;
+
+  const player    = document.getElementById("player");
+  const item      = document.getElementById("item");
+  const scoreText = document.getElementById("score");
+  const timeText  = document.getElementById("time");
+  const msg       = document.getElementById("msg");
+
+  function draw() {
+    player.style.left = x + "px";
+    player.style.top  = y + "px";
+  }
+
+  function moveItem() {
+    item.style.left = Math.floor(Math.random() * 460) + "px";
+    item.style.top  = Math.floor(Math.random() * 360) + "px";
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (playing === false) return;
+
+    // ━━━━━━━━━━ 빈칸 ① ━━━━━━━━━━
+    // 아래 네 줄의 빈 따옴표 "" 안에 d, a, s, w 를 각각 넣으세요
+    if (e.key === "ArrowRight" || e.key === "d") x = x + 20;
+    if (e.key === "ArrowLeft"  || e.key === "a") x = x - 20;
+    if (e.key === "ArrowDown"  || e.key === "s") y = y + 20;
+    if (e.key === "ArrowUp"    || e.key === "w") y = y - 20;
+
+    if (x < 0)   x = 0;
+    if (x > 460) x = 460;
+    if (y < 0)   y = 0;
+    if (y > 360) y = 360;
+
+    draw();
+    checkItem();
+  });
+
+  function checkItem() {
+    const ix = parseInt(item.style.left);
+    const iy = parseInt(item.style.top);
+
+    if (Math.abs(x - ix) < 40 && Math.abs(y - iy) < 40) {
+      score = score + 1;
+      scoreText.innerText = score;
+      moveItem();
+
+      // ━━━━━━━━━━ 빈칸 ② ━━━━━━━━━━
+      // 아래 0% 를 70% 로 바꾸면 먹을 때마다 배경색이 달라집니다
+      document.body.style.background = "hsl(" + (score * 40) + ", 70%, 95%)";
+
+      // ━━━━━━━━━━ 빈칸 ③ ━━━━━━━━━━
+      // 아래 9999 를 10 으로 바꾸면 10점에서 클리어 메시지가 뜹니다
+      if (score >= 9999) {
+        msg.innerText = "🎉 클리어!";
+      }
+    }
+  }
+
+  clockTimer = setInterval(function () {
+
+    // ━━━━━━━━━━ 빈칸 ④ ━━━━━━━━━━
+    // 아래 0 을 1 로 바꾸면 시간이 1초씩 줄어듭니다
+    time = time - 1;
+
+    timeText.innerText = time;
+    if (time <= 5) {
+      timeText.style.color = "red";
+    }
+    if (time <= 0) {
+      clearInterval(clockTimer);
+      msg.innerText = "시간 끝! " + score + "점";
+
+      // ━━━━━━━━━━ 빈칸 ⑤ ━━━━━━━━━━
+      // 아래 true 를 false 로 바꾸면 시간이 끝났을 때 못 움직입니다
+      playing = false;
+    }
+  }, 1000);
+
+  draw();
+  moveItem();
+</script>
+
+</body>
+</html>
