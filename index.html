@@ -287,13 +287,23 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
 }
 
 /* 🎯 미션별 바로가기 */
-.quests li{display:flex; flex-direction:column; align-items:flex-start; gap:0}
-.qgo + .qgo{margin-left:6px}
-.qgo{display:inline-flex; align-items:center; gap:4px; margin:6px 0 2px 47px;
+.quests li{display:flex}
+.qgo + .qgo{margin-left:5px}
+.qgo{display:inline-flex; align-items:center; gap:4px; margin:0 0 0 7px; vertical-align:baseline;
   border:1px solid var(--z); background:var(--z-soft); color:var(--z);
   border-radius:99px; padding:3px 11px; font-size:.76rem; font-weight:600;
   cursor:pointer; font-family:inherit; white-space:nowrap}
 .qgo:hover{background:var(--z); color:#fff}
+
+/* 💻 코드와 실습을 좌우로 */
+.runwrap.split{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:12px; align-items:start}
+.runwrap.split > .slab{margin:0}
+.runwrap.split .slab pre{max-height:520px; overflow:auto}
+.runwrap.split .try{margin-top:0}
+.runwrap.split .try-box iframe{height:470px}
+@media (max-width:980px){ .runwrap.split{grid-template-columns:1fr} }
+.q:focus-visible{outline:2.5px solid var(--z); outline-offset:3px}
 
 /* ▶ 직접 해보기 */
 .try{margin-top:11px; border:1.5px solid var(--line-2); border-radius:12px;
@@ -4582,7 +4592,7 @@ function questGo(){
     if (!made.length && t.indexOf("레시피") >= 0) made.push(secBtn("오늘의 코드", "레시피 보기"));
 
     const keep = made.filter(function(x){ return x; }).slice(0, 2);
-    if (keep.length) li.insertAdjacentHTML("beforeend", keep.join(""));
+    if (keep.length) qt.insertAdjacentHTML("beforeend", keep.join(""));
   });
 }
 
@@ -4817,9 +4827,11 @@ function codeHTML(list){
         '<button class="trybtn">실행</button></div>' +
         '<div class="try-box"></div></div>'
       : "";
+    const inner = runnable
+      ? '<div class="runwrap">' + slabHTML(c[0], c[1]) + play + "</div>"
+      : slabHTML(c[0], c[1]);
     return '<details class="cf"><summary><b>' + esc(c[0]) + "</b>" + hint +
-           '</summary><div class="cf-body">' + slabHTML(c[0], c[1]) + play +
-           "</div></details>";
+           '</summary><div class="cf-body">' + inner + "</div></details>";
   }).join("");
 
   return chips + '<div class="cfs">' + body + "</div>";
@@ -4925,9 +4937,9 @@ function stageHTML(s){
 
   h += sec("🎯 오늘의 미션", "하나씩 누르며 체크하세요",
         '<ul class="quests">' + s.quests.map((q, i) =>
-          '<li><button class="q" data-n="' + s.n + '" data-i="' + i + '" aria-pressed="' + isDone(s.n, i) + '">' +
+          '<li><div class="q" role="button" tabindex="0" data-n="' + s.n + '" data-i="' + i + '" aria-pressed="' + isDone(s.n, i) + '">' +
           '<span class="bx">✓</span><span class="qn">' + String(i + 1).padStart(2, "0") + "</span>" +
-          '<span class="qt">' + q + "</span></button></li>").join("") + "</ul>", "t-quest");
+          '<span class="qt">' + q + "</span></div></li>").join("") + "</ul>", "t-quest");
 
   if (s.gen)
     h += sec("🪄 프롬프트 생성기", "고르기만 하면 질문이 완성됩니다", genHTML(), "t-gen");
@@ -5039,6 +5051,20 @@ document.addEventListener("click", e => {
   const goBtn = e.target.closest("[data-go]");
   if (goBtn) { go(goBtn.dataset.go); return; }
 
+  const qg = e.target.closest(".qgo");
+  if (qg){
+    if (qg.dataset.find !== undefined){
+      gotoCode(Number(qg.dataset.goto), qg.dataset.find);
+    } else {
+      const sc = document.querySelector('[data-j="' + qg.dataset.sec + '"]');
+      if (sc){
+        const y = sc.getBoundingClientRect().top + window.scrollY - 92;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+    }
+    return;
+  }
+
   const q = e.target.closest(".q");
   if (q){
     const n = Number(q.dataset.n), i = Number(q.dataset.i);
@@ -5065,6 +5091,8 @@ document.addEventListener("click", e => {
     const slot = box.querySelector(".try-box");
     if (box.classList.contains("on")){
       box.classList.remove("on");
+      const wrap = box.closest(".runwrap");
+      if (wrap) wrap.classList.remove("split");
       slot.innerHTML = "";                       // 멈추고 비우기
       tb.textContent = "실행";
     } else {
@@ -5075,21 +5103,9 @@ document.addEventListener("click", e => {
       f.srcdoc = src;
       slot.appendChild(f);
       box.classList.add("on");
+      const wrap = box.closest(".runwrap");
+      if (wrap) wrap.classList.add("split");
       tb.textContent = "닫기";
-    }
-    return;
-  }
-
-  const qg = e.target.closest(".qgo");
-  if (qg){
-    if (qg.dataset.find !== undefined){
-      gotoCode(Number(qg.dataset.goto), qg.dataset.find);
-    } else {
-      const sc = document.querySelector('[data-j="' + qg.dataset.sec + '"]');
-      if (sc){
-        const y = sc.getBoundingClientRect().top + window.scrollY - 92;
-        window.scrollTo({ top: y, behavior: "smooth" });
-      }
     }
     return;
   }
@@ -5179,6 +5195,13 @@ function viewFromHash(){
 }
 
 /* 뒤로/앞으로 가기, 주소창에 직접 입력한 #stage7 도 동작하게 */
+/* div 로 바뀐 미션을 Enter·Space 로도 체크할 수 있게 */
+document.addEventListener("keydown", function(e){
+  const q = e.target.classList && e.target.classList.contains("q") ? e.target : null;
+  if (!q) return;
+  if (e.key === "Enter" || e.key === " "){ e.preventDefault(); q.click(); }
+});
+
 document.addEventListener("input", function(e){
   if (e.target.classList && e.target.classList.contains("gtext")) genBuild();
 });
