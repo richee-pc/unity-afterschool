@@ -234,6 +234,17 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
 @media (max-width:520px){ .card2{padding:4px 14px} .step{grid-template-columns:28px 1fr; gap:11px}
   .step .sn{width:28px;height:28px;font-size:.85rem} }
 
+/* 🧭 섹션 바로가기 */
+.jump{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:0 0 15px;
+  padding:11px 13px; background:var(--surface-2); border:1px dashed var(--line-2);
+  border-radius:12px}
+.jump:empty{display:none}
+.jl{font-size:.76rem; font-weight:600; color:var(--ink-3); margin-right:3px}
+.jchip{border:1px solid var(--line-2); background:var(--surface); color:var(--ink-2);
+  border-radius:99px; padding:6px 12px; font-size:.79rem; cursor:pointer;
+  white-space:nowrap; font-family:inherit; transition:.14s}
+.jchip:hover{border-color:var(--z); color:var(--z); background:var(--z-soft)}
+
 /* 🪄 프롬프트 생성기 */
 .gen{border:2.5px solid var(--z); border-radius:16px; overflow:hidden; background:var(--surface)}
 .gen-head{padding:15px 19px; background:var(--z); color:#fff}
@@ -3804,6 +3815,41 @@ function sec(title, hint, inner){
   return '<section class="sec">' + head + inner + "</section>";
 }
 
+/* 지금 차시에 어떤 칸이 있는지 모아 바로가기 버튼을 만든다 */
+function navLabel(t){
+  const m = t.match(/\(([^)]+)\)\s*$/);
+  if (m){
+    const head = t.slice(0, t.indexOf("(")).trim().split(" ")[0];
+    return (head + " " + m[1]).trim();
+  }
+  let x = t.split("—")[0].replace(/\s+/g, " ").trim();
+  if (x.length > 15) x = x.slice(0, 14) + "…";
+  return x;
+}
+function buildJump(){
+  const box = document.getElementById("jump");
+  if (!box) return;
+  const secs = [].slice.call(document.querySelectorAll(".body > section"));
+  const out = [];
+  secs.forEach(function(sc, i){
+    sc.dataset.j = i;
+    const h = sc.querySelector(".sec-h h2");
+    let label = "";
+    if (h){
+      if (h.textContent.indexOf("오늘의 미션") >= 0) return;   // 지금 여기
+      label = navLabel(h.textContent);
+    } else if (sc.querySelector(".chal")) {
+      label = "🔥 오늘의 도전";
+    } else if (sc.querySelector(".ans")) {
+      label = "🔒 도전 정답";
+    } else {
+      return;
+    }
+    out.push('<button class="jchip" data-j="' + i + '">' + esc(label) + "</button>");
+  });
+  box.innerHTML = out.length ? '<span class="jl">바로가기</span>' + out.join("") : "";
+}
+
 /* ══════════ 🪄 프롬프트 생성기 ══════════ */
 const GEN = {
   mode: [["idea", "💡 아이디어 받기", "조건에 맞는 앱 아이디어 3개와 필요한 기능"],
@@ -4096,7 +4142,7 @@ function stageHTML(s){
             l[0] + "</b><p>" + l[1] + "</p></div>").join("") + "</div>");
 
   h += sec("🎯 오늘의 미션", "하나씩 누르며 체크하세요",
-        '<ul class="quests">' + s.quests.map((q, i) =>
+        '<div class="jump" id="jump"></div>' + '<ul class="quests">' + s.quests.map((q, i) =>
           '<li><button class="q" data-n="' + s.n + '" data-i="' + i + '" aria-pressed="' + isDone(s.n, i) + '">' +
           '<span class="bx">✓</span><span class="qn">' + String(i + 1).padStart(2, "0") + "</span>" +
           '<span class="qt">' + q + "</span></button></li>").join("") + "</ul>");
@@ -4178,7 +4224,7 @@ function cheatHTML(){
 
 function render(){
   // 생성기가 있으면 그릴 때마다 질문을 새로 만든다
-  setTimeout(genBuild, 0);
+  setTimeout(function(){ genBuild(); buildJump(); }, 0);
   CODES.length = 0;
   document.querySelector(".rail").style.display = tab === "cheat" ? "none" : "";
   document.querySelector(".wrap").style.gridTemplateColumns =
@@ -4225,6 +4271,16 @@ document.addEventListener("click", e => {
         const el = document.createElement("span");
         el.className = "pill lv1"; el.textContent = "✓ 클리어"; badge.appendChild(el);
       } else if (!stageDone(n) && has) old.remove();
+    }
+    return;
+  }
+
+  const jmp = e.target.closest(".jchip");
+  if (jmp){
+    const sc = document.querySelector('.body > section[data-j="' + jmp.dataset.j + '"]');
+    if (sc){
+      const y = sc.getBoundingClientRect().top + window.scrollY - 66;
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
     return;
   }
