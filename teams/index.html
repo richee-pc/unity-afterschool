@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>우리 반 작품 전시관</title>
-<meta name="description" content="방과후학교 팀 프로젝트 작품 전시관 — 직접 만든 웹앱을 눌러서 바로 플레이해 보세요">
+<meta name="description" content="방과후학교 팀 프로젝트 작품 전시관 — 친구들이 만든 웹앱을 그 자리에서 체험해 보세요">
 <meta property="og:type" content="website">
 <meta property="og:title" content="우리 반 작품 전시관">
 <meta property="og:description" content="우리가 직접 만든 앱, 눌러서 바로 해보세요">
@@ -19,57 +19,77 @@
   --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#F6F8FA; --surface-3:#E8EDF1;
   --ink:#15181C; --ink-2:#495159; --ink-3:#79838D;
   --line:#DBE1E7; --line-2:#C6CFD8;
-  --x:#D9433F; --y:#4E9410; --z:#2360CE;
-  --y-soft:#EAF5DC; --z-soft:#E3ECFC;
+  --x:#D9433F; --y:#4E9410; --z:#2360CE; --gold:#F2B705;
+  --y-soft:#EAF5DC; --z-soft:#E3ECFC; --gold-soft:#FFF6DC;
   --shadow:0 1px 2px rgba(20,30,40,.06), 0 10px 28px -14px rgba(20,30,40,.22);
+  --veil:rgba(16,22,28,.62);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1F2225; --surface:#2A2E32; --surface-2:#32373C; --surface-3:#3A4046;
     --ink:#ECEFF2; --ink-2:#AFB7BF; --ink-3:#828B95;
     --line:#3C4248; --line-2:#4A5158;
-    --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7;
-    --y-soft:#2C3A22; --z-soft:#22303F;
+    --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7; --gold:#F5C542;
+    --y-soft:#2C3A22; --z-soft:#22303F; --gold-soft:#3A3113;
     --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 30px -16px rgba(0,0,0,.7);
+    --veil:rgba(0,0,0,.76);
   }
 }
 :root[data-theme="dark"]{
   --bg:#1F2225; --surface:#2A2E32; --surface-2:#32373C; --surface-3:#3A4046;
   --ink:#ECEFF2; --ink-2:#AFB7BF; --ink-3:#828B95;
   --line:#3C4248; --line-2:#4A5158;
-  --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7;
-  --y-soft:#2C3A22; --z-soft:#22303F;
+  --x:#FF6F6A; --y:#8CDA3F; --z:#6BA5F7; --gold:#F5C542;
+  --y-soft:#2C3A22; --z-soft:#22303F; --gold-soft:#3A3113;
   --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 30px -16px rgba(0,0,0,.7);
+  --veil:rgba(0,0,0,.76);
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:var(--bg); color:var(--ink);
   font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   font-size:16px; line-height:1.72; -webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
 h1,h2,h3{text-wrap:balance; margin:0}
 a{color:inherit; text-decoration:none}
+button{font-family:inherit}
 :focus-visible{outline:2.5px solid var(--z); outline-offset:3px; border-radius:6px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-.wrap{max-width:1120px; margin:0 auto; padding:0 22px 70px}
+.wrap{max-width:1180px; margin:0 auto; padding:0 22px 70px}
 @media (max-width:640px){ .wrap{padding:0 14px 50px} }
 
-/* 머리말 */
-.hero{padding:54px 0 36px; text-align:center}
+/* ─── 머리말 ─── */
+.hero{padding:52px 0 30px; text-align:center}
 .ribbon{display:inline-flex; align-items:center; gap:8px; padding:6px 16px; border-radius:99px;
   background:var(--y-soft); color:var(--y); font-size:.78rem; font-weight:600; letter-spacing:.06em}
 .hero h1{font-family:"Black Han Sans",sans-serif; font-weight:400; margin:16px 0 0;
   font-size:clamp(2rem,6.5vw,3.2rem); line-height:1.22}
-.hero p{margin:14px auto 0; color:var(--ink-2); font-size:1.04rem; max-width:46ch}
-.meta{display:flex; gap:9px; justify-content:center; flex-wrap:wrap; margin-top:22px}
+.hero p{margin:13px auto 0; color:var(--ink-2); font-size:1.04rem; max-width:48ch}
+.meta{display:flex; gap:9px; justify-content:center; flex-wrap:wrap; margin-top:20px}
 .meta span{font-size:.79rem; color:var(--ink-3); background:var(--surface); border:1px solid var(--line);
   padding:5px 13px; border-radius:99px}
 
-/* 작품 격자 */
-.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:18px; margin-top:10px}
+/* ─── 관람 스탬프 ─── */
+.stamp{max-width:480px; margin:22px auto 0; background:var(--surface); border:1px solid var(--line);
+  border-radius:15px; padding:14px 18px; box-shadow:var(--shadow)}
+.stamp .st-top{display:flex; align-items:center; gap:10px; font-size:.88rem}
+.stamp .st-top b{font-size:.93rem}
+.stamp .st-top .n{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-weight:600;
+  color:var(--y); white-space:nowrap}
+.stamp .track{height:8px; background:var(--surface-3); border-radius:99px; overflow:hidden; margin-top:9px}
+.stamp .track div{height:100%; width:0; background:var(--y); border-radius:99px; transition:width .4s}
+.stamp.done .track div{background:var(--gold)}
+.stamp .msg{font-size:.79rem; color:var(--ink-3); margin:7px 0 0}
+.stamp.done .msg{color:var(--y); font-weight:600}
+
+/* ─── 작품 격자 ─── */
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:18px; margin-top:28px}
 .card{background:var(--surface); border:1px solid var(--line); border-radius:18px;
   overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column;
-  transition:transform .16s, border-color .16s}
+  transition:transform .16s, border-color .16s; text-align:left; padding:0;
+  color:inherit; font-size:inherit}
+.card.live{cursor:pointer}
 .card.live:hover{transform:translateY(-4px); border-color:var(--y)}
 
 .shot{position:relative; height:200px; background:#fff; overflow:hidden; border-bottom:1px solid var(--line)}
@@ -79,6 +99,9 @@ a{color:inherit; text-decoration:none}
 .badge{position:absolute; top:12px; left:12px; z-index:2; background:var(--ink); color:var(--bg);
   font-family:"Black Han Sans",sans-serif; font-size:.78rem; letter-spacing:.08em;
   padding:4px 11px; border-radius:99px}
+.seen{position:absolute; top:12px; right:12px; z-index:2; background:var(--y); color:#0E1A05;
+  font-size:.72rem; font-weight:700; padding:4px 10px; border-radius:99px; display:none}
+.card.visited .seen{display:block}
 
 .soon{height:200px; display:grid; place-items:center; background:var(--surface-2);
   border-bottom:1px dashed var(--line-2); color:var(--ink-3)}
@@ -98,7 +121,63 @@ a{color:inherit; text-decoration:none}
 .card.live:hover .play{filter:brightness(1.06)}
 .play.off{background:var(--surface-3); color:var(--ink-3); font-weight:500}
 
-/* 안내 */
+/* ─── 체험 창 ─── */
+.modal{position:fixed; inset:0; z-index:50; display:none; background:var(--veil);
+  padding:18px; backdrop-filter:blur(3px)}
+.modal.open{display:flex; align-items:center; justify-content:center}
+.sheet{background:var(--surface); border-radius:20px; width:100%; max-width:1080px;
+  max-height:100%; display:flex; flex-direction:column; overflow:hidden;
+  box-shadow:0 30px 80px -30px rgba(0,0,0,.6); animation:rise .22s ease}
+@keyframes rise{from{transform:translateY(14px); opacity:0}to{transform:none; opacity:1}}
+
+.bar{display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid var(--line);
+  flex:none}
+.bar .no{background:var(--ink); color:var(--bg); font-family:"Black Han Sans",sans-serif;
+  font-size:.76rem; letter-spacing:.08em; padding:4px 11px; border-radius:99px; flex:none}
+.bar .ttl{display:flex; align-items:center; gap:9px; min-width:0}
+.bar .ttl .ic{font-size:1.3rem; line-height:1}
+.bar .ttl b{font-size:1.05rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.bar .sp{margin-left:auto}
+.ibtn{border:1px solid var(--line); background:var(--surface-2); color:var(--ink-2);
+  border-radius:10px; padding:8px 13px; font-size:.83rem; cursor:pointer; white-space:nowrap}
+.ibtn:hover{border-color:var(--z); color:var(--z)}
+.ibtn.on{background:var(--z-soft); border-color:var(--z); color:var(--z); font-weight:600}
+.xbtn{border:0; background:var(--surface-3); color:var(--ink); border-radius:10px;
+  width:36px; height:36px; font-size:1.05rem; cursor:pointer; flex:none}
+.xbtn:hover{background:var(--x); color:#fff}
+
+.stage{flex:1; min-height:0; overflow:auto; display:grid; place-items:center;
+  background:var(--surface-2); padding:20px}
+.frame{background:#fff; border-radius:16px; overflow:hidden; border:1px solid var(--line-2);
+  box-shadow:0 14px 40px -20px rgba(0,0,0,.45); transition:width .2s}
+.frame iframe{display:block; width:100%; height:100%; border:0}
+.stage.phone .frame{width:390px; max-width:100%; height:min(720px, calc(100vh - 230px))}
+.stage.wide  .frame{width:100%; max-width:980px; height:min(760px, calc(100vh - 230px))}
+
+.foot-bar{display:flex; align-items:center; gap:10px; padding:13px 18px; border-top:1px solid var(--line);
+  flex:none; flex-wrap:wrap}
+.foot-bar .who{font-family:"IBM Plex Mono",monospace; font-size:.76rem; color:var(--ink-3);
+  flex:1; min-width:110px}
+.nav{display:flex; align-items:center; gap:8px}
+.nav .pos{font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--ink-3);
+  min-width:46px; text-align:center}
+
+.toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(14px);
+  background:var(--y); color:#0E1A05; font-weight:600; font-size:.9rem;
+  padding:11px 20px; border-radius:99px; z-index:60; opacity:0; pointer-events:none;
+  transition:opacity .25s, transform .25s; box-shadow:0 10px 30px -12px rgba(0,0,0,.5)}
+.toast.show{opacity:1; transform:translateX(-50%)}
+
+@media (max-width:700px){
+  .modal{padding:0}
+  .sheet{border-radius:0; max-width:none; height:100%}
+  .bar .ttl b{font-size:.95rem}
+  .stage{padding:12px}
+  .stage.phone .frame,.stage.wide .frame{width:100%; height:calc(100vh - 210px)}
+  .hideSm{display:none}
+}
+
+/* ─── 안내 ─── */
 .note{margin-top:34px; background:var(--z-soft); border-radius:14px; padding:18px 22px;
   font-size:.9rem; line-height:1.74; color:var(--ink-2)}
 .note b{color:var(--ink); display:block; margin-bottom:5px}
@@ -126,11 +205,20 @@ a{color:inherit; text-decoration:none}
   <header class="hero">
     <span class="ribbon">🏆 TEAM PROJECT</span>
     <h1>우리 반 작품 전시관</h1>
-    <p>방과후 수업에서 <b>직접 만든 앱</b>입니다. 카드를 누르면 바로 플레이할 수 있어요.</p>
+    <p>방과후 수업에서 <b>직접 만든 앱</b>입니다. 카드를 누르면 <b>이 화면에서 바로</b> 체험할 수 있어요.</p>
     <div class="meta">
       <span>2026학년도 2학기 방과후학교</span>
       <span>HTML · CSS · JavaScript</span>
       <span id="count">—</span>
+    </div>
+
+    <div class="stamp" id="stamp">
+      <div class="st-top">
+        <span>🎟️</span><b>관람 스탬프</b>
+        <span class="n" id="stampN">0 / 0</span>
+      </div>
+      <div class="track"><div id="stampBar"></div></div>
+      <p class="msg" id="stampMsg">작품을 열어 <b>10초 이상</b> 체험하면 도장이 찍힙니다</p>
     </div>
   </header>
 
@@ -153,6 +241,39 @@ a{color:inherit; text-decoration:none}
   </footer>
 </div>
 
+<!-- ─── 체험 창 ─── -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="sheet">
+
+    <div class="bar">
+      <span class="no" id="mNo">1팀</span>
+      <span class="ttl"><span class="ic" id="mIcon">🎮</span><b id="mTitle">작품</b></span>
+      <span class="sp"></span>
+      <button class="ibtn hideSm" id="viewBtn">🖥️ 넓게 보기</button>
+      <button class="ibtn hideSm" id="linkBtn">🔗 링크 복사</button>
+      <button class="xbtn" id="closeBtn" aria-label="닫기">✕</button>
+    </div>
+
+    <div class="stage phone" id="stage">
+      <div class="frame"><iframe id="mFrame" title="작품 체험"
+        sandbox="allow-scripts allow-same-origin allow-modals allow-popups"></iframe></div>
+    </div>
+
+    <div class="foot-bar">
+      <span class="who" id="mWho"></span>
+      <a class="ibtn" id="newTab" target="_blank" rel="noopener">↗ 새 창</a>
+      <span class="nav">
+        <button class="ibtn" id="prevBtn">← 이전</button>
+        <span class="pos" id="mPos">1 / 1</span>
+        <button class="ibtn" id="nextBtn">다음 →</button>
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
 /* ══════════════════════════════════════════════════════════
    팀 작품 목록 — 여기만 고치면 됩니다
@@ -170,8 +291,26 @@ const TEAMS = [
   { no:6, ready:false, icon:"🍅", app:"", desc:"", who:"", file:"team6.html" }
 ];
 
+const KEY = "gallery-visited-v1";
+const STAY = 10000;   // 몇 밀리초 이상 보면 도장을 찍을까
+
+/* ─── 관람 기록 (내 브라우저에만 저장됩니다) ─── */
+let visited = [];
+try {
+  const raw = localStorage.getItem(KEY);
+  if (raw) visited = JSON.parse(raw);
+} catch (e) { visited = []; }
+if (!Array.isArray(visited)) visited = [];
+visited = visited.filter((n, i) => typeof n === "number" && visited.indexOf(n) === i);
+
+function saveVisited(){
+  try { localStorage.setItem(KEY, JSON.stringify(visited)); } catch (e) {}
+}
+
+const live = TEAMS.filter(t => t.ready);
 const grid = document.getElementById("grid");
 
+/* ─── 카드 그리기 ─── */
 grid.innerHTML = TEAMS.map(t => {
   if (!t.ready) {
     return '<div class="card">' +
@@ -181,20 +320,168 @@ grid.innerHTML = TEAMS.map(t => {
       '<p class="desc">아직 작품이 올라오지 않았습니다.</p>' +
       '<span class="play off">준비 중</span></div></div>';
   }
-  return '<a class="card live" href="' + t.file + '">' +
+  return '<button class="card live" data-no="' + t.no + '">' +
     '<div class="shot"><span class="badge">' + t.no + "팀</span>" +
-    '<iframe src="' + t.file + '" loading="lazy" scrolling="no" sandbox="allow-scripts" title="' +
-      t.app + ' 미리보기"></iframe><span class="veil"></span></div>' +
+    '<span class="seen">✓ 체험함</span>' +
+    '<iframe src="' + t.file + '" loading="lazy" scrolling="no" tabindex="-1" ' +
+      'sandbox="allow-scripts allow-same-origin" title=""></iframe>' +
+    '<span class="veil"></span></div>' +
     '<div class="info">' +
       '<div class="app"><span class="ic">' + t.icon + '</span><b>' + t.app + "</b></div>" +
       '<p class="desc">' + t.desc + "</p>" +
       '<span class="who">' + t.who + "</span>" +
-      '<span class="play">▶ 플레이하기</span>' +
-    "</div></a>";
+      '<span class="play">▶ 체험하기</span>' +
+    "</div></button>";
 }).join("");
 
-const done = TEAMS.filter(t => t.ready).length;
-document.getElementById("count").textContent = "작품 " + done + " / " + TEAMS.length + "팀";
+document.getElementById("count").textContent =
+  "작품 " + live.length + " / " + TEAMS.length + "팀";
+
+/* ─── 관람 스탬프 ─── */
+function drawStamp(){
+  // 전시 중인 작품만, 중복 없이 셉니다
+  const seen = live.filter(t => visited.indexOf(t.no) >= 0).length;
+  const all  = live.length;
+
+  document.getElementById("stampN").textContent = seen + " / " + all;
+  document.getElementById("stampBar").style.width =
+    (all ? Math.min(seen / all * 100, 100) : 0) + "%";
+
+  const box = document.getElementById("stamp");
+  const msg = document.getElementById("stampMsg");
+
+  if (all > 0 && seen >= all) {
+    box.className = "stamp done";
+    msg.innerHTML = "🎉 모든 작품을 체험했습니다! 선생님께 보여 주세요";
+  } else if (seen >= 3) {
+    box.className = "stamp done";
+    msg.innerHTML = "🎉 3개 이상 체험 완료! <b>8차시 도전 2</b> 성공입니다";
+  } else {
+    box.className = "stamp";
+    msg.innerHTML = "작품을 열어 <b>10초 이상</b> 체험하면 도장이 찍힙니다 · 목표 3개";
+  }
+
+  TEAMS.forEach(t => {
+    const card = grid.querySelector('.card[data-no="' + t.no + '"]');
+    if (card) card.classList.toggle("visited", visited.indexOf(t.no) >= 0);
+  });
+}
+drawStamp();
+
+/* ─── 체험 창 ─── */
+const modal   = document.getElementById("modal");
+const frame   = document.getElementById("mFrame");
+const stage   = document.getElementById("stage");
+const toastEl = document.getElementById("toast");
+
+let current = -1;       // live 배열 안에서 몇 번째인가
+let stayTimer = null;
+let lastFocus = null;
+
+function toast(text){
+  toastEl.textContent = text;
+  toastEl.classList.add("show");
+  setTimeout(function(){ toastEl.classList.remove("show"); }, 2200);
+}
+
+function open(i){
+  if (live.length === 0) return;
+  if (i < 0) i = live.length - 1;
+  if (i >= live.length) i = 0;
+  current = i;
+
+  const t = live[i];
+
+  document.getElementById("mNo").textContent    = t.no + "팀";
+  document.getElementById("mIcon").textContent  = t.icon;
+  document.getElementById("mTitle").textContent = t.app;
+  document.getElementById("mWho").textContent   = t.who;
+  document.getElementById("mPos").textContent   = (i + 1) + " / " + live.length;
+  document.getElementById("newTab").href        = t.file;
+
+  frame.src = t.file;                       // 열 때마다 새로 시작
+  location.hash = "team" + t.no;
+
+  const many = live.length > 1;
+  document.getElementById("prevBtn").disabled = !many;
+  document.getElementById("nextBtn").disabled = !many;
+
+  if (!modal.classList.contains("open")) {
+    lastFocus = document.activeElement;
+    modal.classList.add("open");
+    document.body.classList.add("locked");
+  }
+  document.getElementById("closeBtn").focus();
+
+  // 10초 이상 머무르면 도장
+  clearTimeout(stayTimer);
+  if (visited.indexOf(t.no) < 0) {
+    stayTimer = setTimeout(function(){
+      if (visited.indexOf(t.no) < 0) {
+        visited.push(t.no);
+        saveVisited();
+        drawStamp();
+        toast("🎟️ " + t.no + "팀 작품 체험 완료!");
+      }
+    }, STAY);
+  }
+}
+
+function close(){
+  clearTimeout(stayTimer);
+  modal.classList.remove("open");
+  document.body.classList.remove("locked");
+  frame.src = "about:blank";                // 소리·타이머 멈추기
+  if (location.hash) history.replaceState(null, "", location.pathname);
+  if (lastFocus) lastFocus.focus();
+}
+
+grid.addEventListener("click", function(e){
+  const card = e.target.closest(".card.live");
+  if (!card) return;
+  const no = Number(card.dataset.no);
+  open(live.findIndex(t => t.no === no));
+});
+
+document.getElementById("closeBtn").onclick = close;
+document.getElementById("prevBtn").onclick  = function(){ open(current - 1); };
+document.getElementById("nextBtn").onclick  = function(){ open(current + 1); };
+
+modal.addEventListener("click", function(e){
+  if (e.target === modal) close();          // 바깥 어두운 곳을 누르면 닫기
+});
+
+document.getElementById("viewBtn").onclick = function(){
+  const wide = stage.classList.toggle("wide");
+  stage.classList.toggle("phone", !wide);
+  this.textContent = wide ? "📱 폰으로 보기" : "🖥️ 넓게 보기";
+  this.classList.toggle("on", wide);
+};
+
+document.getElementById("linkBtn").onclick = function(){
+  const url = location.origin + location.pathname + "#team" + live[current].no;
+  const done = function(){ toast("🔗 링크를 복사했습니다"); };
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(done, function(){ toast(url); });
+  } else {
+    toast(url);
+  }
+};
+
+document.addEventListener("keydown", function(e){
+  if (!modal.classList.contains("open")) return;
+  if (e.key === "Escape")     close();
+  if (e.key === "ArrowLeft")  open(current - 1);
+  if (e.key === "ArrowRight") open(current + 1);
+});
+
+/* 주소에 #team2 가 붙어 있으면 그 작품을 바로 엽니다 */
+(function fromHash(){
+  const m = location.hash.match(/team(\d+)/);
+  if (!m) return;
+  const i = live.findIndex(t => t.no === Number(m[1]));
+  if (i >= 0) open(i);
+})();
 </script>
 
 </body>
