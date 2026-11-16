@@ -234,6 +234,42 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
 @media (max-width:520px){ .card2{padding:4px 14px} .step{grid-template-columns:28px 1fr; gap:11px}
   .step .sn{width:28px;height:28px;font-size:.85rem} }
 
+/* 🧭 맨 위에 붙어 다니는 흐름 바 */
+.flowbar{position:sticky; top:0; z-index:6; margin:0 0 11px; padding:9px 13px;
+  background:var(--surface); border:1px solid var(--line); border-radius:13px;
+  box-shadow:0 6px 18px -12px rgba(20,30,40,.4);
+  display:flex; gap:6px; align-items:center; overflow-x:auto; scrollbar-width:thin}
+.flowbar::-webkit-scrollbar{height:5px}
+.flowbar::-webkit-scrollbar-thumb{background:var(--line-2); border-radius:9px}
+.flowbar .jl{flex:none}
+.jchip{flex:none}
+@media (max-width:900px){ .flowbar{padding:8px 11px; border-radius:11px} }
+
+/* 섹션 색 띠 — 종류가 한눈에 */
+.sec > .sec-h{position:relative; padding-left:12px}
+.sec > .sec-h::before{content:""; position:absolute; left:0; top:2px; bottom:2px;
+  width:4px; border-radius:99px; background:var(--line-2)}
+.sec.t-learn > .sec-h::before{background:var(--z)}
+.sec.t-quest > .sec-h::before{background:var(--y)}
+.sec.t-code  > .sec-h::before{background:var(--ink-3)}
+.sec.t-table > .sec-h::before{background:#9A6BD6}
+.sec.t-help  > .sec-h::before{background:var(--x)}
+.sec.t-gen   > .sec-h::before{background:var(--z)}
+
+/* 도움말 2단 */
+.notes{display:grid; grid-template-columns:repeat(auto-fit,minmax(310px,1fr)); gap:10px; align-items:start}
+
+/* 좁은 표는 나란히 */
+.tgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(390px,1fr));
+  gap:4px 22px; align-items:start}
+.tgrid > .sec{padding-top:18px}
+
+/* 도전 항목 2단 (넓은 화면에서만)
+   — 뒤에 나오는 .chal-body{display:flex} 를 이기려고 선택자를 한 단계 더 씁니다 */
+@media (min-width:860px){
+  .chal > .chal-body{display:grid; grid-template-columns:1fr 1fr; gap:9px; align-items:start}
+}
+
 /* 🎯 미션별 바로가기 */
 .quests li{display:flex; flex-direction:column; align-items:flex-start; gap:0}
 .qgo + .qgo{margin-left:6px}
@@ -4446,11 +4482,11 @@ function tableHTML(t){
 function noteHTML(n){
   return '<div class="note ' + n[0] + '"><b>' + (n[0] === "warn" ? "⚠️ " : "💡 ") + n[1] + "</b>" + n[2] + "</div>";
 }
-function sec(title, hint, inner){
+function sec(title, hint, inner, kind){
   const head = title
     ? '<div class="sec-h"><h2>' + title + "</h2>" + (hint ? "<em>" + hint + "</em>" : "") + "</div>"
     : "";
-  return '<section class="sec">' + head + inner + "</section>";
+  return '<section class="sec' + (kind ? " " + kind : "") + '">' + head + inner + "</section>";
 }
 
 /* 미션 글에서 'P1' 'R3' '템플릿' 같은 말을 찾아 바로가기 버튼을 붙인다 */
@@ -4462,7 +4498,7 @@ function gotoCode(stageN, find){
     for (let i = 0; i < codes.length; i = i + 1){
       if (re.test(codes[i].querySelector("summary b").textContent)){
         codes[i].open = true;
-        const y = codes[i].getBoundingClientRect().top + window.scrollY - 66;
+        const y = codes[i].getBoundingClientRect().top + window.scrollY - 92;
         window.scrollTo({ top: y, behavior: "smooth" });
         return;
       }
@@ -4476,7 +4512,7 @@ function gotoCode(stageN, find){
 function questGo(){
   const lis   = [].slice.call(document.querySelectorAll(".quests li"));
   const codes = [].slice.call(document.querySelectorAll(".cf"));
-  const secs  = [].slice.call(document.querySelectorAll(".body > section"));
+  const secs  = [].slice.call(document.querySelectorAll(".body section"));
 
   const HOME = { P1:5, P2:5, P3:6, P4:6, P5:6, P6:7 };   // 프롬프트가 있는 차시
 
@@ -4546,7 +4582,7 @@ function navLabel(t){
 function buildJump(){
   const box = document.getElementById("jump");
   if (!box) return;
-  const secs = [].slice.call(document.querySelectorAll(".body > section"));
+  const secs = [].slice.call(document.querySelectorAll(".body section"));
   const out = [];
   secs.forEach(function(sc, i){
     sc.dataset.j = i;
@@ -4847,13 +4883,15 @@ function stageHTML(s){
   const idx = STAGES.indexOf(s);
   const prev = STAGES[idx - 1], next = STAGES[idx + 1];
 
-  let h = '<div class="card pane"><div class="head">' +
+  let h = '<div class="flowbar jump" id="jump"></div>' +
+    '<div class="card pane"><div class="head">' +
     '<div class="eyebrow">' +
       '<span class="pill stg">STAGE ' + String(s.n).padStart(2, "0") + "</span>" +
       '<span class="pill date">' + s.date + (s.date.indexOf("/") >= 0 ? " (월) 16:50–17:50" : "") + "</span>" +
       '<span class="pill lv' + s.lv + '">' + s.lvName + "</span>" +
       (stageDone(s.n) ? '<span class="pill lv1">✓ 클리어</span>' : "") +
-    "</div><h1>" + s.title + "</h1><p>" + s.sub + "</p></div><div class=\"body\">";
+    "</div><h1>" + s.title + "</h1><p>" + s.sub + "</p></div><div class=\"body\">" +
+    '';
 
   if (s.install && s.install.length)
     h += sec("⬇️ 유니티 설치, 8단계", "순서대로 따라오세요",
@@ -4865,21 +4903,23 @@ function stageHTML(s){
     h += sec("📖 오늘 알아야 할 것", "읽고 넘어가면 미션이 쉬워집니다",
           '<div class="learn">' + s.learn.map((l, i) =>
             '<div class="lc"><span class="k">' + String(i + 1).padStart(2, "0") + "</span><b>" +
-            l[0] + "</b><p>" + l[1] + "</p></div>").join("") + "</div>");
+            l[0] + "</b><p>" + l[1] + "</p></div>").join("") + "</div>", "t-learn");
 
   h += sec("🎯 오늘의 미션", "하나씩 누르며 체크하세요",
-        '<div class="jump" id="jump"></div>' + '<ul class="quests">' + s.quests.map((q, i) =>
+        '<ul class="quests">' + s.quests.map((q, i) =>
           '<li><button class="q" data-n="' + s.n + '" data-i="' + i + '" aria-pressed="' + isDone(s.n, i) + '">' +
           '<span class="bx">✓</span><span class="qn">' + String(i + 1).padStart(2, "0") + "</span>" +
-          '<span class="qt">' + q + "</span></button></li>").join("") + "</ul>");
+          '<span class="qt">' + q + "</span></button></li>").join("") + "</ul>", "t-quest");
 
   if (s.gen)
-    h += sec("🪄 프롬프트 생성기", "고르기만 하면 질문이 완성됩니다", genHTML());
+    h += sec("🪄 프롬프트 생성기", "고르기만 하면 질문이 완성됩니다", genHTML(), "t-gen");
 
   if (s.code && s.code.length)
-    h += sec("💻 오늘의 코드", "아래 버튼을 누르면 그 코드가 열립니다", codeHTML(s.code));
+    h += sec("💻 오늘의 코드", "아래 버튼을 누르면 그 코드가 열립니다", codeHTML(s.code), "t-code");
 
-  if (s.tables) s.tables.forEach(t => { h += '<section class="sec">' + tableHTML(t) + "</section>"; });
+  // 표는 문장이 길어서 나란히 놓으면 가로 스크롤이 생깁니다 — 전체 폭으로
+  if (s.tables)
+    s.tables.forEach(t => { h += '<section class="sec t-table">' + tableHTML(t) + "</section>"; });
 
   if (s.links && s.links.length)
     h += sec(s.linksTitle || "🔗 링크", "새 탭으로 열립니다",
@@ -4889,7 +4929,7 @@ function stageHTML(s){
             '<span class="ar">↗</span></a>').join("") + "</div>");
 
   if (s.notes && s.notes.length)
-    h += sec("🆘 막히면 여기", "", s.notes.map(noteHTML).join(""));
+    h += sec("🆘 막히면 여기", "", '<div class="notes">' + s.notes.map(noteHTML).join("") + "</div>", "t-help");
 
   const ch = s.challenge ||
     (s.bonus && s.bonus.length ? { items: s.bonus.map(b => [b, ""]) } : null);
@@ -5027,9 +5067,9 @@ document.addEventListener("click", e => {
     if (qg.dataset.find !== undefined){
       gotoCode(Number(qg.dataset.goto), qg.dataset.find);
     } else {
-      const sc = document.querySelector('.body > section[data-j="' + qg.dataset.sec + '"]');
+      const sc = document.querySelector('[data-j="' + qg.dataset.sec + '"]');
       if (sc){
-        const y = sc.getBoundingClientRect().top + window.scrollY - 66;
+        const y = sc.getBoundingClientRect().top + window.scrollY - 92;
         window.scrollTo({ top: y, behavior: "smooth" });
       }
     }
@@ -5038,9 +5078,9 @@ document.addEventListener("click", e => {
 
   const jmp = e.target.closest(".jchip");
   if (jmp){
-    const sc = document.querySelector('.body > section[data-j="' + jmp.dataset.j + '"]');
+    const sc = document.querySelector('[data-j="' + jmp.dataset.j + '"]');
     if (sc){
-      const y = sc.getBoundingClientRect().top + window.scrollY - 66;
+      const y = sc.getBoundingClientRect().top + window.scrollY - 92;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
     return;
@@ -5075,7 +5115,7 @@ document.addEventListener("click", e => {
       target.open = true;
       box.querySelectorAll(".chip").forEach(function(x){ x.classList.remove("on"); });
       chip.classList.add("on");
-      const y = target.getBoundingClientRect().top + window.scrollY - 72;
+      const y = target.getBoundingClientRect().top + window.scrollY - 92;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
     return;
