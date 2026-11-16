@@ -234,6 +234,38 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
 @media (max-width:520px){ .card2{padding:4px 14px} .step{grid-template-columns:28px 1fr; gap:11px}
   .step .sn{width:28px;height:28px;font-size:.85rem} }
 
+/* 🪄 프롬프트 생성기 */
+.gen{border:2.5px solid var(--z); border-radius:16px; overflow:hidden; background:var(--surface)}
+.gen-head{padding:15px 19px; background:var(--z); color:#fff}
+.gen-head b{font-size:1.06rem; display:block}
+.gen-head em{font-style:normal; font-size:.84rem; opacity:.9}
+.gen-body{padding:16px 17px 4px}
+.gl{font-size:.88rem; font-weight:600; margin:14px 0 8px; color:var(--ink)}
+.gl:first-child{margin-top:2px}
+.gl span{font-weight:400; font-size:.78rem; color:var(--ink-3)}
+.gchips{display:flex; flex-wrap:wrap; gap:7px}
+.gchip{border:1.5px solid var(--line-2); background:var(--surface-2); color:var(--ink-2);
+  border-radius:11px; padding:9px 13px; font-size:.84rem; cursor:pointer; font-family:inherit;
+  text-align:left; transition:.14s; line-height:1.4}
+.gchip i{font-style:normal; display:block; font-size:.74rem; color:var(--ink-3); margin-top:1px}
+.gchip:hover{border-color:var(--z)}
+.gchip[aria-pressed="true"]{background:var(--z); border-color:var(--z); color:#fff; font-weight:600}
+.gchip[aria-pressed="true"] i{color:rgba(255,255,255,.82)}
+.gtext{width:100%; font-family:inherit; font-size:.92rem; padding:11px 13px;
+  border:1.5px solid var(--line-2); border-radius:11px; background:var(--surface-2); color:var(--ink)}
+.gtext:focus{outline:none; border-color:var(--z)}
+.gen-out{margin:16px 0 0; padding:15px 17px 17px; background:var(--surface-2);
+  border-top:1.5px solid var(--line)}
+.go-top{display:flex; align-items:center; gap:10px; margin-bottom:9px}
+.go-top b{font-size:.93rem}
+.gcopy{margin-left:auto; border:0; border-radius:9px; background:var(--z); color:#fff;
+  font-size:.82rem; font-weight:600; padding:8px 16px; cursor:pointer; font-family:inherit}
+.gcopy:hover{filter:brightness(1.08)}
+.go-pre{margin:0; white-space:pre-wrap; word-break:break-word; background:var(--slab-bg);
+  color:var(--slab-ink); border-radius:11px; padding:15px 16px; font-size:.82rem; line-height:1.72;
+  font-family:"IBM Plex Mono","D2Coding",monospace; max-height:420px; overflow:auto}
+.go-tip{margin:10px 0 0; font-size:.81rem; color:var(--ink-2); line-height:1.7}
+
 /* 📂 코드 고르기 버튼 + 접히는 코드 */
 .chips{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px}
 .chip{border:1.5px solid var(--line-2); background:var(--surface); color:var(--ink-2);
@@ -2100,10 +2132,12 @@ const STAGES = [
   "팀에서 <b>주제 하나</b> 확정 — AI가 준 문장 말고 <b>우리 말로</b> 다시 쓰기",
   "<b>한 줄 소개</b> 완성 — \"우리 앱은 ○○할 때 ○○해주는 앱이다\"",
   "<b>앱 이름</b>·<b>대표 이모지</b> 정하고, 종이에 <b>화면 그림</b> 그리기",
-  "★ 아래 <b>템플릿 4종</b>을 하나씩 열어 보고 <b>우리에게 맞는 것 고르기</b>",
+  "★ 아래 <b>템플릿 6종</b>을 열어 보고 <b>우리에게 맞는 것 고르기</b> — 없으면 🪄 생성기로",
+  "🪄 <b>프롬프트 생성기</b>에서 우리 조건을 골라 <b>질문을 만들어</b> AI에 넣어 보기",
   "★ 고른 템플릿을 저장하고 <b>①제목 ②내용</b>을 우리 것으로 바꿔 보기 → <b>레벨 1 시작!</b>",
   "🤖 <b>AI 활용 기록표</b> 첫 줄 채우기 (발표 때 쓸 자료입니다)"
  ],
+ gen:true,
  code:[
   ["① 뽑기형  ─ pick.html  (추천 · 당번 · 룰렛)", `<!doctype html>
 <html lang="ko">
@@ -2727,6 +2761,330 @@ const STAGES = [
 
 </body>
 </html>`, "④ 타이머"],
+  ["⑤ 기록형  ─ log.html   (장부 · 습관 · 일지)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기록 앱</title>
+<style>
+  :root {
+    --main: #4f46e5;          /* ③ 우리 팀 색 */
+    --bg:   #eef2ff;
+  }
+  body { font-family: sans-serif; background: var(--bg); margin: 0;
+         padding: 24px 16px 60px; display: flex; justify-content: center; }
+  .app { width: 100%; max-width: 450px; }
+  h1 { font-size: 27px; text-align: center; margin: 0 0 4px; }
+  .sub { text-align: center; color: #64748b; font-size: 15px; margin: 0 0 20px; }
+
+  .box { background: white; border-radius: 16px; padding: 18px; margin-bottom: 14px;
+         box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+
+  .addbar { display: flex; gap: 8px; }
+  .addbar input { font-size: 16px; padding: 12px; border: 2px solid #e2e8f0;
+                  border-radius: 10px; font-family: inherit; min-width: 0; }
+  #what { flex: 2; }
+  #howmuch { flex: 1; }
+  .addbar input:focus { outline: none; border-color: var(--main); }
+  .addbar button { font-size: 16px; padding: 12px 16px; border: 0; border-radius: 10px;
+                   background: var(--main); color: white; cursor: pointer; flex: none; }
+
+  .sum { display: flex; gap: 10px; margin-bottom: 14px; }
+  .sum div { flex: 1; background: white; border-radius: 14px; padding: 14px;
+             text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+  .sum b { display: block; font-size: 26px; color: var(--main); }
+  .sum small { color: #64748b; font-size: 13px; }
+
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: flex; align-items: center; gap: 10px; padding: 11px 4px;
+       border-bottom: 1px solid #f1f5f9; font-size: 16px; }
+  li .nm { flex: 1; }
+  li .vl { font-weight: bold; color: var(--main); }
+  li .dt { font-size: 12px; color: #94a3b8; }
+  li button { border: 0; background: #fee2e2; color: #dc2626; cursor: pointer;
+              border-radius: 8px; padding: 6px 10px; font-size: 13px; }
+  .empty { color: #94a3b8; text-align: center; padding: 22px 0; font-size: 15px; }
+
+  #clear { width: 100%; font-size: 14px; padding: 11px; border: 0; border-radius: 10px;
+           background: #e2e8f0; color: #475569; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ━━━ ① 제목과 단위를 우리 앱으로 바꾸세요 ━━━ -->
+  <h1>📒 우리 반 학급비 장부</h1>
+  <p class="sub">쓴 내용과 금액을 적으면 저절로 더해집니다</p>
+
+  <div class="box">
+    <div class="addbar">
+      <input id="what" placeholder="어디에 썼나요?">
+      <input id="howmuch" type="number" placeholder="금액">
+      <button id="addBtn">기록</button>
+    </div>
+  </div>
+
+  <div class="sum">
+    <div><b id="total">0</b><small>합계 (원)</small></div>
+    <div><b id="count">0</b><small>기록 수</small></div>
+  </div>
+
+  <div class="box">
+    <ul id="list"></ul>
+  </div>
+
+  <button id="clear">전체 지우기</button>
+
+</div>
+
+<script>
+  // ━━━ ② 처음에 보여 줄 기록 — 우리 것으로 바꾸거나 빈 목록으로 두세요 ━━━
+  let logs = [
+    { what: "색종이", value: 3000, date: "11/10" },
+    { what: "간식",   value: 12000, date: "11/12" }
+  ];
+
+  const listEl  = document.getElementById("list");
+  const totalEl = document.getElementById("total");
+  const countEl = document.getElementById("count");
+  const whatEl  = document.getElementById("what");
+  const muchEl  = document.getElementById("howmuch");
+
+  function save() {
+    localStorage.setItem("우리반장부", JSON.stringify(logs));
+  }
+
+  function draw() {
+    listEl.innerHTML = "";
+
+    if (logs.length === 0) {
+      listEl.innerHTML = "<p class='empty'>아직 기록이 없습니다</p>";
+    }
+
+    let sum = 0;
+
+    for (let i = 0; i < logs.length; i = i + 1) {
+      sum = sum + logs[i].value;
+
+      const li = document.createElement("li");
+
+      const nm = document.createElement("span");
+      nm.className = "nm";
+      nm.innerText = logs[i].what;
+
+      const dt = document.createElement("span");
+      dt.className = "dt";
+      dt.innerText = logs[i].date;
+
+      const vl = document.createElement("span");
+      vl.className = "vl";
+      vl.innerText = logs[i].value;
+
+      const del = document.createElement("button");
+      del.innerText = "삭제";
+      del.onclick = function () {
+        logs.splice(i, 1);     // i번째를 1개 지운다
+        save();
+        draw();
+      };
+
+      li.appendChild(nm);
+      li.appendChild(dt);
+      li.appendChild(vl);
+      li.appendChild(del);
+      listEl.appendChild(li);
+    }
+
+    totalEl.innerText = sum;
+    countEl.innerText = logs.length;
+  }
+
+  document.getElementById("addBtn").onclick = function () {
+    const what = whatEl.value;
+    const value = Number(muchEl.value);     // 글자를 숫자로 바꾼다
+
+    if (what === "") {
+      alert("내용을 입력하세요!");
+      return;
+    }
+
+    // 오늘 날짜를 11/16 모양으로
+    const now = new Date();
+    const date = (now.getMonth() + 1) + "/" + now.getDate();
+
+    logs.push({ what: what, value: value, date: date });
+
+    whatEl.value = "";
+    muchEl.value = "";
+    save();
+    draw();
+  };
+
+  whatEl.onkeydown = function (e) {
+    if (e.key === "Enter") document.getElementById("addBtn").onclick();
+  };
+  muchEl.onkeydown = function (e) {
+    if (e.key === "Enter") document.getElementById("addBtn").onclick();
+  };
+
+  document.getElementById("clear").onclick = function () {
+    if (confirm("정말 전부 지울까요?")) {
+      logs = [];
+      save();
+      draw();
+    }
+  };
+
+  // 껐다 켜도 남아 있게 — 저장해 둔 것이 있으면 불러온다
+  const saved = localStorage.getItem("우리반장부");
+  if (saved !== null) {
+    logs = JSON.parse(saved);
+  }
+
+  draw();
+<\/script>
+
+</body>
+</html>`, "⑤ 기록"],
+  ["⑥ 카드형  ─ card.html  (단어장 · 암기 · 퀴즈카드)", `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>카드 앱</title>
+<style>
+  :root {
+    --main: #db2777;          /* ③ 우리 팀 색 */
+    --bg:   #fdf2f8;
+  }
+  body { font-family: sans-serif; background: var(--bg); margin: 0;
+         padding: 24px 16px 60px; display: flex; justify-content: center; }
+  .app { width: 100%; max-width: 430px; text-align: center; }
+  h1 { font-size: 27px; margin: 0 0 4px; }
+  .sub { color: #64748b; font-size: 15px; margin: 0 0 18px; }
+
+  #pos { font-family: monospace; color: var(--main); font-weight: bold; font-size: 15px; }
+
+  #card { background: white; border-radius: 20px; padding: 20px;
+          min-height: 210px; display: flex; flex-direction: column;
+          align-items: center; justify-content: center; gap: 10px;
+          box-shadow: 0 6px 24px rgba(0,0,0,.09); cursor: pointer;
+          margin: 12px 0 8px; user-select: none; }
+  #card:active { transform: scale(.985); }
+  #face { font-size: 34px; font-weight: bold; line-height: 1.35; }
+  #hint { font-size: 13px; color: #94a3b8; }
+  #card.back { background: var(--main); }
+  #card.back #face { color: white; font-size: 28px; }
+  #card.back #hint { color: rgba(255,255,255,.75); }
+
+  .btns { display: flex; gap: 9px; }
+  .btns button { flex: 1; font-size: 16px; padding: 14px 0; border: 0; border-radius: 12px;
+                 cursor: pointer; font-family: inherit;
+                 background: white; color: #475569; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  #shuffle { background: var(--main); color: white; }
+
+  #done { margin-top: 14px; font-size: 14px; color: #64748b; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ━━━ ① 제목을 우리 앱으로 바꾸세요 ━━━ -->
+  <h1>🃏 영단어 암기 카드</h1>
+  <p class="sub">카드를 누르면 뒤집힙니다</p>
+
+  <div id="pos"></div>
+
+  <div id="card">
+    <div id="face"></div>
+    <div id="hint">눌러서 뒤집기</div>
+  </div>
+
+  <div class="btns">
+    <button id="prev">← 이전</button>
+    <button id="shuffle">🔀 섞기</button>
+    <button id="next">다음 →</button>
+  </div>
+
+  <div id="done"></div>
+
+</div>
+
+<script>
+  // ━━━ ② 카드 내용을 우리 것으로 바꾸세요 (앞면 / 뒷면) ━━━
+  let cards = [
+    { front: "apple",   back: "사과" },
+    { front: "school",  back: "학교" },
+    { front: "friend",  back: "친구" },
+    { front: "science", back: "과학" },
+    { front: "library", back: "도서관" }
+  ];
+
+  let index = 0;        // 지금 몇 번째 카드인가
+  let flipped = false;  // 뒤집혀 있나
+
+  const cardEl = document.getElementById("card");
+  const faceEl = document.getElementById("face");
+  const hintEl = document.getElementById("hint");
+  const posEl  = document.getElementById("pos");
+  const doneEl = document.getElementById("done");
+
+  function draw() {
+    posEl.innerText = (index + 1) + " / " + cards.length;
+
+    if (flipped) {
+      faceEl.innerText = cards[index].back;
+      hintEl.innerText = "뒷면 — 눌러서 되돌리기";
+      cardEl.className = "back";
+    } else {
+      faceEl.innerText = cards[index].front;
+      hintEl.innerText = "눌러서 뒤집기";
+      cardEl.className = "";
+    }
+  }
+
+  // 카드를 누르면 뒤집힌다
+  cardEl.onclick = function () {
+    flipped = !flipped;     // true 면 false, false 면 true
+    draw();
+  };
+
+  document.getElementById("next").onclick = function () {
+    index = index + 1;
+    if (index >= cards.length) index = 0;   // 끝이면 처음으로
+    flipped = false;
+    draw();
+  };
+
+  document.getElementById("prev").onclick = function () {
+    index = index - 1;
+    if (index < 0) index = cards.length - 1;  // 처음이면 끝으로
+    flipped = false;
+    draw();
+  };
+
+  // 카드 순서를 무작위로 섞는다
+  document.getElementById("shuffle").onclick = function () {
+    for (let i = cards.length - 1; i > 0; i = i - 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = cards[i];
+      cards[i] = cards[j];
+      cards[j] = temp;
+    }
+    index = 0;
+    flipped = false;
+    draw();
+    doneEl.innerText = "카드를 섞었어요!";
+  };
+
+  draw();
+<\/script>
+
+</body>
+</html>`, "⑥ 카드"],
   ["🤖 P1 · 아이디어 10개 받기  (기획할 때)", `━━━ 언제 쓰나 ━━━
 주제가 안 정해질 때. 받은 10개 중에서 고르는 게 아니라,
 우리 반에 진짜 필요한 걸 찾는 힌트로 쓰세요.
@@ -2791,7 +3149,9 @@ ChatGPT(chatgpt.com) 또는 제미나이(gemini.google.com) 에서
          ["<b>문제를 내고 점수</b>를 매긴다","<b>② 퀴즈형</b>","반 퀴즈 · 분리수거 · 성격 테스트"],
          ["여러 항목의 <b>수를 센다</b>","<b>③ 집계형</b>","반 투표 · 설문 · 급식 평점"],
          ["<b>시간을 재거나</b> 순서대로 진행","<b>④ 타이머형</b>","집중 타이머 · 운동 루틴"],
-         ["위에 없는 모양이다","<b>가장 비슷한 것 + 🤖 AI</b>","가계부 · 체크리스트 · 기록장"]]},
+         ["<b>입력해서 쌓아</b> 둔다","<b>⑤ 기록형</b>","학급비 장부 · 습관 기록 · 운동 일지"],
+         ["<b>앞뒤를 뒤집어</b> 외운다","<b>⑥ 카드형</b>","영단어 · 역사 연표 · 인물 카드"],
+         ["위에 없는 모양이다","🪄 <b>프롬프트 생성기</b>","아래에서 조건을 골라 AI에게 직접 부탁하세요"]]},
   {cap:"💡 실생활 주제 — AI와 함께면 여기까지 됩니다",
    head:["주제","해결하는 불편함","바탕 템플릿"],
    rows:[["📒 <b>우리 반 학급비 장부</b>","얼마 걷고 얼마 썼는지 아무도 모름","③ + 입력창"],
@@ -3444,6 +3804,179 @@ function sec(title, hint, inner){
   return '<section class="sec">' + head + inner + "</section>";
 }
 
+/* ══════════ 🪄 프롬프트 생성기 ══════════ */
+const GEN = {
+  mode: [["idea", "💡 아이디어 받기", "조건에 맞는 앱 아이디어 3개와 필요한 기능"],
+         ["base", "🧱 뼈대 만들기", "조건대로 돌아가는 기본 앱 (기능 1개 + 전체 주석)"],
+         ["plus", "➕ 기능 추가하기", "지금 만든 앱에 기능 하나 더"]],
+  field: ["급식·간식", "공부·시험", "운동·건강", "친구·우리 반", "동아리", "환경·분리수거",
+          "용돈·돈 관리", "시간 관리", "게임·놀이", "음악·취미", "진로", "학교생활 전반"],
+  kind: ["뽑기 (하나 골라주기)", "퀴즈 (문제·점수)", "투표·집계", "타이머·스톱워치",
+         "기록·저장 (입력해서 쌓기)", "카드 뒤집기 (암기)", "체크리스트", "계산기",
+         "D-day·일정", "랭킹·순위", "조건에 따른 추천", "일기·메모"],
+  where: ["교실에서 다 같이", "혼자 휴대폰으로", "집에서", "발표 때 큰 화면", "복도·게시판"],
+  feat: ["껐다 켜도 남는 저장", "효과음", "다크 모드", "막대그래프", "타이머",
+         "랜덤 뽑기", "점수 매기기", "화면 여러 개", "입력창으로 추가", "같은 것 두 번 안 나오기"],
+  mood: ["밝고 귀여운", "깔끔하고 차분한", "진한 게임풍", "파스텔 느낌", "미니멀 흑백"],
+  color: ["파랑", "초록", "분홍", "보라", "주황", "빨강", "검정"],
+  base: ["처음부터 만들기", "① 뽑기형 바탕", "② 퀴즈형 바탕", "③ 집계형 바탕",
+         "④ 타이머형 바탕", "⑤ 기록형 바탕", "⑥ 카드형 바탕"]
+};
+
+function chipRow(key, items, multi){
+  return '<div class="gchips" data-g="' + key + '" data-multi="' + (multi ? 1 : 0) + '">' +
+    items.map(function(v){
+      const val = Array.isArray(v) ? v[0] : v;
+      const lab = Array.isArray(v) ? v[1] : v;
+      const sub = Array.isArray(v) ? '<i>' + esc(v[2]) + "</i>" : "";
+      return '<button class="gchip" data-v="' + esc(val) + '" aria-pressed="false">' +
+             esc(lab) + sub + "</button>";
+    }).join("") + "</div>";
+}
+
+function genHTML(){
+  return '<div class="gen">' +
+    '<div class="gen-head"><b>🪄 우리 팀 프롬프트 만들기</b>' +
+      "<em>아래를 고르면 ChatGPT·제미나이에 그대로 붙여넣을 질문이 만들어집니다</em></div>" +
+
+    '<div class="gen-body">' +
+      '<div class="gl">1. 무엇을 부탁할까요? <span>(하나)</span></div>' + chipRow("mode", GEN.mode, false) +
+      '<div class="gl">2. 어떤 분야인가요? <span>(하나)</span></div>' + chipRow("field", GEN.field, false) +
+      '<div class="gl">3. 어떤 모양의 앱인가요? <span>(하나)</span></div>' + chipRow("kind", GEN.kind, false) +
+      '<div class="gl">4. 어디서 쓰나요? <span>(하나)</span></div>' + chipRow("where", GEN.where, false) +
+      '<div class="gl">5. 꼭 넣고 싶은 기능 <span>(여러 개)</span></div>' + chipRow("feat", GEN.feat, true) +
+      '<div class="gl">6. 어떤 느낌으로? <span>(하나)</span></div>' + chipRow("mood", GEN.mood, false) +
+      '<div class="gl">7. 주 색상 <span>(하나)</span></div>' + chipRow("color", GEN.color, false) +
+      '<div class="gl">8. 무엇을 바탕으로? <span>(하나)</span></div>' + chipRow("base", GEN.base, false) +
+      '<div class="gl">9. 우리 앱을 한 줄로 <span>(직접 쓰기)</span></div>' +
+      '<input class="gtext" id="gOne" placeholder="예) 급식 메뉴를 못 고를 때 하나 뽑아 주는 앱">' +
+      '<div class="gl">10. 더 하고 싶은 말 <span>(선택)</span></div>' +
+      '<input class="gtext" id="gFree" placeholder="예) 결과가 나올 때 폭죽이 터지면 좋겠어요">' +
+    "</div>" +
+
+    '<div class="gen-out">' +
+      '<div class="go-top"><b>📋 만들어진 질문</b>' +
+        '<button class="gcopy" id="gCopy">복사</button></div>' +
+      '<pre id="gOut" class="go-pre"></pre>' +
+      '<p class="go-tip">⚠️ 받은 코드는 <b>P2 프롬프트로 설명을 들은 뒤</b> 쓰세요. ' +
+      '이해 못 한 코드는 발표 때 설명할 수 없습니다.</p>' +
+    "</div></div>";
+}
+
+function genRead(key){
+  const row = document.querySelector('.gchips[data-g="' + key + '"]');
+  if (!row) return [];
+  return [].slice.call(row.querySelectorAll('.gchip[aria-pressed="true"]'))
+           .map(function(b){ return b.dataset.v; });
+}
+
+function genBuild(){
+  const out = document.getElementById("gOut");
+  if (!out) return;
+
+  const mode  = genRead("mode")[0] || "";
+  const field = genRead("field")[0];
+  const kind  = genRead("kind")[0];
+  const where = genRead("where")[0];
+  const feats = genRead("feat");
+  const mood  = genRead("mood")[0];
+  const color = genRead("color")[0];
+  const base  = genRead("base")[0];
+  const one   = (document.getElementById("gOne") || {}).value || "";
+  const free  = (document.getElementById("gFree") || {}).value || "";
+
+  if (!mode){
+    out.textContent = "① 무엇을 부탁할지부터 골라 주세요.";
+    return;
+  }
+
+  const L = [];
+  L.push("나는 한국 고등학생이고, HTML·CSS·JavaScript 기초만 배웠습니다.");
+  L.push("방과후 수업에서 우리 반이 실제로 쓸 웹앱을 팀으로 만들고 있습니다.");
+  L.push("");
+
+  L.push("[ 만들려는 것 ]");
+  if (one)   L.push("- 한 줄 설명 : " + one);
+  if (field) L.push("- 분야 : " + field);
+  if (kind)  L.push("- 앱 모양 : " + kind);
+  if (where) L.push("- 쓰는 곳 : " + where);
+  L.push("- 쓰는 사람 : 우리 반 고등학생");
+  L.push("");
+
+  if (feats.length){
+    L.push("[ 꼭 넣고 싶은 기능 ]");
+    for (let i = 0; i < feats.length; i = i + 1) L.push("- " + feats[i]);
+    L.push("");
+  }
+
+  if (mood || color){
+    L.push("[ 디자인 ]");
+    if (mood)  L.push("- 분위기 : " + mood);
+    if (color) L.push("- 주 색상 : " + color + " 계열");
+    L.push("- 색은 3가지 안쪽으로, 휴대폰에서도 잘 보이게");
+    L.push("");
+  }
+
+  if (free){
+    L.push("[ 더 바라는 것 ]");
+    L.push("- " + free);
+    L.push("");
+  }
+
+  L.push("[ 꼭 지켜 주세요 ]");
+  L.push("- 라이브러리나 프레임워크 없이 순수 HTML·CSS·JavaScript 로만");
+  L.push("- let, if, for, 함수, getElementById, onclick, innerText 수준으로만");
+  L.push("- 모든 줄에 한국어 주석을 달아 주세요");
+  L.push("- 중학생도 이해할 수 있는 쉬운 말로 설명해 주세요");
+
+  if (mode === "idea"){
+    L.push("");
+    L.push("[ 무엇을 해 주세요 ]");
+    L.push("위 조건에 맞는 앱 아이디어를 3개 제안해 주세요.");
+    L.push("아이디어마다 이렇게 적어 주세요.");
+    L.push("1) 어떤 불편함을 푸는지 한 줄");
+    L.push("2) 화면에 무엇이 보이는지 (버튼·목록·결과 등)");
+    L.push("3) 필요한 기능 3개 이하");
+    L.push("4) 고등학생이 3주 안에 만들 수 있는지 (쉬움/보통/어려움)");
+    L.push("아직 코드는 쓰지 마세요.");
+  }
+  else if (mode === "base"){
+    L.push("- 파일 하나(.html)로 완성해 주세요");
+    L.push("- 기능은 위에 적은 것 중 가장 중요한 것 하나만 먼저 넣어 주세요");
+    L.push("");
+    L.push("[ 무엇을 해 주세요 ]");
+    if (base && base !== "처음부터 만들기"){
+      L.push("미션보드의 " + base.replace(" 바탕", "") + " 템플릿을 바탕으로,");
+      L.push("아래에 붙여 넣는 코드를 우리 주제에 맞게 고쳐 주세요.");
+    } else {
+      L.push("위 조건에 맞는 웹앱의 기본 뼈대를 처음부터 만들어 주세요.");
+    }
+    L.push("그리고 마지막에 이것을 꼭 알려 주세요.");
+    L.push("1) 각 부분이 무슨 일을 하는지 3~4줄 요약");
+    L.push("2) 우리가 내용을 바꾸려면 어디를 고쳐야 하는지 정확히 3곳");
+    L.push("3) 다음에 기능을 하나 더 넣는다면 무엇이 좋을지");
+    if (base && base !== "처음부터 만들기"){
+      L.push("");
+      L.push("[ 바탕 코드 ]");
+      L.push("( 여기에 템플릿 코드를 복사해서 붙여넣으세요 )");
+    }
+  }
+  else {
+    L.push("- 전체 코드를 다시 쓰지 말고, 바꿔야 할 부분만 알려 주세요");
+    L.push("- 기존 코드의 어느 줄 아래에 들어가는지 정확히 짚어 주세요");
+    L.push("");
+    L.push("[ 무엇을 해 주세요 ]");
+    L.push("아래 코드에 위에 적은 기능을 " + (feats.length ? "하나씩 순서대로" : "하나만") + " 추가해 주세요.");
+    L.push("먼저 가장 쉬운 것 하나부터 알려 주고, 제가 됐다고 하면 다음 것을 알려 주세요.");
+    L.push("마지막에 제대로 됐는지 확인하는 방법도 알려 주세요.");
+    L.push("");
+    L.push("[ 지금 내 코드 ]");
+    L.push("( 여기에 내 코드 전체를 복사해서 붙여넣으세요 )");
+  }
+
+  out.textContent = L.join("\n");
+}
+
 /* 코드 블록을 버튼으로 골라 펼치게 만든다 */
 function shortLabel(t){
   let x = t.replace(/\([^)]*\)/g, "").replace(/\s+/g, " ").trim();
@@ -3568,6 +4101,9 @@ function stageHTML(s){
           '<span class="bx">✓</span><span class="qn">' + String(i + 1).padStart(2, "0") + "</span>" +
           '<span class="qt">' + q + "</span></button></li>").join("") + "</ul>");
 
+  if (s.gen)
+    h += sec("🪄 프롬프트 생성기", "고르기만 하면 질문이 완성됩니다", genHTML());
+
   if (s.code && s.code.length)
     h += sec("💻 오늘의 코드", "아래 버튼을 누르면 그 코드가 열립니다", codeHTML(s.code));
 
@@ -3641,6 +4177,8 @@ function cheatHTML(){
 }
 
 function render(){
+  // 생성기가 있으면 그릴 때마다 질문을 새로 만든다
+  setTimeout(genBuild, 0);
   CODES.length = 0;
   document.querySelector(".rail").style.display = tab === "cheat" ? "none" : "";
   document.querySelector(".wrap").style.gridTemplateColumns =
@@ -3688,6 +4226,27 @@ document.addEventListener("click", e => {
         el.className = "pill lv1"; el.textContent = "✓ 클리어"; badge.appendChild(el);
       } else if (!stageDone(n) && has) old.remove();
     }
+    return;
+  }
+
+  const gchip = e.target.closest(".gchip");
+  if (gchip){
+    const row = gchip.closest(".gchips");
+    const on = gchip.getAttribute("aria-pressed") === "true";
+    if (row.dataset.multi !== "1"){
+      row.querySelectorAll(".gchip").forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
+    }
+    gchip.setAttribute("aria-pressed", String(!on));
+    genBuild();
+    return;
+  }
+
+  if (e.target.closest("#gCopy")){
+    const txt = document.getElementById("gOut").textContent;
+    const btn = document.getElementById("gCopy");
+    const ok = function(){ btn.textContent = "복사됨!";
+      setTimeout(function(){ btn.textContent = "복사"; }, 1400); };
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, ok); else ok();
     return;
   }
 
@@ -3745,6 +4304,10 @@ function viewFromHash(){
 }
 
 /* 뒤로/앞으로 가기, 주소창에 직접 입력한 #stage7 도 동작하게 */
+document.addEventListener("input", function(e){
+  if (e.target.classList && e.target.classList.contains("gtext")) genBuild();
+});
+
 window.addEventListener("hashchange", () => {
   const next = viewFromHash();
   if (tab === "home" && view === next) return;   // 이미 그 화면이면 그냥 둠
