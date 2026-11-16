@@ -357,8 +357,20 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
 .namebtn:hover{background:var(--z); color:#fff}
 .plan-saved{font-size:.78rem; color:var(--y); font-weight:600; min-height:18px}
 
+/* 🖼️ 캔버스 안내 */
+.gcanvas{margin:13px 0 0; padding:14px 16px; border-radius:12px;
+  background:var(--z-soft); border:1px solid var(--z); font-size:.85rem; line-height:1.7}
+.gcanvas > b{display:block; color:var(--ink); margin-bottom:8px; font-size:.9rem}
+.gc-row{display:flex; gap:10px; align-items:flex-start; margin:6px 0; color:var(--ink-2)}
+.gc-n{flex:none; width:62px; font-weight:700; color:var(--z); font-size:.8rem; margin-top:1px}
+.gc-row b{color:var(--ink)}
+.gc-warn{margin:10px 0 0; padding-top:9px; border-top:1px dashed var(--z);
+  font-size:.82rem; color:var(--ink-2); line-height:1.7}
+.gc-warn b{color:var(--ink)}
+@media (max-width:520px){ .gc-row{flex-direction:column; gap:2px} .gc-n{width:auto} }
+
 /* 📦 생성기 결과물 안내 */
-.gwhat{margin:0 0 11px; padding:12px 15px; border-radius:11px; background:var(--y-soft);
+.gwhat{margin:10px 0 2px; padding:12px 15px; border-radius:11px; background:var(--y-soft);
   border:1px solid var(--y); font-size:.84rem; line-height:1.72; color:var(--ink-2)}
 .gwhat b{color:var(--ink); display:block; margin-bottom:3px}
 .gwhat ul{margin:5px 0 0; padding-left:18px}
@@ -4783,6 +4795,7 @@ function genHTML(){
 
     '<div class="gen-body">' +
       '<div class="gl">1. 무엇을 부탁할까요? <span>(하나)</span></div>' + chipRow("mode", GEN.mode, false) +
+      '<div class="gwhat" id="gWhat"></div>' +
       '<div class="gl">2. 어떤 분야인가요? <span>(하나)</span></div>' + chipRow("field", GEN.field, false) +
       '<div class="gl">3. 어떤 모양의 앱인가요? <span>(하나)</span></div>' + chipRow("kind", GEN.kind, false) +
       '<div class="gl">4. 어디서 쓰나요? <span>(하나)</span></div>' + chipRow("where", GEN.where, false) +
@@ -4797,10 +4810,22 @@ function genHTML(){
     "</div>" +
 
     '<div class="gen-out">' +
-      '<div class="gwhat" id="gWhat"></div>' +
       '<div class="go-top"><b>📋 만들어진 질문</b>' +
         '<button class="gcopy" id="gCopy">복사</button></div>' +
       '<pre id="gOut" class="go-pre"></pre>' +
+      '<div class="gcanvas">' +
+        "<b>🖼️ 받은 코드를 그 자리에서 바로 보고 싶다면 — 캔버스</b>" +
+        '<div class="gc-row"><span class="gc-n">제미나이</span>' +
+          "<span>답을 받으면 코드 상자 근처에 <b>Canvas</b>(또는 미리보기) 단추가 나옵니다. " +
+          "누르면 <b>오른쪽에 실행 화면</b>이 떠서, 코드를 고치는 대로 바로 반영돼요.</span></div>" +
+        '<div class="gc-row"><span class="gc-n">ChatGPT</span>' +
+          "<span>답 위쪽의 <b>Canvas</b> 로 열면 코드와 화면을 함께 볼 수 있습니다.</span></div>" +
+        '<div class="gc-row"><span class="gc-n">안 보이면</span>' +
+          "<span>계정이나 버전에 따라 단추가 없을 수 있어요. 그럴 땐 그냥 <b>복사 → 메모장 → 저장</b> 하면 됩니다. " +
+          "이 수업은 처음부터 그 방법으로 해 왔으니 전혀 문제없어요.</span></div>" +
+        '<p class="gc-warn">★ 캔버스는 <b>미리보기일 뿐</b>입니다. 우리 작품은 반드시 ' +
+          "<b>메모장에 붙여 .html 로 저장</b>해야 USB 로 옮기고 <b>전시관에 올릴 수</b> 있습니다.</p>" +
+      "</div>" +
       '<p class="go-tip">⚠️ 받은 코드는 <b>P2 프롬프트로 설명을 들은 뒤</b> 쓰세요. ' +
       '이해 못 한 코드는 발표 때 설명할 수 없습니다.</p>' +
     "</div></div>";
@@ -4827,7 +4852,7 @@ const GWHAT = {
           "각 부분이 무슨 일을 하는지 3~4줄 요약",
           "우리가 고쳐야 할 곳 정확히 3군데",
           "다음에 넣으면 좋을 기능 제안"],
-         "받으면 → 메모장에 붙여 <b>우리앱.html</b> 로 저장하고 더블클릭해서 확인하세요"],
+         "받으면 → <b>캔버스</b>가 있으면 거기서 바로 확인하고, 메모장에 붙여 <b>우리앱.html</b> 로 저장하세요 (저장은 꼭!)"],
   plus: ["➕ <b>고칠 부분만</b> 옵니다 — 전체 코드를 다시 주지 않습니다",
          ["추가할 코드 조각과 그 설명",
           "기존 코드의 어느 줄 아래에 넣는지",
