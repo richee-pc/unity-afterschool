@@ -286,6 +286,11 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.86em;
   .chal > .chal-body{display:grid; grid-template-columns:1fr 1fr; gap:9px; align-items:start}
 }
 
+.node.gal{text-decoration:none; margin-top:10px; border-top:1px dashed var(--line-2);
+  padding-top:13px; border-radius:0 0 12px 12px}
+.node.gal .dot{background:var(--y-soft); color:var(--y); border-color:var(--y)}
+.node.gal:hover .lb b{color:var(--y)}
+
 /* 🎯 미션별 바로가기 */
 .quests li{display:flex}
 .qgo + .qgo{margin-left:5px}
@@ -5037,6 +5042,10 @@ function renderRail(){
            '<span class="dot">' + (dn ? "✓" : String(s.n).padStart(2, "0")) + "</span>" +
            '<span class="lb"><b>' + s.title + "</b><i>" + s.date + "</i></span></button>";
   }).join("");
+  // 항상 보이는 전시관 바로가기
+  h += '<a class="node gal" href="teams/" target="_blank" rel="noopener">' +
+       '<span class="dot">🏆</span><span class="lb"><b>작품 전시관</b>' +
+       '<i>팀별 완성작 · 새 창</i></span></a>';
   trackEl.innerHTML = h;
 }
 
