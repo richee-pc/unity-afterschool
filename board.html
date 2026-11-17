@@ -4305,6 +4305,26 @@ function addScore(point) {
  n:7, date:"13차시 · 11/30", lv:3, lvName:"완성·발표",
  title:"팀 프로젝트 ③ — 완성, 발표회, 수료",
  sub:"앞 25분은 마무리와 교차 테스트, 뒤 30분은 발표회입니다. 오늘이 마지막이에요.",
+ submit:[
+  ["우리 파일 이름부터 바꾸기",
+   "우리 앱 파일을 <b>team3.html</b> 처럼 <b>우리 팀 번호</b>로 바꿉니다. " +
+   "(3팀이면 <code>team3.html</code>) <b>한글·띄어쓰기는 넣지 마세요.</b> 전시관이 못 찾습니다."],
+  ["제출 코너 컴퓨터로 가기",
+   "선생님이 <b>전시관 저장소를 열어 둔 컴퓨터</b>가 제출 코너입니다. " +
+   "우리 파일을 <b>USB나 메일</b>로 가져가세요."],
+  ["teams 폴더 열기",
+   "열려 있는 화면에서 <b>teams</b> 폴더를 누릅니다. " +
+   "다른 팀 파일들이 보이면 제대로 찾아온 거예요."],
+  ["Add file → Upload files",
+   "오른쪽 위 <b>Add file</b> 을 누르고 <b>Upload files</b> 를 고릅니다. " +
+   "그다음 우리 파일을 <b>끌어다 놓기</b>."],
+  ["Commit changes 누르기",
+   "화면을 아래로 내려 초록색 <b>Commit changes</b> 버튼을 누르면 제출 끝! " +
+   "<b>이 버튼을 안 누르면 올라가지 않습니다.</b>"],
+  ["1~2분 뒤 전시관에서 확인",
+   "<b>작품 전시관</b>을 열고 <b>새로고침(F5)</b> 하세요. 우리 카드가 보이면 성공입니다. " +
+   "안 보이면 파일 이름을 다시 확인해 보세요."]
+ ],
  learn:[
   ["오늘 시간표","<b>0~10분</b> 남은 것 고치기 · <b>10~25분</b> 옆 팀과 교차 테스트 후 치명적인 것 2개만 수정 · <b>25~55분</b> 발표회와 자유 체험 · <b>55~60분</b> 투표와 마무리."],
   ["만든 사람은 버그를 못 찾습니다","여러분은 <b>될 것 같은 길로만</b> 누릅니다. 남은 엉뚱하게 눌러요 — 빈칸으로 제출하고, 버튼을 연타하고, 새로고침을 누릅니다. <b>그래서 교차 테스트가 필요합니다.</b>"],
@@ -4351,6 +4371,15 @@ ChatGPT(chatgpt.com) 또는 제미나이(gemini.google.com) 에서
 3. 그중 치명적인 2개만 고치기. 나머지는 발표 때 말하면 됩니다`, "🤖 P6 테스트"]
  ],
  tables:[
+  {cap:"✅ 제출 전 마지막 확인 — 전시관은 우리 파일 속 글자를 읽어 옵니다",
+   head:["확인할 것","우리 파일에서"],
+   rows:[["템플릿 기본 내용이 <b>하나도 안 남았나</b>","김치찌개 · 피자 · apple 같은 예시가 남아 있으면 ❌"],
+         ["버튼을 <b>전부 눌러</b> 봤나","빈칸으로 눌러도, 연타해도 괜찮은지"],
+         ["<b>앱 이름</b>이 들어 있나","<code>&lt;h1&gt;🍚 오늘 뭐 먹지&lt;/h1&gt;</code> ← 이모지 + 이름이 카드에 나옵니다"],
+         ["<b>한 줄 소개</b>가 들어 있나","<code>&lt;p class=\"sub\"&gt;한 줄 소개&lt;/p&gt;</code> ← 카드 설명이 됩니다"],
+         ["<b>팀원</b>을 넣고 싶다면 (선택)","<code>&lt;head&gt;</code> 안에 <code>&lt;meta name=\"team\" content=\"3팀 김○○ 이○○\"&gt;</code>"],
+         ["파일 이름이 <b>team번호.html</b> 인가","<code>team3.html</code> ⭕ &nbsp; <code>우리앱.html</code> ❌ &nbsp; <code>team 3.html</code> ❌"]]},
+
   {cap:"🔍 교차 테스트 체크리스트 — 옆 팀 앱을 이렇게 괴롭혀 보세요",
    head:["해볼 것","보통 여기서 터집니다"],
    rows:[["<b>아무것도 안 넣고</b> 버튼 누르기","빈 항목이 생기거나 빈 결과가 나옴"],
@@ -4620,6 +4649,7 @@ function questGo(){
     const r = t.match(/\bR(10|[1-9])\b/);
     if (r) made.push(codeBtn("R" + r[1], "R" + r[1] + " 보기", 6));
 
+    if (t.indexOf("제출") >= 0) made.push(secBtn("작품 제출", "제출 방법"));
     if (t.indexOf("체험장") >= 0) made.push(codeBtn("체험장", "체험장 열기", 6));
     if (t.indexOf("템플릿") >= 0 || t.indexOf("뼈대") >= 0) made.push(secBtn("오늘의 코드", "템플릿 보기"));
     if (t.indexOf("생성기") >= 0) made.push(secBtn("프롬프트 생성기", "생성기 열기"));
@@ -5108,6 +5138,13 @@ function stageHTML(s){
           '<li><div class="q" role="button" tabindex="0" data-n="' + s.n + '" data-i="' + i + '" aria-pressed="' + isDone(s.n, i) + '">' +
           '<span class="bx">✓</span><span class="qn">' + String(i + 1).padStart(2, "0") + "</span>" +
           '<span class="qt">' + q + "</span></div></li>").join("") + "</ul>", "t-quest");
+
+  if (s.submit && s.submit.length)
+    h += sec("📤 작품 제출하는 법", "이대로만 따라오면 됩니다",
+          '<div class="card2"><div class="steps">' + s.submit.map((st, i) =>
+            '<div class="step"><span class="sn">' + (i + 1) + "</span>" +
+            "<span><b>" + st[0] + "</b><p>" + st[1] + "</p></span></div>").join("") + "</div></div>",
+          "t-quest");
 
   if (s.gen){
     h += sec("📝 우리 팀 기획 카드", "적어 두면 아래 생성기에 자동으로 들어갑니다", planHTML(), "t-quest");
