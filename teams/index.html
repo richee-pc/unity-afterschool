@@ -177,6 +177,10 @@ button{font-family:inherit}
   .hideSm{display:none}
 }
 
+.card.addcard{border-style:dashed; border-color:var(--line-2); box-shadow:none; background:var(--surface-2)}
+.card.addcard .soon{background:transparent; border-bottom:1px dashed var(--line-2)}
+.card.addcard .info .desc b{color:var(--ink)}
+
 /* ─── 안내 ─── */
 .note{margin-top:34px; background:var(--z-soft); border-radius:14px; padding:18px 22px;
   font-size:.9rem; line-height:1.74; color:var(--ink-2)}
@@ -205,7 +209,7 @@ button{font-family:inherit}
   <header class="hero">
     <span class="ribbon">🏆 TEAM PROJECT</span>
     <h1>우리 반 작품 전시관</h1>
-    <p>방과후 수업에서 <b>직접 만든 앱</b>입니다. 카드를 누르면 <b>이 화면에서 바로</b> 체험할 수 있어요.</p>
+    <p>방과후 수업에서 <b>직접 만든 앱</b>입니다. 카드를 누르면 <b>이 화면에서 바로</b> 체험할 수 있어요.<br><b>파일만 올리면 자동으로 전시</b>됩니다.</p>
     <div class="meta">
       <span>2026학년도 2학기 방과후학교</span>
       <span>HTML · CSS · JavaScript</span>
@@ -225,12 +229,25 @@ button{font-family:inherit}
   <main class="grid" id="grid"></main>
 
   <div class="note">
-    <b>🧑‍🏫 선생님께 — 작품 올리는 법</b>
+    <b>📤 작품 올리는 법 — 팀이 직접 하면 됩니다</b>
     <ol>
-      <li>팀에게 받은 파일을 <code>team1.html</code> … <code>team6.html</code> 로 이름을 바꿔 <code>teams/</code> 폴더에 올립니다.</li>
-      <li>이 파일(<code>teams/index.html</code>)을 열어 맨 아래 <code>TEAMS</code> 목록에서 그 팀의 <code>ready</code> 를 <code>true</code> 로 바꾸고, 앱 이름·소개·팀원을 채웁니다.</li>
-      <li>저장하고 올리면 1~2분 뒤 자동으로 전시됩니다.</li>
+      <li>우리 앱 파일 이름을 <code>team3.html</code> 처럼 <b>우리 팀 번호</b>로 바꿉니다.</li>
+      <li><code>teams/</code> 폴더에 올립니다. (선생님이 로그인해 둔 화면에서 끌어다 놓기)</li>
+      <li><b>1~2분 뒤 새로고침</b>하면 전시관에 바로 나타납니다. 목록을 고칠 필요 없어요!</li>
     </ol>
+    <p style="margin:11px 0 0"><b>고치고 싶으면?</b> 같은 이름으로 <b>다시 올리기만</b> 하면 됩니다.</p>
+  </div>
+
+  <div class="note" style="background:var(--y-soft); margin-top:12px">
+    <b>✏️ 카드에 뜨는 이름·소개·팀원 바꾸기 — 우리 파일 안에서</b>
+    <p style="margin:0 0 7px">전시관은 <b>여러분 파일 안의 글자를 그대로 읽어 옵니다.</b></p>
+    <ol>
+      <li><code>&lt;h1&gt;🍚 오늘 뭐 먹지&lt;/h1&gt;</code> → <b>이모지 + 앱 이름</b>으로 나옵니다</li>
+      <li><code>&lt;p class="sub"&gt;한 줄 소개&lt;/p&gt;</code> → <b>카드 설명</b>이 됩니다</li>
+      <li>팀원을 넣고 싶으면 <code>&lt;head&gt;</code> 안에 한 줄 추가<br>
+        <code>&lt;meta name="team" content="3팀 김○○ 이○○"&gt;</code></li>
+    </ol>
+    <p style="margin:11px 0 0">바꾸고 저장해서 <b>다시 올리면</b> 카드도 같이 바뀝니다.</p>
   </div>
 
   <a class="back" href="../">← 미션보드로 돌아가기</a>
@@ -276,23 +293,52 @@ button{font-family:inherit}
 
 <script>
 /* ══════════════════════════════════════════════════════════
-   팀 작품 목록 — 여기만 고치면 됩니다
-   ready : 파일을 올렸으면 true, 아직이면 false
+   작품은 파일만 올리면 자동으로 전시됩니다.
+   teams/ 폴더에 team1.html ~ team24.html 로 올리기만 하면 끝!
+   앱 이름·소개·팀원은 그 파일 안에서 읽어 옵니다.
    ══════════════════════════════════════════════════════════ */
-const TEAMS = [
-  { no:1, ready:true,  icon:"🍚", app:"오늘 뭐 먹지",
-    desc:"점심 메뉴 고르느라 쓰는 10분을 버튼 한 번으로 줄였습니다.",
-    who:"예시 작품", file:"team1.html" },
+const MAX_TEAM = 24;          // 몇 번까지 찾아볼까
+const KEY  = "gallery-visited-v1";
+const STAY = 10000;           // 몇 밀리초 이상 보면 도장을 찍을까
 
-  { no:2, ready:false, icon:"🎯", app:"", desc:"", who:"", file:"team2.html" },
-  { no:3, ready:false, icon:"⏰", app:"", desc:"", who:"", file:"team3.html" },
-  { no:4, ready:false, icon:"🧠", app:"", desc:"", who:"", file:"team4.html" },
-  { no:5, ready:false, icon:"🗳️", app:"", desc:"", who:"", file:"team5.html" },
-  { no:6, ready:false, icon:"🍅", app:"", desc:"", who:"", file:"team6.html" }
-];
+let live = [];                // 찾아낸 작품들
 
-const KEY = "gallery-visited-v1";
-const STAY = 10000;   // 몇 밀리초 이상 보면 도장을 찍을까
+/* ─── 작품 파일 안에서 이름·소개·팀원을 읽어 낸다 ─── */
+function parseWork(no, html){
+  const doc = new DOMParser().parseFromString(html, "text/html");
+
+  const h1 = doc.querySelector("h1");
+  let title = (h1 ? h1.textContent : (doc.title || "")).trim();
+
+  // 제목 맨 앞에 이모지가 있으면 그것을 대표 아이콘으로
+  let icon = "🎮";
+  try {
+    const m = title.match(/^((?:\p{Extended_Pictographic}|️|‍)+)\s*/u);
+    if (m){ icon = m[1]; title = title.slice(m[0].length).trim(); }
+  } catch (e) { /* 오래된 브라우저면 그냥 기본 아이콘 */ }
+
+  if (!title) title = no + "팀 작품";
+
+  const meta = function(n){
+    const el = doc.querySelector('meta[name="' + n + '"]');
+    return el && el.content ? el.content.trim() : "";
+  };
+
+  let desc = meta("description");
+  if (!desc){
+    const p = doc.querySelector(".sub, .lead, header p, h1 + p");
+    if (p) desc = p.textContent.trim();
+  }
+
+  return {
+    no: no,
+    icon: icon,
+    app: title,
+    desc: desc,
+    who: meta("team") || meta("author") || "",
+    file: "team" + no + ".html"
+  };
+}
 
 /* ─── 관람 기록 (내 브라우저에만 저장됩니다) ─── */
 let visited = [];
@@ -301,47 +347,56 @@ try {
   if (raw) visited = JSON.parse(raw);
 } catch (e) { visited = []; }
 if (!Array.isArray(visited)) visited = [];
-visited = visited.filter((n, i) => typeof n === "number" && visited.indexOf(n) === i);
+visited = visited.filter(function(n, i){
+  return typeof n === "number" && visited.indexOf(n) === i;
+});
 
 function saveVisited(){
   try { localStorage.setItem(KEY, JSON.stringify(visited)); } catch (e) {}
 }
 
-const live = TEAMS.filter(t => t.ready);
-const grid = document.getElementById("grid");
+const grid    = document.getElementById("grid");
+const modal   = document.getElementById("modal");
+const frame   = document.getElementById("mFrame");
+const stage   = document.getElementById("stage");
+const toastEl = document.getElementById("toast");
 
 /* ─── 카드 그리기 ─── */
-grid.innerHTML = TEAMS.map(t => {
-  if (!t.ready) {
-    return '<div class="card">' +
-      '<div class="soon"><div><span class="em">' + t.icon + "</span>" +
-      "<small>준비 중</small></div></div>" +
-      '<div class="info"><div class="app"><span class="ic">📦</span><b>' + t.no + "팀</b></div>" +
-      '<p class="desc">아직 작품이 올라오지 않았습니다.</p>' +
-      '<span class="play off">준비 중</span></div></div>';
-  }
-  return '<button class="card live" data-no="' + t.no + '">' +
-    '<div class="shot"><span class="badge">' + t.no + "팀</span>" +
-    '<span class="seen">✓ 체험함</span>' +
-    '<iframe src="' + t.file + '" loading="lazy" scrolling="no" tabindex="-1" ' +
-      'sandbox="allow-scripts allow-same-origin" title=""></iframe>' +
-    '<span class="veil"></span></div>' +
-    '<div class="info">' +
-      '<div class="app"><span class="ic">' + t.icon + '</span><b>' + t.app + "</b></div>" +
-      '<p class="desc">' + t.desc + "</p>" +
-      '<span class="who">' + t.who + "</span>" +
-      '<span class="play">▶ 체험하기</span>' +
-    "</div></button>";
-}).join("");
+function drawGrid(){
+  let h = live.map(function(t){
+    return '<button class="card live" data-no="' + t.no + '">' +
+      '<div class="shot"><span class="badge">' + t.no + "팀</span>" +
+      '<span class="seen">✓ 체험함</span>' +
+      '<iframe src="' + t.file + '" loading="lazy" scrolling="no" tabindex="-1" ' +
+        'sandbox="allow-scripts allow-same-origin" title=""></iframe>' +
+      '<span class="veil"></span></div>' +
+      '<div class="info">' +
+        '<div class="app"><span class="ic">' + t.icon + '</span><b>' + t.app + "</b></div>" +
+        '<p class="desc">' + (t.desc || "직접 눌러서 확인해 보세요") + "</p>" +
+        '<span class="who">' + (t.who || (t.no + "팀")) + "</span>" +
+        '<span class="play">▶ 체험하기</span>' +
+      "</div></button>";
+  }).join("");
 
-document.getElementById("count").textContent =
-  "작품 " + live.length + " / " + TEAMS.length + "팀";
+  // 맨 끝에 '우리 것도 올리기' 안내 카드
+  h += '<div class="card addcard"><div class="soon"><div>' +
+       '<span class="em">➕</span><small>여기에 우리 팀 작품이</small></div></div>' +
+       '<div class="info"><div class="app"><span class="ic">📤</span><b>작품 올리기</b></div>' +
+       '<p class="desc">우리 앱 파일을 <b>team번호.html</b> 로 이름 바꿔서 ' +
+       '<b>teams 폴더</b>에 올리면 바로 전시됩니다.</p>' +
+       '<span class="play off">아래 안내 참고</span></div></div>';
+
+  grid.innerHTML = h;
+
+  document.getElementById("count").textContent =
+    live.length ? "작품 " + live.length + "개" : "아직 작품이 없어요";
+}
 
 /* ─── 관람 스탬프 ─── */
 function drawStamp(){
-  // 전시 중인 작품만, 중복 없이 셉니다
-  const seen = live.filter(t => visited.indexOf(t.no) >= 0).length;
   const all  = live.length;
+  const seen = live.filter(function(t){ return visited.indexOf(t.no) >= 0; }).length;
+  const goal = Math.min(3, all);
 
   document.getElementById("stampN").textContent = seen + " / " + all;
   document.getElementById("stampBar").style.width =
@@ -350,31 +405,28 @@ function drawStamp(){
   const box = document.getElementById("stamp");
   const msg = document.getElementById("stampMsg");
 
-  if (all > 0 && seen >= all) {
+  if (all === 0){
+    box.className = "stamp";
+    msg.innerHTML = "작품이 올라오면 여기에 도장판이 생깁니다";
+  } else if (seen >= all){
     box.className = "stamp done";
     msg.innerHTML = "🎉 모든 작품을 체험했습니다! 선생님께 보여 주세요";
-  } else if (seen >= 3) {
+  } else if (seen >= goal){
     box.className = "stamp done";
-    msg.innerHTML = "🎉 3개 이상 체험 완료! <b>8차시 도전 2</b> 성공입니다";
+    msg.innerHTML = "🎉 " + goal + "개 이상 체험 완료! <b>13차시 도전 3</b> 성공입니다";
   } else {
     box.className = "stamp";
-    msg.innerHTML = "작품을 열어 <b>10초 이상</b> 체험하면 도장이 찍힙니다 · 목표 3개";
+    msg.innerHTML = "작품을 열어 <b>10초 이상</b> 체험하면 도장이 찍힙니다 · 목표 " + goal + "개";
   }
 
-  TEAMS.forEach(t => {
+  live.forEach(function(t){
     const card = grid.querySelector('.card[data-no="' + t.no + '"]');
     if (card) card.classList.toggle("visited", visited.indexOf(t.no) >= 0);
   });
 }
-drawStamp();
 
 /* ─── 체험 창 ─── */
-const modal   = document.getElementById("modal");
-const frame   = document.getElementById("mFrame");
-const stage   = document.getElementById("stage");
-const toastEl = document.getElementById("toast");
-
-let current = -1;       // live 배열 안에서 몇 번째인가
+let current = -1;
 let stayTimer = null;
 let lastFocus = null;
 
@@ -384,7 +436,7 @@ function toast(text){
   setTimeout(function(){ toastEl.classList.remove("show"); }, 2200);
 }
 
-function open(i){
+function openWork(i){
   if (live.length === 0) return;
   if (i < 0) i = live.length - 1;
   if (i >= live.length) i = 0;
@@ -395,29 +447,28 @@ function open(i){
   document.getElementById("mNo").textContent    = t.no + "팀";
   document.getElementById("mIcon").textContent  = t.icon;
   document.getElementById("mTitle").textContent = t.app;
-  document.getElementById("mWho").textContent   = t.who;
+  document.getElementById("mWho").textContent   = t.who || (t.no + "팀");
   document.getElementById("mPos").textContent   = (i + 1) + " / " + live.length;
   document.getElementById("newTab").href        = t.file;
 
-  frame.src = t.file;                       // 열 때마다 새로 시작
+  frame.src = t.file;
   location.hash = "team" + t.no;
 
   const many = live.length > 1;
   document.getElementById("prevBtn").disabled = !many;
   document.getElementById("nextBtn").disabled = !many;
 
-  if (!modal.classList.contains("open")) {
+  if (!modal.classList.contains("open")){
     lastFocus = document.activeElement;
     modal.classList.add("open");
     document.body.classList.add("locked");
   }
   document.getElementById("closeBtn").focus();
 
-  // 10초 이상 머무르면 도장
   clearTimeout(stayTimer);
-  if (visited.indexOf(t.no) < 0) {
+  if (visited.indexOf(t.no) < 0){
     stayTimer = setTimeout(function(){
-      if (visited.indexOf(t.no) < 0) {
+      if (visited.indexOf(t.no) < 0){
         visited.push(t.no);
         saveVisited();
         drawStamp();
@@ -427,11 +478,11 @@ function open(i){
   }
 }
 
-function close(){
+function closeWork(){
   clearTimeout(stayTimer);
   modal.classList.remove("open");
   document.body.classList.remove("locked");
-  frame.src = "about:blank";                // 소리·타이머 멈추기
+  frame.src = "about:blank";
   if (location.hash) history.replaceState(null, "", location.pathname);
   if (lastFocus) lastFocus.focus();
 }
@@ -440,15 +491,15 @@ grid.addEventListener("click", function(e){
   const card = e.target.closest(".card.live");
   if (!card) return;
   const no = Number(card.dataset.no);
-  open(live.findIndex(t => t.no === no));
+  openWork(live.findIndex(function(t){ return t.no === no; }));
 });
 
-document.getElementById("closeBtn").onclick = close;
-document.getElementById("prevBtn").onclick  = function(){ open(current - 1); };
-document.getElementById("nextBtn").onclick  = function(){ open(current + 1); };
+document.getElementById("closeBtn").onclick = closeWork;
+document.getElementById("prevBtn").onclick  = function(){ openWork(current - 1); };
+document.getElementById("nextBtn").onclick  = function(){ openWork(current + 1); };
 
 modal.addEventListener("click", function(e){
-  if (e.target === modal) close();          // 바깥 어두운 곳을 누르면 닫기
+  if (e.target === modal) closeWork();
 });
 
 document.getElementById("viewBtn").onclick = function(){
@@ -461,27 +512,50 @@ document.getElementById("viewBtn").onclick = function(){
 document.getElementById("linkBtn").onclick = function(){
   const url = location.origin + location.pathname + "#team" + live[current].no;
   const done = function(){ toast("🔗 링크를 복사했습니다"); };
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(done, function(){ toast(url); });
-  } else {
-    toast(url);
-  }
+  if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function(){ toast(url); });
+  else toast(url);
 };
 
 document.addEventListener("keydown", function(e){
   if (!modal.classList.contains("open")) return;
-  if (e.key === "Escape")     close();
-  if (e.key === "ArrowLeft")  open(current - 1);
-  if (e.key === "ArrowRight") open(current + 1);
+  if (e.key === "Escape")     closeWork();
+  if (e.key === "ArrowLeft")  openWork(current - 1);
+  if (e.key === "ArrowRight") openWork(current + 1);
 });
 
-/* 주소에 #team2 가 붙어 있으면 그 작품을 바로 엽니다 */
-(function fromHash(){
+/* ─── 시작 : 올라와 있는 작품을 찾아 그린다 ─── */
+(function start(){
+  const jobs = [];
+  for (let n = 1; n <= MAX_TEAM; n = n + 1){
+    jobs.push((function(num){
+      return fetch("team" + num + ".html", { cache: "no-store" })
+        .then(function(r){ return r.ok ? r.text() : null; })
+        .then(function(t){ return t ? parseWork(num, t) : null; })
+        .catch(function(){ return null; });
+    })(n));
+  }
+
+  Promise.all(jobs).then(function(found){
+    live = found.filter(function(x){ return x; });
+    drawGrid();
+    drawStamp();
+
+    openFromHash();
+  });
+
+  // 주소창의 #team7 로 들어오거나, 링크를 눌러 주소만 바뀌어도 열리게
+  window.addEventListener("hashchange", openFromHash);
+})();
+
+function openFromHash(){
   const m = location.hash.match(/team(\d+)/);
   if (!m) return;
-  const i = live.findIndex(t => t.no === Number(m[1]));
-  if (i >= 0) open(i);
-})();
+  const no = Number(m[1]);
+  // 이미 그 작품을 보고 있으면 다시 열지 않습니다
+  if (modal.classList.contains("open") && live[current] && live[current].no === no) return;
+  const i = live.findIndex(function(t){ return t.no === no; });
+  if (i >= 0) openWork(i);
+}
 </script>
 
 </body>
