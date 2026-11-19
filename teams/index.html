@@ -192,8 +192,16 @@ button{font-family:inherit}
 .iv-money{display:flex; align-items:center; gap:10px; flex-wrap:wrap;
   padding:12px 15px; background:var(--gold-soft); border-radius:12px; margin-bottom:14px}
 .iv-money .lbl{font-size:.85rem; font-weight:600; color:var(--ink)}
-.iv-chips{font-size:1.5rem; letter-spacing:2px; line-height:1}
-.iv-chips .used{opacity:.22}
+.iv-bar{flex:1; min-width:120px; height:11px; background:var(--surface-3);
+  border-radius:99px; overflow:hidden}
+.iv-bar span{display:block; height:100%; width:0; background:var(--gold);
+  border-radius:99px; transition:width .25s}
+.iv-input{width:84px; font-family:"IBM Plex Mono",monospace; font-weight:700;
+  font-size:.95rem; text-align:right; padding:9px 10px; border:1.5px solid var(--line-2);
+  border-radius:10px; background:var(--surface); color:var(--ink)}
+.iv-input:focus{outline:none; border-color:var(--gold)}
+.iv-input.on{border-color:var(--gold); background:var(--gold-soft); color:var(--ink)}
+.iv-unit{font-size:.84rem; color:var(--ink-3); font-weight:600}
 .iv-money .left{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-weight:700;
   font-size:.86rem; color:var(--ink-2); white-space:nowrap}
 .iv-list{display:flex; flex-direction:column; gap:8px}
@@ -285,11 +293,11 @@ body{line-height:1.78}
 
   <section class="invest" id="invest">
     <div class="iv-top"><b>💰 투자 투표 — 내게 3억이 있다면?</b>
-      <em>발표를 다 듣고, 투자하고 싶은 팀에 나눠 거세요 (한 팀에 몰아도 됩니다)</em></div>
+      <em>발표를 다 듣고, 투자하고 싶은 팀에 <b>원하는 만큼</b> 나눠 거세요 (한 팀에 몰아도 됩니다 · 0.5억 같은 소수도 가능)</em></div>
     <div class="iv-body">
       <div class="iv-money">
         <span class="lbl">남은 투자금</span>
-        <span class="iv-chips" id="ivChips"></span>
+        <span class="iv-bar"><span id="ivFill"></span></span>
         <span class="left" id="ivLeft"></span>
       </div>
       <div class="iv-list" id="ivList"></div>
@@ -364,11 +372,10 @@ body{line-height:1.78}
 
 <script>
 /* ══════════ 💰 투자 투표 ══════════ */
-const IV_KEY  = "gallery-invest-v1";
-const IV_TOTAL = 3;                    // 투자금 몇 장?
-const IV_UNIT  = "1억";
+const IV_KEY   = "gallery-invest-v2";
+const IV_TOTAL = 3;                    // 모두 몇 억?
 
-let invest = {};                       // { 팀번호: 건 장수 }
+let invest = {};                       // { 팀번호: 투자한 억 }
 try { invest = JSON.parse(localStorage.getItem(IV_KEY)) || {}; }
 catch (e) { invest = {}; }
 if (typeof invest !== "object" || invest === null) invest = {};
@@ -376,10 +383,29 @@ if (typeof invest !== "object" || invest === null) invest = {};
 function ivSaved(){
   try { localStorage.setItem(IV_KEY, JSON.stringify(invest)); } catch (e) {}
 }
+function round1(v){ return Math.round(v * 10) / 10; }
 function ivUsed(){
   let n = 0;
-  for (const k in invest) n = n + (invest[k] || 0);
-  return n;
+  for (const k in invest) n = n + (Number(invest[k]) || 0);
+  return round1(n);
+}
+
+/* 남은 금액과 막대만 다시 그린다 (입력칸은 건드리지 않습니다) */
+function ivRefresh(){
+  const box = document.getElementById("invest");
+  if (!box) return;
+  const used = Math.min(ivUsed(), IV_TOTAL);
+  const left = round1(IV_TOTAL - used);
+
+  document.getElementById("ivFill").style.width = (used / IV_TOTAL * 100) + "%";
+  document.getElementById("ivLeft").textContent =
+    left > 0 ? left + "억 남음" : "다 쓰셨습니다";
+
+  box.classList.toggle("full", left <= 0.001);
+
+  [].slice.call(box.querySelectorAll(".iv-input")).forEach(function(el){
+    el.classList.toggle("on", Number(el.value) > 0);
+  });
 }
 
 function drawInvest(){
@@ -387,59 +413,60 @@ function drawInvest(){
   const list = document.getElementById("ivList");
   if (!box || !list) return;
 
-  if (live.length === 0){
-    box.style.display = "none";
-    return;
-  }
+  if (live.length === 0){ box.style.display = "none"; return; }
   box.style.display = "";
 
-  const used = Math.min(ivUsed(), IV_TOTAL);
-  const left = IV_TOTAL - used;
-
-  let chips = "";
-  for (let i = 0; i < IV_TOTAL; i = i + 1){
-    chips = chips + '<span class="' + (i < used ? "used" : "") + '">💵</span>';
-  }
-  document.getElementById("ivChips").innerHTML = chips;
-  document.getElementById("ivLeft").textContent =
-    left > 0 ? (left * 1) + "억 남음" : "다 쓰셨습니다";
-
   list.innerHTML = live.map(function(t){
-    const n = invest[t.no] || 0;
+    const v = invest[t.no] || 0;
     return '<div class="iv-row">' +
       '<span class="ic">' + t.icon + "</span>" +
       '<span class="nm"><b>' + t.app + "</b><i>" + t.no + "팀</i></span>" +
-      '<span class="amt">' + (n ? n + "억" : "—") + "</span>" +
-      '<button class="iv-add" data-iv="' + t.no + '"' + (left <= 0 ? " disabled" : "") +
-        ">+" + IV_UNIT + "</button>" +
-      (n ? '<button class="iv-del" data-ivdel="' + t.no + '">빼기</button>' : "") +
+      '<input class="iv-input ivInput" type="number" inputmode="decimal" ' +
+        'min="0" max="' + IV_TOTAL + '" step="0.5" data-iv="' + t.no + '" ' +
+        'value="' + (v || "") + '" placeholder="0">' +
+      '<span class="iv-unit">억</span>' +
       "</div>";
   }).join("");
 
-  box.classList.toggle("full", left <= 0);
+  ivRefresh();
 }
 
+/* 입력한 금액 반영
+   타이핑 중에는 칸을 건드리지 않습니다. (0.5 처럼 소수를 칠 수 있도록)
+   칸을 벗어날 때 실제 반영된 금액으로 정리해 줍니다. */
+function ivRoom(no){
+  const was = Number(invest[no]) || 0;
+  return round1(IV_TOTAL - round1(ivUsed() - was));   // 이 팀에 쓸 수 있는 최대
+}
+
+document.addEventListener("input", function(e){
+  const el = e.target.closest(".ivInput");
+  if (!el) return;
+
+  const no = Number(el.dataset.iv);
+  let v = Number(el.value);
+  if (!isFinite(v) || v < 0) v = 0;
+  v = Math.min(round1(v), ivRoom(no));
+
+  if (v > 0) invest[no] = v; else delete invest[no];
+  ivSaved();
+  ivRefresh();
+});
+
+/* 칸에서 손을 떼면 실제 금액으로 맞춰 줍니다 */
+document.addEventListener("change", function(e){
+  const el = e.target.closest(".ivInput");
+  if (!el) return;
+  const v = invest[Number(el.dataset.iv)] || 0;
+  el.value = v || "";
+  ivRefresh();
+});
+
 document.addEventListener("click", function(e){
-  const add = e.target.closest("[data-iv]");
-  if (add && !add.disabled){
-    const no = Number(add.dataset.iv);
-    if (ivUsed() >= IV_TOTAL) return;
-    invest[no] = (invest[no] || 0) + 1;
-    ivSaved(); drawInvest();
-    return;
-  }
-  const del = e.target.closest("[data-ivdel]");
-  if (del){
-    const no = Number(del.dataset.ivdel);
-    invest[no] = Math.max((invest[no] || 0) - 1, 0);
-    if (!invest[no]) delete invest[no];
-    ivSaved(); drawInvest();
-    return;
-  }
   if (e.target.closest("#ivReset")){
     invest = {};
-    ivSaved(); drawInvest();
-    return;
+    ivSaved();
+    drawInvest();
   }
 });
 
