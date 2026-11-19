@@ -3496,6 +3496,82 @@ const STAGES = [
 
   button { width: 100%; font-size: 17px; padding: 15px; border: 0; border-radius: 12px;
            background: var(--main); color: white; cursor: pointer; font-family: inherit; }
+/* ═══════════ 가독성·부드러움 보정 ═══════════ */
+
+/* 글줄을 조금 넉넉하게 */
+body{line-height:1.78}
+p{line-height:1.8}
+
+/* 칸 사이 숨 쉴 틈 */
+.sec{padding-top:30px}
+.sec-h{margin-bottom:15px}
+.sec-h h2{font-size:1.05rem; line-height:1.5}
+.sec-h em{font-size:.79rem}
+
+/* 모서리를 한 톤 둥글게 */
+.lc,.note,.cf,.try,.uq,.cq,.tw,.slab,.card2,.ans{border-radius:14px}
+.plan,.gen,.upg,.chal{border-radius:18px}
+
+/* 테두리는 얇고 연하게 — 색 블록이 덜 튀도록 */
+.plan,.gen,.upg,.chal{border-width:2px}
+.ans{border-width:1.5px}
+
+/* 그림자를 넓고 옅게 */
+.card,.plan,.gen,.upg,.chal{
+  box-shadow:0 1px 3px -1px rgba(20,30,40,.05), 0 16px 38px -24px rgba(20,30,40,.3)}
+.upg,.chal{box-shadow:0 1px 3px -1px rgba(20,30,40,.05), 0 16px 38px -26px rgba(20,30,40,.35)}
+
+/* 개념 카드 — 가장 많이 읽는 곳 */
+.lc{padding:16px 18px}
+.lc > b{font-size:.95rem; line-height:1.6; margin-bottom:7px}
+.lc p{font-size:.885rem; line-height:1.82}
+
+/* 체크 항목 — 손가락과 눈 모두 편하게 */
+.q{padding:14px 16px; line-height:1.7}
+.cq{padding:14px 16px; line-height:1.7}
+.uq{padding:14px 15px; line-height:1.7}
+.uq .ut > b{font-size:.94rem; line-height:1.55; margin-bottom:5px}
+.uq .ut em,.cq .ct em{font-size:.845rem; line-height:1.8}
+
+/* 도움말 상자 */
+.note{padding:16px 19px; line-height:1.78}
+.note > b{margin-bottom:6px}
+.note li{margin:6px 0}
+
+/* 표 — 줄 간격과 여백 */
+.tw table th,.tw table td{padding:11px 13px; line-height:1.72}
+.tw table th{font-size:.79rem; letter-spacing:.01em}
+
+/* 코드 — 줄 간격을 넓혀 읽기 쉽게 */
+.slab pre{line-height:1.88; font-size:.845rem; padding:16px 18px}
+.slab.clip pre{max-height:180px}
+.slab-top{padding:10px 12px 10px 15px}
+
+/* 단계 안내 */
+.step{padding:16px 0}
+.step p{line-height:1.8}
+
+/* 버튼류 — 조금 크고 부드럽게 */
+.chip{padding:8px 15px; border-radius:99px}
+.jchip{padding:7px 13px}
+.qgo{padding:4px 12px}
+.gchip{padding:10px 14px; border-radius:12px; line-height:1.5}
+.trybtn,.gcopy,.namebtn{border-radius:10px}
+
+/* 머리띠 여백 */
+.chal-top,.upg-top,.plan-head,.gen-head{padding:15px 19px}
+.howto{padding:14px 19px; line-height:1.78}
+
+/* 생성기 — 항목 사이 간격 */
+.gl{margin:17px 0 9px}
+.gwhat{line-height:1.8; padding:14px 16px}
+.gcanvas{line-height:1.78}
+.go-pre{line-height:1.8; padding:16px 17px}
+
+/* 움직임을 싫어하는 사람을 위해 */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important; scroll-behavior:auto !important}
+}
 </style>
 </head>
 <body>
@@ -3854,7 +3930,7 @@ ChatGPT(chatgpt.com) 또는 제미나이(gemini.google.com) 에서
 - 모든 줄에 한국어 주석을 달아 주세요
 - 마지막에 제대로 됐는지 확인하는 방법을 알려 주세요
 
-[ 여기에 내 코드 전체를 붙여넣기 ]
+(지금까지 코드를 만든 그 대화에서 이어서 물어보세요. 코드를 다시 붙이지 않아도 됩니다.)
 
 ━━━ 받은 다음 할 일 ━━━
 1. 지금 파일을 백업 (우리앱_백업2.html 처럼)
@@ -3883,7 +3959,7 @@ ChatGPT(chatgpt.com) 또는 제미나이(gemini.google.com) 에서
 - 전체 코드를 다시 쓰지 말고, 고쳐야 할 줄만 짚어 주세요
 - 왜 그렇게 고치는지 이유도 알려 주세요
 
-[ 여기에 내 코드 전체를 붙여넣기 ]
+(지금까지 코드를 만든 그 대화에서 이어서 물어보세요. 코드를 다시 붙이지 않아도 됩니다.)
 
 ━━━ 자주 나오는 빨간 글씨 ━━━
 is not defined          이름을 잘못 썼다 (대소문자까지 확인)
@@ -3910,7 +3986,7 @@ ChatGPT(chatgpt.com) 또는 제미나이(gemini.google.com) 에서
 - 바꾼 부분마다 무엇을 왜 바꿨는지 한 줄로 알려 주세요
 - 색은 3가지 안쪽으로 통일해 주세요
 
-[ 여기에 내 코드 전체를 붙여넣기 ]
+(지금까지 코드를 만든 그 대화에서 이어서 물어보세요. 코드를 다시 붙이지 않아도 됩니다.)
 
 ━━━ 받은 다음 할 일 ━━━
 CSS 만 바뀌었는지 확인하세요. HTML 이나 JS 가 같이 바뀌었으면
@@ -3929,6 +4005,7 @@ ChatGPT(chatgpt.com) 또는 제미나이(gemini.google.com) 에서
 
 나는 한국 고등학생이고, 방과후 수업에서 웹앱을 만들었습니다.
 아래가 지금까지 만든 코드 전체입니다.
+(이 질문은 꼭 '새 대화' 에서 보내세요)
 
 이 앱을 처음 쓰는 사람 입장에서 불편하거나 헷갈릴 만한 점을 5가지 찾아 주세요.
 
@@ -3971,7 +4048,7 @@ ChatGPT(chatgpt.com) 또는 제미나이(gemini.google.com) 에서
 - 움직임을 불편해하는 사람을 위해 아래 처리도 같이 넣어 주세요
   @media (prefers-reduced-motion: reduce) { 움직임을 끄는 설정 }
 
-[ 여기에 내 코드 전체를 붙여넣기 ]
+(지금까지 코드를 만든 그 대화에서 이어서 물어보세요. 코드를 다시 붙이지 않아도 됩니다.)
 
 ━━━ 받은 다음 할 일 ━━━
 1. 하나씩 붙이고 저장, 새로고침으로 확인하기
@@ -4088,7 +4165,7 @@ ChatGPT(chatgpt.com) 또는 제미나이(gemini.google.com) 에서
 - 각각 어떤 문제가 생길 것 같은지 한 줄로
 - 고치기 쉬운 것부터 순서대로
 
-[ 여기에 내 코드 전체를 붙여넣기 ]
+(지금까지 코드를 만든 그 대화에서 이어서 물어보세요. 코드를 다시 붙이지 않아도 됩니다.)
 
 ━━━ 받은 다음 할 일 ━━━
 1. 10가지를 직접 해 보기 (옆 팀에게도 시켜 보기)
@@ -4344,7 +4421,10 @@ function questGo(){
   function secIndex(word){
     for (let i = 0; i < secs.length; i = i + 1){
       const h = secs[i].querySelector(".sec-h h2");
-      if (h && h.textContent.indexOf(word) >= 0) return i;
+      if (!h) continue;
+      if (h.textContent.indexOf(word) >= 0) return i;
+      // '오늘의 코드' 를 찾을 때 '오늘의 프롬프트' 도 같은 칸으로 봅니다
+      if (word === "오늘의 코드" && h.textContent.indexOf("오늘의 프롬프트") >= 0) return i;
     }
     return -1;
   }
@@ -4895,8 +4975,14 @@ function stageHTML(s){
     h += sec("🪄 프롬프트 생성기", "고르기만 하면 질문이 완성됩니다", genHTML(), "t-gen");
   }
 
-  if (s.code && s.code.length)
-    h += sec("💻 오늘의 코드", "아래 버튼을 누르면 그 코드가 열립니다", codeHTML(s.code), "t-code");
+  if (s.code && s.code.length){
+    // 전부 프롬프트면 제목을 바꿔 줍니다
+    const onlyPrompt = s.code.every(c => c[0].indexOf("🤖") >= 0);
+    h += sec(onlyPrompt ? "🤖 오늘의 프롬프트" : "💻 오늘의 코드",
+          onlyPrompt ? "버튼을 누르면 질문이 열립니다 — 복사해서 AI에 넣으세요"
+                     : "아래 버튼을 누르면 그 코드가 열립니다",
+          codeHTML(s.code), "t-code");
+  }
 
   // 표는 문장이 길어서 나란히 놓으면 가로 스크롤이 생깁니다 — 전체 폭으로
   if (s.tables)

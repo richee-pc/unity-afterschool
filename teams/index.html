@@ -238,6 +238,23 @@ button{font-family:inherit}
 .sig .bun{font-size:1.1rem; line-height:1}
 .sig b{font-family:"IBM Plex Mono",monospace; font-size:.86rem; color:var(--ink-2)}
 .foot p{margin:9px 0 0; color:var(--ink-3); font-size:.78rem}
+/* ═══════════ 가독성·부드러움 보정 ═══════════ */
+body{line-height:1.78}
+.card{border-radius:20px}
+.card,.invest{box-shadow:0 1px 3px -1px rgba(20,30,40,.05), 0 16px 38px -24px rgba(20,30,40,.3)}
+.info{padding:18px 20px 20px; gap:8px}
+.info .app b{font-size:1.1rem; line-height:1.5}
+.info .desc{font-size:.895rem; line-height:1.74}
+.play{padding:12px 16px; border-radius:12px}
+.note{padding:18px 22px; line-height:1.78}
+.note li{margin:7px 0}
+.stamp{border-radius:17px; padding:15px 19px}
+.invest{border-radius:20px; border-width:2px}
+.iv-row{padding:12px 14px; border-radius:13px}
+.iv-row .nm b{font-size:.96rem; line-height:1.5}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important; scroll-behavior:auto !important}
+}
 </style>
 </head>
 <body>
