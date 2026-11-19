@@ -181,6 +181,44 @@ button{font-family:inherit}
 .card.addcard .soon{background:transparent; border-bottom:1px dashed var(--line-2)}
 .card.addcard .info .desc b{color:var(--ink)}
 
+/* 💰 투자 투표 */
+.invest{max-width:640px; margin:26px auto 0; background:var(--surface);
+  border:2.5px solid var(--gold); border-radius:18px; overflow:hidden;
+  box-shadow:0 12px 30px -20px var(--gold)}
+.iv-top{padding:15px 19px; background:var(--gold); color:#2A1C00}
+.iv-top b{font-size:1.06rem; display:block}
+.iv-top em{font-style:normal; font-size:.84rem; opacity:.85}
+.iv-body{padding:16px 17px 18px}
+.iv-money{display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  padding:12px 15px; background:var(--gold-soft); border-radius:12px; margin-bottom:14px}
+.iv-money .lbl{font-size:.85rem; font-weight:600; color:var(--ink)}
+.iv-chips{font-size:1.5rem; letter-spacing:2px; line-height:1}
+.iv-chips .used{opacity:.22}
+.iv-money .left{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-weight:700;
+  font-size:.86rem; color:var(--ink-2); white-space:nowrap}
+.iv-list{display:flex; flex-direction:column; gap:8px}
+.iv-row{display:flex; align-items:center; gap:11px; padding:11px 13px;
+  border:1.5px solid var(--line); border-radius:12px; background:var(--surface-2)}
+.iv-row .ic{font-size:1.3rem; line-height:1}
+.iv-row .nm{flex:1; min-width:0}
+.iv-row .nm b{display:block; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.iv-row .nm i{font-style:normal; font-size:.76rem; color:var(--ink-3)}
+.iv-row .amt{font-family:"IBM Plex Mono",monospace; font-weight:700; font-size:.9rem;
+  color:var(--gold); min-width:54px; text-align:right}
+.iv-row button{border:0; border-radius:9px; padding:8px 13px; cursor:pointer;
+  font-family:inherit; font-size:.82rem; font-weight:600}
+.iv-add{background:var(--gold); color:#2A1C00}
+.iv-add:disabled{background:var(--surface-3); color:var(--ink-3); cursor:default}
+.iv-del{background:var(--surface-3); color:var(--ink-2); margin-left:4px}
+.iv-done{display:none; margin-top:14px; padding:15px; border-radius:13px;
+  background:var(--gold); color:#2A1C00; text-align:center; font-weight:700}
+.invest.full .iv-done{display:block; animation:rise .3s ease}
+.iv-done span{display:block; font-size:.84rem; font-weight:500; opacity:.82; margin-top:4px}
+.iv-reset{width:100%; margin-top:11px; border:1px solid var(--line); background:var(--surface);
+  color:var(--ink-3); border-radius:10px; padding:9px; font-size:.8rem; cursor:pointer;
+  font-family:inherit}
+.iv-empty{color:var(--ink-3); font-size:.88rem; text-align:center; padding:16px 0}
+
 /* ─── 안내 ─── */
 .note{margin-top:34px; background:var(--z-soft); border-radius:14px; padding:18px 22px;
   font-size:.9rem; line-height:1.74; color:var(--ink-2)}
@@ -227,6 +265,22 @@ button{font-family:inherit}
   </header>
 
   <main class="grid" id="grid"></main>
+
+  <section class="invest" id="invest">
+    <div class="iv-top"><b>💰 투자 투표 — 내게 3억이 있다면?</b>
+      <em>발표를 다 듣고, 투자하고 싶은 팀에 나눠 거세요 (한 팀에 몰아도 됩니다)</em></div>
+    <div class="iv-body">
+      <div class="iv-money">
+        <span class="lbl">남은 투자금</span>
+        <span class="iv-chips" id="ivChips"></span>
+        <span class="left" id="ivLeft"></span>
+      </div>
+      <div class="iv-list" id="ivList"></div>
+      <div class="iv-done" id="ivDone">🎉 투자 완료!
+        <span>이 화면을 선생님께 보여 주세요</span></div>
+      <button class="iv-reset" id="ivReset">처음부터 다시 투자하기</button>
+    </div>
+  </section>
 
   <div class="note">
     <b>📤 작품 올리는 법 — 팀이 직접 하면 됩니다</b>
@@ -292,6 +346,86 @@ button{font-family:inherit}
 <div class="toast" id="toast"></div>
 
 <script>
+/* ══════════ 💰 투자 투표 ══════════ */
+const IV_KEY  = "gallery-invest-v1";
+const IV_TOTAL = 3;                    // 투자금 몇 장?
+const IV_UNIT  = "1억";
+
+let invest = {};                       // { 팀번호: 건 장수 }
+try { invest = JSON.parse(localStorage.getItem(IV_KEY)) || {}; }
+catch (e) { invest = {}; }
+if (typeof invest !== "object" || invest === null) invest = {};
+
+function ivSaved(){
+  try { localStorage.setItem(IV_KEY, JSON.stringify(invest)); } catch (e) {}
+}
+function ivUsed(){
+  let n = 0;
+  for (const k in invest) n = n + (invest[k] || 0);
+  return n;
+}
+
+function drawInvest(){
+  const box  = document.getElementById("invest");
+  const list = document.getElementById("ivList");
+  if (!box || !list) return;
+
+  if (live.length === 0){
+    box.style.display = "none";
+    return;
+  }
+  box.style.display = "";
+
+  const used = Math.min(ivUsed(), IV_TOTAL);
+  const left = IV_TOTAL - used;
+
+  let chips = "";
+  for (let i = 0; i < IV_TOTAL; i = i + 1){
+    chips = chips + '<span class="' + (i < used ? "used" : "") + '">💵</span>';
+  }
+  document.getElementById("ivChips").innerHTML = chips;
+  document.getElementById("ivLeft").textContent =
+    left > 0 ? (left * 1) + "억 남음" : "다 쓰셨습니다";
+
+  list.innerHTML = live.map(function(t){
+    const n = invest[t.no] || 0;
+    return '<div class="iv-row">' +
+      '<span class="ic">' + t.icon + "</span>" +
+      '<span class="nm"><b>' + t.app + "</b><i>" + t.no + "팀</i></span>" +
+      '<span class="amt">' + (n ? n + "억" : "—") + "</span>" +
+      '<button class="iv-add" data-iv="' + t.no + '"' + (left <= 0 ? " disabled" : "") +
+        ">+" + IV_UNIT + "</button>" +
+      (n ? '<button class="iv-del" data-ivdel="' + t.no + '">빼기</button>' : "") +
+      "</div>";
+  }).join("");
+
+  box.classList.toggle("full", left <= 0);
+}
+
+document.addEventListener("click", function(e){
+  const add = e.target.closest("[data-iv]");
+  if (add && !add.disabled){
+    const no = Number(add.dataset.iv);
+    if (ivUsed() >= IV_TOTAL) return;
+    invest[no] = (invest[no] || 0) + 1;
+    ivSaved(); drawInvest();
+    return;
+  }
+  const del = e.target.closest("[data-ivdel]");
+  if (del){
+    const no = Number(del.dataset.ivdel);
+    invest[no] = Math.max((invest[no] || 0) - 1, 0);
+    if (!invest[no]) delete invest[no];
+    ivSaved(); drawInvest();
+    return;
+  }
+  if (e.target.closest("#ivReset")){
+    invest = {};
+    ivSaved(); drawInvest();
+    return;
+  }
+});
+
 /* ══════════════════════════════════════════════════════════
    작품은 파일만 올리면 자동으로 전시됩니다.
    teams/ 폴더에 team1.html ~ team24.html 로 올리기만 하면 끝!
@@ -539,6 +673,7 @@ document.addEventListener("keydown", function(e){
     live = found.filter(function(x){ return x; });
     drawGrid();
     drawStamp();
+    drawInvest();
 
     openFromHash();
   });
